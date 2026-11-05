@@ -2056,7 +2056,8 @@ function tick(now){
     }
     let v = p.view && !p.view.startsWith("act:") ? p.view.split("|")[0] : "front";
     if (moving) {
-      if (Math.abs(dy) > Math.abs(dx) * .5) v = dy > 0 ? "front" : "back";
+      // chỉ quay lưng khi đi lên dốc hơn 45 độ; đi ngang, đi chéo, đi xuống đều quay mặt ra màn hình
+      v = dy < 0 && -dy > Math.abs(dx) ? "back" : "front";
       p.backUntil = 0; p.stopAt = 0;
     } else {
       if (!p.stopAt) p.stopAt = now;
