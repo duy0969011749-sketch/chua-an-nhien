@@ -267,9 +267,9 @@
 
   /* Tạo nhân vật */
   .creator{display:grid;grid-template-columns:150px 1fr;gap:18px;align-items:start}
-  .preview{background:radial-gradient(circle at 50% 70%,#f3d79a,#e7b866 70%);border:2px solid var(--gold-deep);border-radius:18px;height:230px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:14px;position:relative;overflow:hidden}
-  .preview .av{width:64px;height:96px;transform:scale(1.65);transform-origin:50% 100%}
-  .preview .turn{position:absolute;right:8px;top:40px;min-height:30px;padding:0 10px;border-radius:999px;border:2px solid var(--gold-deep);background:#fff8e8;font-weight:700;font-size:.78rem;color:var(--ink)}
+  .preview{background:radial-gradient(circle at 50% 70%,#f3d79a,#e7b866 70%);border:2px solid var(--gold-deep);border-radius:18px;height:240px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:46px;position:relative;overflow:hidden}
+  .preview .av{width:64px;height:96px;transform:scale(1.55);transform-origin:50% 100%}
+  .preview .turn{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);white-space:nowrap;min-height:30px;padding:0 10px;border-radius:999px;border:2px solid var(--gold-deep);background:#fff8e8;font-weight:700;font-size:.78rem;color:var(--ink)}
   .preview .nm2{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(30,10,8,.62);color:#fff;font-weight:700;font-size:.8rem;padding:2px 10px;border-radius:999px;white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis}
   .field{margin-bottom:12px}
   .field > label,.field > .lab{display:block;font-weight:700;font-size:.92rem;margin-bottom:4px}
@@ -307,7 +307,7 @@
 
   @media (max-width:520px){
     .creator{grid-template-columns:1fr}
-    .preview{height:200px}
+    .preview{height:230px}
     .preview .av{transform:scale(1.5)}
     .act .disc{width:52px;height:52px;font-size:.8rem}
     .act .lbl{font-size:.66rem}
@@ -1404,9 +1404,14 @@ $("btnEnter").addEventListener("click", async () => {
   const start = { id: meId, ...prof, on: Math.round(onlineHours() * 10) / 10, x: 640 + Math.round(Math.random() * 240 - 120), y: 690, act: "", actTs: 0 };
   start.tx = start.x; start.ty = 600 + Math.round(Math.random() * 40);
   let res;
-  try { res = await net.join(start); } catch { res = { ok: false, err: true }; }
+  try { res = await net.join(start); } catch (e) { res = { ok: false, err: true, msg: String((e && (e.code || e.message)) || e) }; console.error("join", e); }
   btn.disabled = false; btn.textContent = "Vào chùa";
-  if (!res.ok) { $("charErr").textContent = res.err ? "Không kết nối được, vui lòng thử lại." : `Chánh điện đã đủ ${MAX_PEOPLE} người. Vui lòng quay lại sau.`; return; }
+  if (!res.ok) {
+    $("charErr").textContent = !res.err ? `Chánh điện đã đủ ${MAX_PEOPLE} người. Vui lòng quay lại sau.`
+      : /permission/i.test(res.msg) ? "Firebase từ chối ghi dữ liệu: cần dán bộ quy tắc trong README vào Realtime Database > Rules rồi bấm Publish."
+      : `Không kết nối được, vui lòng thử lại. (${res.msg})`;
+    return;
+  }
   me = { ...start };
   createPlayer(me);
   net.onPlayers(syncPlayers);
