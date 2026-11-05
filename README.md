@@ -24,6 +24,18 @@ Hành động: Lạy, Thắp hương, Gõ mõ, Thỉnh chuông, Xin xăm, Xin 8 
 
 Điều khiển: chạm hoặc bấm vào sàn để đi, phím mũi tên hoặc W A S D trên máy tính. Bấm vào chuông, mõ, bát hương trong cảnh cũng thực hiện hành động.
 
+## Map
+
+- Nút "Đổi map" ở góc trên phải: chọn Chùa An Nhiên hoặc Quán nhậu Zô Zô. Bảng chọn map ghi số người đang ở mỗi map.
+- Tối đa 50 người online tính chung cho cả hai map. Chat, nhân vật, giờ online dùng chung; mỗi map chỉ thấy người đang ở map đó. Map đang ở được nhớ cho lần vào sau.
+
+### Quán nhậu Zô Zô
+
+- 5 bàn, mỗi bàn 6 ghế nhựa (30 chỗ). Chạm vào ghế trống để đi tới ngồi; ghế có người thì không ngồi được. Đi chỗ khác là tự đứng dậy.
+- Bấm cuốn menu đỏ trên bàn (hoặc nút Menu) để mở sổ menu phóng to, chọn 1 trong 8 món: lẩu thái, mực nướng, ốc xào, gà nướng, đậu phụ chiên, nem chua rán, lạc rang, tháp bia. Phải ngồi ở bàn đó mới gọi được. Món hiện trên bàn cho mọi người cùng thấy, tối đa 4 món mỗi bàn, tự hết sau 10 phút (món do ai gọi sẽ mất sớm hơn nếu người đó thoát).
+- Nút Zô: nâng ly bia. Từ 2 người cùng bàn bấm Zô trong vòng 4 giây thì cả bàn cụng ly: chữ "Zô!!!" nổ trên bàn kèm tiếng keng.
+- Nút Gắp: cầm đũa gắp món trên bàn đưa lên miệng.
+
 ## Chat
 
 - Máy tính: bấm Enter để mở ô chat, gõ rồi Enter để gửi, Esc để đóng. Điện thoại: bấm nút Chat ở góc trên phải.

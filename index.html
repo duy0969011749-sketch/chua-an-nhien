@@ -24,6 +24,60 @@
   #stage{position:absolute;left:0;top:0;width:1280px;height:720px;transform-origin:0 0;will-change:transform}
   #scene{position:absolute;inset:0;display:block}
   #players{position:absolute;inset:0;pointer-events:none}
+  #sceneQuan{display:none}
+  #stage.map-quan #scene{display:none}
+  #stage.map-quan #sceneQuan{display:block}
+  #stage:not(.map-quan) .qobj{display:none}
+  /* quán: bàn, ghế, món */
+  .qtable{position:absolute;width:250px;height:64px;margin:-50px 0 0 -125px;pointer-events:none}
+  .qtable svg{display:block;overflow:visible}
+  .qtable .dishes{position:absolute;left:24px;right:30px;top:-12px;height:34px;display:flex;justify-content:space-around;align-items:flex-end}
+  .qtable .dishes svg{width:46px;height:36px;animation:dishIn .35s cubic-bezier(.2,.8,.2,1.3)}
+  @keyframes dishIn{from{transform:translateY(-14px) scale(.4);opacity:0}}
+  .tmenu{position:absolute;right:-4px;top:-6px;width:40px;height:34px;pointer-events:auto;cursor:pointer}
+  .qstool{position:absolute;width:56px;height:46px;margin:-30px 0 0 -28px;pointer-events:auto;cursor:pointer;display:flex;align-items:flex-end;justify-content:center}
+  .qstool svg{width:40px;height:30px;display:block}
+  .qstool:hover svg{filter:brightness(1.15) drop-shadow(0 0 4px #fff3b0)}
+  .clink{position:absolute;z-index:3000;pointer-events:none;white-space:nowrap;font:800 38px "Baloo 2",sans-serif;color:#ffe08a;text-shadow:0 3px 0 #8f1b16,0 0 14px rgba(255,200,80,.9);animation:clinkPop 1.7s ease-out forwards}
+  .clink svg{position:absolute;left:50%;top:50%;width:150px;height:150px;margin:-75px 0 0 -75px;z-index:-1;animation:spin 3s linear infinite}
+  @keyframes clinkPop{0%{transform:translate(-50%,-30%) scale(.3);opacity:0}15%{transform:translate(-50%,-50%) scale(1.25);opacity:1}30%{transform:translate(-50%,-50%) scale(1)}80%{opacity:1}100%{transform:translate(-50%,-95%) scale(1);opacity:0}}
+  /* ngồi ghế */
+  .av.sit{transform:translateY(10px)}
+  .av.sit .lg{transform:scaleY(.42)}
+  #stage.map-quan .pl:not(.walk) .av.v-front .pray{display:none}
+  #stage.map-quan .pl:not(.walk) .av.v-front .side{display:inline}
+  /* nâng ly, gắp món */
+  .av.posing .pray{display:none!important}
+  .av.posing .side{display:inline!important}
+  .av.posing .armR{visibility:hidden}
+  .av .pz{transform-origin:43px 53px;animation:pzRaise 2.4s ease-in-out both}
+  @keyframes pzRaise{0%{opacity:0;transform:rotate(80deg)}12%{opacity:1;transform:rotate(70deg)}30%{transform:rotate(0)}38%{transform:translateY(-2px) rotate(-8deg)}46%{transform:rotate(4deg)}54%,84%{opacity:1;transform:rotate(0)}100%{opacity:0;transform:rotate(70deg)}}
+  .av .pgA{animation:pgA 2.6s ease-in-out both}
+  .av .pgA .pgF{animation:pgAF 2.6s linear both}
+  .av .pgB{animation:pgB 2.6s ease-in-out both}
+  .av .pgB .pgF{animation:pgBF 2.6s linear both}
+  @keyframes pgA{0%{opacity:0}8%,40%{opacity:1}46%,100%{opacity:0}}
+  @keyframes pgAF{0%,24%{opacity:0}32%,100%{opacity:1}}
+  @keyframes pgB{0%,40%{opacity:0}46%,80%{opacity:1}88%,100%{opacity:0}}
+  @keyframes pgBF{0%,64%{opacity:1}70%,100%{opacity:0}}
+  .av .pgk{transform-origin:43px 53px;animation:pgBob .65s ease-in-out 4 alternate}
+  @keyframes pgBob{from{transform:none}to{transform:translateY(-3px) rotate(-8deg)}}
+  /* chọn map, sổ menu */
+  .maps{display:grid;gap:12px}
+  .mapcard{display:flex;gap:14px;align-items:center;text-align:left;width:100%;padding:12px;border-radius:16px;border:3px solid #e2cfa3;background:#fff;color:var(--ink)}
+  .mapcard[aria-current="true"]{border-color:var(--red-deep);background:#fff3df}
+  .mapcard .thumb{flex:none;width:96px;height:64px;border-radius:10px;overflow:hidden}
+  .mapcard .thumb svg{display:block;width:100%;height:100%}
+  .mapcard b{display:block;font-size:1.05rem}
+  .mapcard small{display:block;color:var(--muted);font-weight:600}
+  .menubook{background:#fff8e6 repeating-linear-gradient(0deg,transparent 0 27px,rgba(170,130,70,.12) 27px 28px)}
+  #mMenu.open .menubook{animation:menuZoom .38s cubic-bezier(.2,.8,.2,1.08)}
+  @keyframes menuZoom{from{transform:translate(var(--dx,0),var(--dy,0)) scale(.12) rotate(-8deg);opacity:.3}}
+  .dishgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .dish{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;border-radius:14px;border:2px solid #e2cfa3;background:#fffdf6;font-weight:700;font-size:.9rem;color:var(--ink)}
+  .dish:hover{border-color:var(--gold-deep);background:#fff3df}
+  .dish svg{width:66px;height:50px}
+  @media (max-width:520px){ .dishgrid{grid-template-columns:repeat(2,1fr)} }
   [data-act]{cursor:pointer}
 
   /* Hiệu ứng trong cảnh */
@@ -254,6 +308,7 @@
   .chatbar .btn{min-height:42px;padding:0 16px;font-size:.92rem}
   .hint{font-size:.85rem;color:#fff;padding:6px 14px;border-radius:999px;transition:opacity .4s}
   .hint.hide{opacity:0;pointer-events:none}
+  .acts[hidden]{display:none}
   .acts{display:flex;gap:10px;padding:0 10px;flex-wrap:nowrap;max-width:100vw;overflow-x:auto;scrollbar-width:none}
   .act{flex:none;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;padding:0;color:#fff}
   .act .disc{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.92rem;font-weight:800;color:#fff7dc;letter-spacing:.01em;
@@ -522,6 +577,119 @@
   </g>
   <rect id="floorHit" y="474" width="1280" height="246" fill="transparent"/>
 </svg>
+<svg id="sceneQuan" viewBox="0 0 1280 720" width="1280" height="720" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="qWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3d68a"/><stop offset="1" stop-color="#d9a64e"/></linearGradient>
+    <linearGradient id="qFloor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a59c8e"/><stop offset="1" stop-color="#cfc6b6"/></linearGradient>
+    <linearGradient id="qSign" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d63e31"/><stop offset="1" stop-color="#8f1b16"/></linearGradient>
+    <radialGradient id="qGlow"><stop offset="0" stop-color="#fff3b0" stop-opacity=".9"/><stop offset="1" stop-color="#fff3b0" stop-opacity="0"/></radialGradient>
+    <linearGradient id="qWood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9a6a42"/><stop offset="1" stop-color="#6e4a2e"/></linearGradient>
+  </defs>
+  <rect width="1280" height="460" fill="url(#qWall)"/>
+  <path d="M0 34 H1280 M0 68 H1280 M0 102 H1280 M0 136 H1280 M0 170 H1280 M0 204 H1280 M0 238 H1280 M0 272 H1280 M0 306 H1280 M0 340 H1280 M0 374 H1280" stroke="#b07a35" stroke-width="1.2" opacity=".2"/>
+  <rect y="372" width="1280" height="88" fill="#8a3f2a"/><rect y="368" width="1280" height="7" fill="#5e2a1c"/>
+  <path d="M40 375 V460 M120 375 V460 M200 375 V460 M280 375 V460 M360 375 V460 M440 375 V460 M520 375 V460 M600 375 V460 M680 375 V460 M760 375 V460 M840 375 V460 M920 375 V460 M1000 375 V460 M1080 375 V460 M1160 375 V460 M1240 375 V460" stroke="#6e3020" stroke-width="2" opacity=".55"/>
+  <rect y="460" width="1280" height="260" fill="url(#qFloor)"/>
+  <path d="M0 474 H1280 M0 492 H1280 M0 514 H1280 M0 540 H1280 M0 570 H1280 M0 604 H1280 M0 642 H1280 M0 684 H1280 M107 460 L-760 720 M156 460 L-630 720 M206 460 L-500 720 M255 460 L-370 720 M305 460 L-240 720 M354 460 L-110 720 M404 460 L20 720 M453 460 L150 720 M503 460 L280 720 M552 460 L410 720 M602 460 L540 720 M651 460 L670 720 M701 460 L800 720 M750 460 L930 720 M800 460 L1060 720 M850 460 L1190 720 M899 460 L1320 720 M949 460 L1450 720 M998 460 L1580 720 M1048 460 L1710 720 M1097 460 L1840 720 M1147 460 L1970 720" stroke="#8a8172" stroke-width="1.4" opacity=".45"/>
+  <rect y="456" width="1280" height="6" fill="#6e655a"/>
+  <path d="M300 0 V214" stroke="#3a2a22" stroke-width="2"/><ellipse cx="300" cy="244" rx="70" ry="40" fill="url(#qGlow)" opacity=".7"/><path d="M278 236 L291 214 H309 L322 236 Z" fill="#2f6b4a" stroke="#1f4a33" stroke-width="2"/><ellipse cx="300" cy="237" rx="9" ry="4" fill="#fff3b0"/>
+  <path d="M470 0 V250" stroke="#3a2a22" stroke-width="2"/><ellipse cx="470" cy="280" rx="70" ry="40" fill="url(#qGlow)" opacity=".7"/><path d="M448 272 L461 250 H479 L492 272 Z" fill="#2f6b4a" stroke="#1f4a33" stroke-width="2"/><ellipse cx="470" cy="273" rx="9" ry="4" fill="#fff3b0"/>
+  <path d="M640 0 V214" stroke="#3a2a22" stroke-width="2"/><ellipse cx="640" cy="244" rx="70" ry="40" fill="url(#qGlow)" opacity=".7"/><path d="M618 236 L631 214 H649 L662 236 Z" fill="#2f6b4a" stroke="#1f4a33" stroke-width="2"/><ellipse cx="640" cy="237" rx="9" ry="4" fill="#fff3b0"/>
+  <path d="M810 0 V250" stroke="#3a2a22" stroke-width="2"/><ellipse cx="810" cy="280" rx="70" ry="40" fill="url(#qGlow)" opacity=".7"/><path d="M788 272 L801 250 H819 L832 272 Z" fill="#2f6b4a" stroke="#1f4a33" stroke-width="2"/><ellipse cx="810" cy="273" rx="9" ry="4" fill="#fff3b0"/>
+  <path d="M980 0 V214" stroke="#3a2a22" stroke-width="2"/><ellipse cx="980" cy="244" rx="70" ry="40" fill="url(#qGlow)" opacity=".7"/><path d="M958 236 L971 214 H989 L1002 236 Z" fill="#2f6b4a" stroke="#1f4a33" stroke-width="2"/><ellipse cx="980" cy="237" rx="9" ry="4" fill="#fff3b0"/>
+  <path d="M0 150 Q160 186 320 150 Q480 186 640 150 Q800 186 960 150 Q1120 186 1280 150" stroke="#3a2a22" stroke-width="2" fill="none"/>
+  <circle cx="38" cy="165" r="12" fill="#ffd35a" opacity=".25"/><circle cx="38" cy="165" r="5" fill="#ffd35a" stroke="#7a5a2a" stroke-width="1"/>
+  <circle cx="118" cy="174" r="12" fill="#ff8a5a" opacity=".25"/><circle cx="118" cy="174" r="5" fill="#ff8a5a" stroke="#7a5a2a" stroke-width="1"/>
+  <circle cx="202" cy="174" r="12" fill="#8fd3ff" opacity=".25"/><circle cx="202" cy="174" r="5" fill="#8fd3ff" stroke="#7a5a2a" stroke-width="1"/>
+  <circle cx="282" cy="165" r="12" fill="#ffe08a" opacity=".25"/><circle cx="282" cy="165" r="5" fill="#ffe08a" stroke="#7a5a2a" stroke-width="1"/>
+  <circle cx="358" cy="165" r="12" fill="#ff6f91" opacity=".25"/><circle cx="358" cy="165" r="5" fill="#ff6f91" stroke="#7a5a2a" stroke-width="1"/>
+  <circle cx="438" cy="174" r="12" fill="#ffd35a" opacity=".25"/><circle cx="438" cy="174" r="5" fill="#ffd35a" stroke="#7a5a2a" stroke-width="1"/>
+  <circle cx="522" cy="174" r="12" fill="#ff8a5a" opacity=".25"/><circle cx="522" cy="174" r="5" fill="#ff8a5a" stroke="#7a5a2a" stroke-width="1"/>
+  <circle cx="602" cy="165" r="12" fill="#8fd3ff" opacity=".25"/><circle cx="602" cy="165" r="5" fill="#8fd3ff" stroke="#7a5a2a" stroke-width="1"/>
+  <circle cx="678" cy="165" r="12" fill="#ffe08a" opacity=".25"/><circle cx="678" cy="165" r="5" fill="#ffe08a" stroke="#7a5a2a" stroke-width="1"/>
+  <circle cx="758" cy="174" r="12" fill="#ff6f91" opacity=".25"/><circle cx="758" cy="174" r="5" fill="#ff6f91" stroke="#7a5a2a" stroke-width="1"/>
+  <circle cx="842" cy="174" r="12" fill="#ffd35a" opacity=".25"/><circle cx="842" cy="174" r="5" fill="#ffd35a" stroke="#7a5a2a" stroke-width="1"/>
+  <circle cx="922" cy="165" r="12" fill="#ff8a5a" opacity=".25"/><circle cx="922" cy="165" r="5" fill="#ff8a5a" stroke="#7a5a2a" stroke-width="1"/>
+  <circle cx="998" cy="165" r="12" fill="#8fd3ff" opacity=".25"/><circle cx="998" cy="165" r="5" fill="#8fd3ff" stroke="#7a5a2a" stroke-width="1"/>
+  <circle cx="1078" cy="174" r="12" fill="#ffe08a" opacity=".25"/><circle cx="1078" cy="174" r="5" fill="#ffe08a" stroke="#7a5a2a" stroke-width="1"/>
+  <circle cx="1162" cy="174" r="12" fill="#ff6f91" opacity=".25"/><circle cx="1162" cy="174" r="5" fill="#ff6f91" stroke="#7a5a2a" stroke-width="1"/>
+  <circle cx="1242" cy="165" r="12" fill="#ffd35a" opacity=".25"/><circle cx="1242" cy="165" r="5" fill="#ffd35a" stroke="#7a5a2a" stroke-width="1"/>
+  <rect x="420" y="30" width="440" height="98" rx="14" fill="url(#qSign)" stroke="#ffd35a" stroke-width="5"/>
+  <text x="640" y="88" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="46" fill="#ffe08a" stroke="#6a120e" stroke-width="1.5">QUÁN NHẬU ZÔ ZÔ</text>
+  <text x="640" y="114" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="700" font-size="17" fill="#fff3c4">Lai rai bạn bè · Vui là chính</text>
+  <g>
+    <rect x="48" y="186" width="164" height="258" rx="10" fill="#dfe4ea" stroke="#7d8790" stroke-width="3"/>
+    <rect x="58" y="196" width="144" height="24" rx="4" fill="#c8312f"/>
+    <text x="130" y="214" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="16" fill="#fff">BIA LẠNH</text>
+    <rect x="62" y="228" width="136" height="204" rx="6" fill="#a9dcf0" stroke="#7d8790" stroke-width="2"/>
+    <path d="M62 278 H198 M62 328 H198 M62 378 H198" stroke="#7d8790" stroke-width="2"/>
+    <rect x="70" y="248" width="9" height="28" rx="3" fill="#2f7a3a"/><rect x="72.5" y="240" width="4" height="10" rx="1.5" fill="#2f7a3a"/>
+    <rect x="86" y="248" width="9" height="28" rx="3" fill="#2f7a3a"/><rect x="88.5" y="240" width="4" height="10" rx="1.5" fill="#2f7a3a"/>
+    <rect x="102" y="248" width="9" height="28" rx="3" fill="#2f7a3a"/><rect x="104.5" y="240" width="4" height="10" rx="1.5" fill="#2f7a3a"/>
+    <rect x="118" y="248" width="9" height="28" rx="3" fill="#2f7a3a"/><rect x="120.5" y="240" width="4" height="10" rx="1.5" fill="#2f7a3a"/>
+    <rect x="134" y="248" width="9" height="28" rx="3" fill="#2f7a3a"/><rect x="136.5" y="240" width="4" height="10" rx="1.5" fill="#2f7a3a"/>
+    <rect x="150" y="248" width="9" height="28" rx="3" fill="#2f7a3a"/><rect x="152.5" y="240" width="4" height="10" rx="1.5" fill="#2f7a3a"/>
+    <rect x="166" y="248" width="9" height="28" rx="3" fill="#2f7a3a"/><rect x="168.5" y="240" width="4" height="10" rx="1.5" fill="#2f7a3a"/>
+    <rect x="182" y="248" width="9" height="28" rx="3" fill="#2f7a3a"/><rect x="184.5" y="240" width="4" height="10" rx="1.5" fill="#2f7a3a"/>
+    <rect x="70" y="298" width="9" height="28" rx="3" fill="#b5712a"/><rect x="72.5" y="290" width="4" height="10" rx="1.5" fill="#b5712a"/>
+    <rect x="86" y="298" width="9" height="28" rx="3" fill="#b5712a"/><rect x="88.5" y="290" width="4" height="10" rx="1.5" fill="#b5712a"/>
+    <rect x="102" y="298" width="9" height="28" rx="3" fill="#b5712a"/><rect x="104.5" y="290" width="4" height="10" rx="1.5" fill="#b5712a"/>
+    <rect x="118" y="298" width="9" height="28" rx="3" fill="#b5712a"/><rect x="120.5" y="290" width="4" height="10" rx="1.5" fill="#b5712a"/>
+    <rect x="134" y="298" width="9" height="28" rx="3" fill="#b5712a"/><rect x="136.5" y="290" width="4" height="10" rx="1.5" fill="#b5712a"/>
+    <rect x="150" y="298" width="9" height="28" rx="3" fill="#b5712a"/><rect x="152.5" y="290" width="4" height="10" rx="1.5" fill="#b5712a"/>
+    <rect x="166" y="298" width="9" height="28" rx="3" fill="#b5712a"/><rect x="168.5" y="290" width="4" height="10" rx="1.5" fill="#b5712a"/>
+    <rect x="182" y="298" width="9" height="28" rx="3" fill="#b5712a"/><rect x="184.5" y="290" width="4" height="10" rx="1.5" fill="#b5712a"/>
+    <rect x="70" y="348" width="9" height="28" rx="3" fill="#2f7a3a"/><rect x="72.5" y="340" width="4" height="10" rx="1.5" fill="#2f7a3a"/>
+    <rect x="86" y="348" width="9" height="28" rx="3" fill="#2f7a3a"/><rect x="88.5" y="340" width="4" height="10" rx="1.5" fill="#2f7a3a"/>
+    <rect x="102" y="348" width="9" height="28" rx="3" fill="#2f7a3a"/><rect x="104.5" y="340" width="4" height="10" rx="1.5" fill="#2f7a3a"/>
+    <rect x="118" y="348" width="9" height="28" rx="3" fill="#2f7a3a"/><rect x="120.5" y="340" width="4" height="10" rx="1.5" fill="#2f7a3a"/>
+    <rect x="134" y="348" width="9" height="28" rx="3" fill="#2f7a3a"/><rect x="136.5" y="340" width="4" height="10" rx="1.5" fill="#2f7a3a"/>
+    <rect x="150" y="348" width="9" height="28" rx="3" fill="#2f7a3a"/><rect x="152.5" y="340" width="4" height="10" rx="1.5" fill="#2f7a3a"/>
+    <rect x="166" y="348" width="9" height="28" rx="3" fill="#2f7a3a"/><rect x="168.5" y="340" width="4" height="10" rx="1.5" fill="#2f7a3a"/>
+    <rect x="182" y="348" width="9" height="28" rx="3" fill="#2f7a3a"/><rect x="184.5" y="340" width="4" height="10" rx="1.5" fill="#2f7a3a"/>
+    <rect x="70" y="398" width="9" height="28" rx="3" fill="#c8312f"/><rect x="72.5" y="390" width="4" height="10" rx="1.5" fill="#c8312f"/>
+    <rect x="86" y="398" width="9" height="28" rx="3" fill="#c8312f"/><rect x="88.5" y="390" width="4" height="10" rx="1.5" fill="#c8312f"/>
+    <rect x="102" y="398" width="9" height="28" rx="3" fill="#c8312f"/><rect x="104.5" y="390" width="4" height="10" rx="1.5" fill="#c8312f"/>
+    <rect x="118" y="398" width="9" height="28" rx="3" fill="#c8312f"/><rect x="120.5" y="390" width="4" height="10" rx="1.5" fill="#c8312f"/>
+    <rect x="134" y="398" width="9" height="28" rx="3" fill="#c8312f"/><rect x="136.5" y="390" width="4" height="10" rx="1.5" fill="#c8312f"/>
+    <rect x="150" y="398" width="9" height="28" rx="3" fill="#c8312f"/><rect x="152.5" y="390" width="4" height="10" rx="1.5" fill="#c8312f"/>
+    <rect x="166" y="398" width="9" height="28" rx="3" fill="#c8312f"/><rect x="168.5" y="390" width="4" height="10" rx="1.5" fill="#c8312f"/>
+    <rect x="182" y="398" width="9" height="28" rx="3" fill="#c8312f"/><rect x="184.5" y="390" width="4" height="10" rx="1.5" fill="#c8312f"/>
+    <rect x="70" y="232" width="8" height="196" rx="3" fill="#fff" opacity=".35"/><rect x="192" y="300" width="5" height="40" rx="2" fill="#7d8790"/>
+  </g>
+  <rect x="222" y="404" width="64" height="38" rx="4" fill="#c8312f" stroke="#4a2e22" stroke-width="2"/><path d="M238 404 V442 M254 404 V442 M270 404 V442 M222 418 H286" stroke="#4a2e22" stroke-width="1.2" opacity=".5"/>
+  <rect x="222" y="368" width="64" height="38" rx="4" fill="#e3a73a" stroke="#4a2e22" stroke-width="2"/><path d="M238 368 V406 M254 368 V406 M270 368 V406 M222 382 H286" stroke="#4a2e22" stroke-width="1.2" opacity=".5"/>
+  <rect x="290" y="404" width="64" height="38" rx="4" fill="#2f6b4a" stroke="#4a2e22" stroke-width="2"/><path d="M306 404 V442 M322 404 V442 M338 404 V442 M290 418 H354" stroke="#4a2e22" stroke-width="1.2" opacity=".5"/>
+  <circle cx="380" cy="240" r="34" fill="#fff8e6" stroke="#6e4a2e" stroke-width="6"/><path d="M380 240 V218 M380 240 L396 248" stroke="#3a2a22" stroke-width="4" stroke-linecap="round"/>
+  <rect x="690" y="190" width="150" height="110" rx="6" fill="#fff8e6" stroke="#6e4a2e" stroke-width="7"/>
+  <rect x="704" y="204" width="122" height="82" fill="#7fc4e8"/><path d="M704 286 L744 240 L772 266 L796 232 L826 286Z" fill="#4f8a3c"/><circle cx="800" cy="222" r="9" fill="#ffd35a"/>
+  <rect x="868" y="176" width="156" height="170" rx="8" fill="#2f3a32" stroke="url(#qWood)" stroke-width="8"/>
+  <text x="946" y="206" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="19" fill="#ffe08a">THỰC ĐƠN</text>
+  <text x="884" y="230" font-family="'Baloo 2',sans-serif" font-weight="600" font-size="14" fill="#f3efe6">- Lẩu thái</text>
+  <text x="884" y="248" font-family="'Baloo 2',sans-serif" font-weight="600" font-size="14" fill="#f3efe6">- Mực nướng</text>
+  <text x="884" y="266" font-family="'Baloo 2',sans-serif" font-weight="600" font-size="14" fill="#f3efe6">- Ốc xào</text>
+  <text x="884" y="284" font-family="'Baloo 2',sans-serif" font-weight="600" font-size="14" fill="#f3efe6">- Gà nướng</text>
+  <text x="884" y="302" font-family="'Baloo 2',sans-serif" font-weight="600" font-size="14" fill="#f3efe6">- Nem chua rán</text>
+  <text x="884" y="320" font-family="'Baloo 2',sans-serif" font-weight="600" font-size="14" fill="#f3efe6">- Tháp bia</text>
+  <rect x="1046" y="320" width="196" height="16" rx="4" fill="#8a5e3e"/>
+  <rect x="1056" y="336" width="176" height="108" fill="url(#qWood)" stroke="#4a2e1e" stroke-width="2"/>
+  <path d="M1100 336 V444 M1144 336 V444 M1188 336 V444" stroke="#4a2e1e" stroke-width="1.5" opacity=".5"/>
+  <rect x="1078" y="292" width="134" height="28" rx="4" fill="#3a3a3a" stroke="#222" stroke-width="2"/>
+  <rect x="1084" y="298" width="122" height="10" fill="#e2572c"/><path d="M1084 303 H1206" stroke="#ffb35a" stroke-width="2" opacity=".8"/>
+  <path d="M1090 296 L1104 284" stroke="#c9a06a" stroke-width="2"/><rect x="1093" y="285" width="7" height="6" rx="2" fill="#a8502a" transform="rotate(-40 1096 288)"/>
+  <path d="M1110 296 L1124 284" stroke="#c9a06a" stroke-width="2"/><rect x="1113" y="285" width="7" height="6" rx="2" fill="#a8502a" transform="rotate(-40 1116 288)"/>
+  <path d="M1130 296 L1144 284" stroke="#c9a06a" stroke-width="2"/><rect x="1133" y="285" width="7" height="6" rx="2" fill="#a8502a" transform="rotate(-40 1136 288)"/>
+  <path d="M1150 296 L1164 284" stroke="#c9a06a" stroke-width="2"/><rect x="1153" y="285" width="7" height="6" rx="2" fill="#a8502a" transform="rotate(-40 1156 288)"/>
+  <path d="M1170 296 L1184 284" stroke="#c9a06a" stroke-width="2"/><rect x="1173" y="285" width="7" height="6" rx="2" fill="#a8502a" transform="rotate(-40 1176 288)"/>
+  <path d="M1190 296 L1204 284" stroke="#c9a06a" stroke-width="2"/><rect x="1193" y="285" width="7" height="6" rx="2" fill="#a8502a" transform="rotate(-40 1196 288)"/>
+  <circle class="smoke" cx="1110" cy="282" r="7" style="animation-delay:0s"/>
+  <circle class="smoke" cx="1150" cy="282" r="7" style="animation-delay:1.2s"/>
+  <circle class="smoke" cx="1190" cy="282" r="7" style="animation-delay:2.4s"/>
+  <circle class="smoke" cx="1130" cy="282" r="7" style="animation-delay:3.2s"/>
+  <text x="1144" y="400" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="22" fill="#ffe08a">NƯỚNG</text>
+  <path d="M996 444 L1000 400 H1036 L1040 444Z" fill="#b5652f" stroke="#6e3a1c" stroke-width="2"/>
+  <g fill="#4f8a3c" stroke="#2f5a24" stroke-width="1.5"><ellipse cx="1004" cy="380" rx="10" ry="22" transform="rotate(-30 1004 380)"/><ellipse cx="1018" cy="370" rx="10" ry="26"/><ellipse cx="1032" cy="380" rx="10" ry="22" transform="rotate(30 1032 380)"/></g>
+</svg>
     <div id="players"></div>
   </div>
 </div>
@@ -529,8 +697,8 @@
 <!-- Góc trên trái -->
 <div class="hud" id="hudTL">
   <div class="pill info">
-    <h1>Chùa An Nhiên</h1>
-    <div class="room"><span class="dot"></span>Chánh điện · <b id="count">1</b>/50 người</div>
+    <h1 id="mapTitle">Chùa An Nhiên</h1>
+    <div class="room"><span class="dot"></span><span id="roomName">Chánh điện</span> · <b id="count">1</b>/50 người</div>
     <div class="stats"><span>Hương <b id="sIncense">0</b></span><span>Mõ <b id="sMo">0</b></span><span>Chuông <b id="sBell">0</b></span><span>Lời nguyện <b id="sPrayer">0</b></span></div>
     <div class="mode" id="modeNotice"></div>
   </div>
@@ -541,6 +709,7 @@
   <button class="tbtn" id="btnSound" type="button" aria-pressed="true">Âm thanh: Bật</button>
   <button class="tbtn" id="btnPrayers" type="button">Lời nguyện</button>
   <button class="tbtn" id="btnChar" type="button">Nhân vật</button>
+  <button class="tbtn" id="btnMap" type="button" hidden>Đổi map</button>
   <button class="tbtn" id="btnChat" type="button" hidden>Chat</button>
   <button class="tbtn" id="btnLogout" type="button" hidden>Đăng xuất</button>
 </div>
@@ -558,13 +727,38 @@
 <!-- Thanh hành động -->
 <div class="hud" id="hudB">
   <div class="pill hint" id="hint">Chạm vào sàn để đi lại. Bấm Hương để đến trước bàn thờ.</div>
-  <div class="acts" role="toolbar" aria-label="Hành động">
+  <div class="acts" id="actsQuan" role="toolbar" aria-label="Hành động ở quán" hidden>
+    <button class="act" data-do="zo" type="button"><span class="disc">Zô</span><span class="lbl">Nâng ly</span></button>
+    <button class="act" data-do="gap" type="button"><span class="disc">Gắp</span><span class="lbl">Gắp món</span></button>
+    <button class="act" data-do="menu" type="button"><span class="disc">Menu</span><span class="lbl">Gọi món</span></button>
+  </div>
+  <div class="acts" id="actsChua" role="toolbar" aria-label="Hành động">
     <button class="act" data-do="bow" type="button"><span class="disc">Lạy</span><span class="lbl">Lễ Phật</span></button>
     <button class="act" data-do="incense" type="button"><span class="disc">Hương</span><span class="lbl">Thắp hương</span></button>
     <button class="act" data-do="mo" type="button"><span class="disc">Mõ</span><span class="lbl">Gõ mõ</span></button>
     <button class="act" data-do="bell" type="button"><span class="disc">Chuông</span><span class="lbl">Thỉnh chuông</span></button>
     <button class="act" data-do="xam" type="button"><span class="disc">Xăm</span><span class="lbl">Xin xăm</span></button>
     <button class="act" data-do="so" type="button"><span class="disc">Số</span><span class="lbl">Xin 8 số</span></button>
+  </div>
+</div>
+
+<!-- Chọn map -->
+<div class="modal" id="mMap" role="dialog" aria-modal="true" aria-labelledby="mMapT">
+  <div class="sheet">
+    <div class="sheet-head"><h2 id="mMapT">Chọn map</h2><button class="x" data-close type="button">Đóng</button></div>
+    <div class="sheet-body"><div class="maps" id="mapList"></div></div>
+  </div>
+</div>
+
+<!-- Sổ menu quán -->
+<div class="modal" id="mMenu" role="dialog" aria-modal="true" aria-labelledby="mMenuT">
+  <div class="sheet menubook">
+    <div class="sheet-head"><h2 id="mMenuT">Thực đơn</h2><button class="x" data-close type="button">Đóng</button></div>
+    <div class="sheet-body">
+      <p class="muted" id="menuNote" style="margin:0 0 12px"></p>
+      <div class="dishgrid" id="dishGrid"></div>
+      <div class="err" id="menuMsg" role="status" style="margin-top:10px"></div>
+    </div>
   </div>
 </div>
 
@@ -897,7 +1091,7 @@ function actArms(SL, sleeve, sleeveR, light){
 }
 
 let avSeq = 0;
-function avatarSVG(d, view, act){
+function avatarSVG(d, view, act, opt){
   if (act) view = "back";
   const c = d.color || "#6f7fa0", dark = shade(c, -.3), light = shade(c, .3), fem = d.g === "nu", front = view === "front";
   const o = OUTFITS.some(x => x[0] === d.outfit) ? d.outfit : (fem ? "aodai" : "trang");
@@ -1000,8 +1194,10 @@ function avatarSVG(d, view, act){
     aL = `<path d="M21.5 53 Q15.3 58 15.3 72 L20.7 72.5 Q20.6 63 24 58 Z" fill="${sleeve}" ${OL}/>` + hand(18, 74.6);
     aR = `<path d="M42.5 53 Q48.7 58 48.7 72 L43.3 72.5 Q43.4 63 40 58 Z" fill="${sleeveR}" ${OL}/>` + hand(46, 74.6);
   }
+  const poseG = opt && opt.pose ? poseSVG(opt.pose, front, SL, sleeveR, opt.food || "#d9823b") : "";
   if (flower) aR += handFlower(flower, SL === "wide" ? 45.5 : 46, SL === "wide" ? 76.5 : 74.5, 18);
-  s += `<g class="side"><g class="armL">${aL}</g><g class="armR">${aR}</g></g>`;
+  // nhìn trước: tay cầm ly/đũa vẽ sau đầu (đưa đũa lên miệng không bị đầu che)
+  s += `<g class="side"><g class="armL">${aL}</g><g class="armR">${aR}</g></g>` + (front ? "" : poseG);
 
   // tay chắp (đứng yên, quay mặt)
   if (front) {
@@ -1037,7 +1233,7 @@ function avatarSVG(d, view, act){
   }
   if (acc.has("hoa")) s += flowerSVG(17.5, 19.5);
   if (acc.has("non") && !muni) s += hatSVG(front);
-  let out = act ? body.replace("<!--HEAD-->", s + `</g></g>`) + `<path class="prop p-fall" d="M49 44 V52" stroke="#d9b36a" stroke-width="1.6" stroke-linecap="round"/></svg>` : s + `</g></svg>`;
+  let out = act ? body.replace("<!--HEAD-->", s + `</g></g>`) + `<path class="prop p-fall" d="M49 44 V52" stroke="#d9b36a" stroke-width="1.6" stroke-linecap="round"/></svg>` : s + `</g>` + (front ? poseG : "") + `</svg>`;
   if (isHex(d.hc)) {
     const hc = d.hc, hg = `<linearGradient id="hr${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(hc, .22)}"/><stop offset="1" stop-color="${shade(hc, -.38)}"/></linearGradient>`
       + `<linearGradient id="hrB${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(hc, .35)}"/><stop offset="1" stop-color="${shade(hc, -.12)}"/></linearGradient>`;
@@ -1244,7 +1440,14 @@ function playBell(vol = 1){
 }
 
 /* ---------------- Cảnh & camera ---------------- */
-const W = 1280, H = 720, WALK = { x0: 70, x1: 1210, y0: 482, y1: 702 };
+const W = 1280, H = 720;
+const MAPS = {
+  chua: { name: "Chùa An Nhiên", room: "Chánh điện", desc: "Lễ Phật, thắp hương, gõ mõ, thỉnh chuông", walk: { x0: 70, x1: 1210, y0: 482, y1: 702 },
+    spawn: () => { const x = 640 + Math.round(Math.random() * 240 - 120); return { x, y: 690, tx: x, ty: 600 + Math.round(Math.random() * 40) }; } },
+  quan: { name: "Quán nhậu Zô Zô", room: "Quán nhậu", desc: "5 bàn, 30 ghế, gọi món, nâng ly", walk: { x0: 70, x1: 1210, y0: 470, y1: 708 },
+    spawn: () => { const x = 640 + Math.round(Math.random() * 200 - 100); return { x, y: 708, tx: x, ty: 700 }; } }
+};
+let curMap = "chua", WALK = MAPS.chua.walk;
 const SPOTS = { incense: { x: 640, y: 530 }, bell: { x: 250, y: 528 }, mo: { x: 1056, y: 528 }, bow: null };
 const view = $("view"), stage = $("stage"), layer = $("players");
 let scale = 1, camX = 0, camY = 0, firstCam = true;
@@ -1363,17 +1566,22 @@ function playAct(p, act, remote){
     case "mo": moStrike(p, remote); say(p, "Nam mô A Di Đà Phật", 1600); break;
     case "xam": startAct(p, "xam"); say(p, "Đang xin xăm", 3000); break;
     case "so": startAct(p, "so"); say(p, "Đang xin số may mắn", 3000); break;
+    case "zo": startPose(p, "zo"); say(p, "Zô!", 1500); p.zoAt = performance.now(); checkClink(p); break;
+    case "gap": startPose(p, "gap"); break;
     case "pray": startAct(p, "pray"); say(p, "Vừa gửi một lời nguyện", 3000); break;
   }
 }
 
 function syncPlayers(obj){
+  lastPlayers = obj || {};
   const seen = new Set();
   let n = 0;
   for (const id in obj) {
     const d = obj[id]; if (!d || !d.name) continue;
-    seen.add(id); n++;
+    n++;
     if (id === meId) continue;
+    if ((d.map === "quan" ? "quan" : "chua") !== curMap) continue;
+    seen.add(id);
     let p = players.get(id);
     if (!p) { p = createPlayer({ ...d, id }); continue; }
     p.d = { ...d, id }; applyProfile(p);
@@ -1383,6 +1591,11 @@ function syncPlayers(obj){
   }
   for (const [id, p] of players) if (id !== meId && !seen.has(id)) { p.el.remove(); players.delete(id); }
   $("count").textContent = Math.max(1, n);
+  // hai người cùng chọn một ghế: ai ngồi sau thì đứng dậy
+  if (me && me.seat) for (const p of players.values()) {
+    if (p.id !== meId && p.d.seat === me.seat && (p.d.seatTs || 0) <= (me.seatTs || 0)) { setMe({ seat: "" }); say(players.get(meId), "Ghế này có người rồi", 1800); break; }
+  }
+  renderTables();
 }
 
 /* ---------------- Vòng lặp ---------------- */
@@ -1426,6 +1639,9 @@ function tick(now){
       if (Math.abs(dx) > 2) p.flip = dx < 0;
     } else if (p.id === meId && pending) { const fn = pending; pending = null; fn(); }
     const av = p.el.querySelector(".av");
+    if (moving && p.id === meId && me.seat) setMe({ seat: "" });
+    if (p.pose && (moving || now > p.poseUntil)) p.pose = null;
+    const S = moving ? null : seatOf(p);
     if (p.act) {
       if (moving) stopAct(p);
       else if (now > p.actUntil) {
@@ -1433,7 +1649,7 @@ function tick(now){
         else { stopAct(p); p.backUntil = now + 400; }
       }
     }
-    let v = p.view && !p.view.startsWith("act:") ? p.view : "front";
+    let v = p.view && !p.view.startsWith("act:") ? p.view.split("|")[0] : "front";
     if (moving) {
       if (Math.abs(dy) > Math.abs(dx) * .5) v = dy > 0 ? "front" : "back";
       p.backUntil = 0; p.stopAt = 0;
@@ -1442,12 +1658,16 @@ function tick(now){
       if (now < (p.backUntil || 0)) v = "back";
       else if (now - p.stopAt > 900) { p.backUntil = 0; v = "front"; }
     }
+    if (S) v = S.face;
     if (p.act) v = "act:" + p.act;
-    if (v !== p.view) {
-      p.view = v; av.innerHTML = avatarSVG(p.d, v, p.act);
+    const key = v + (p.pose && !p.act ? "|" + p.pose + p.poseSeq : "");
+    if (key !== p.view) {
+      p.view = key; av.innerHTML = avatarSVG(p.d, v, p.act, p.pose && !p.act ? { pose: p.pose, food: p.pose === "gap" ? foodFor(p) : "" } : null);
       av.classList.toggle("v-front", v === "front"); av.classList.toggle("acting", !!p.act);
+      av.classList.toggle("posing", !!(p.pose && !p.act));
       av.dataset.act = p.act || ""; delete av.dataset.out;
     }
+    av.classList.toggle("sit", !!S);
     av.classList.toggle("flip", p.flip);
     p.el.classList.toggle("walk", moving);
     const s = 1.12 + (src.y - WALK.y0) / (WALK.y1 - WALK.y0) * .4;
@@ -1459,12 +1679,239 @@ function tick(now){
   requestAnimationFrame(tick);
 }
 
+
+/* ================= Quán nhậu: bàn, ghế, món, động tác ================= */
+const TABLES = [{ x: 300, y: 548 }, { x: 640, y: 548 }, { x: 980, y: 548 }, { x: 470, y: 668 }, { x: 810, y: 668 }];
+const SEATS = {};
+TABLES.forEach((T, t) => {
+  [-70, 0, 70].forEach((dx, i) => {
+    SEATS[`t${t}b${i}`] = { id: `t${t}b${i}`, t, x: T.x + dx, y: T.y - 34, face: "front" };
+    SEATS[`t${t}f${i}`] = { id: `t${t}f${i}`, t, x: T.x + dx, y: T.y + 30, face: "back" };
+  });
+});
+const DISHES = [["lau", "Lẩu thái"], ["muc", "Mực nướng"], ["oc", "Ốc xào"], ["ga", "Gà nướng"], ["dau", "Đậu phụ chiên"], ["nem", "Nem chua rán"], ["lac", "Lạc rang"], ["bia", "Tháp bia"]];
+const DISH_NAME = Object.fromEntries(DISHES);
+const FOOD_COLOR = { lau: "#e2572c", muc: "#e7b46a", oc: "#c98a4a", ga: "#c96a2c", dau: "#f2c35a", nem: "#d9653a", lac: "#e9cf98", bia: "#e7b46a" };
+const ORDER_MS = 10 * 60 * 1000;
+const PLATE = `<ellipse cx="22" cy="27" rx="19" ry="6.5" fill="#fbfaf6" stroke="#bdb6a8"/><ellipse cx="22" cy="26.3" rx="13" ry="4" fill="none" stroke="#e3ddd0" stroke-width=".8"/>`;
+function dishSVG(id){
+  const st = `stroke-width=".8"`;
+  switch (id) {
+    case "lau": return `<ellipse cx="22" cy="29" rx="17" ry="4.5" fill="rgba(0,0,0,.18)"/><path d="M6 18 Q6 30 22 30 Q38 30 38 18Z" fill="#55585e" stroke="#2c2c30"/><ellipse cx="4.5" cy="20" rx="2.6" ry="1.8" fill="#55585e" stroke="#2c2c30"/><ellipse cx="39.5" cy="20" rx="2.6" ry="1.8" fill="#55585e" stroke="#2c2c30"/>`
+      + `<ellipse cx="22" cy="18" rx="16" ry="5" fill="#d9452e" stroke="#2c2c30"/><path d="M13 17 q2 -2.5 4 0 M25 19 q2 -2.5 4 0" stroke="#ffb07a" stroke-width="1.6" fill="none"/><g fill="#4f9a3a"><circle cx="19" cy="19" r="1.2"/><circle cx="29" cy="16.5" r="1.1"/><circle cx="16" cy="16" r="1"/></g>`
+      + `<path d="M15 11 q-2 -3 0 -6 M22 10 q2 -3 0 -6 M29 11 q-2 -3 0 -6" stroke="#fff" stroke-width="1.3" fill="none" opacity=".75" stroke-linecap="round"/>`;
+    case "muc": return PLATE + `<path d="M11 24 Q13 18 26 19 Q34 20 36 23 Q34 26 26 26.5 Q15 27 11 24Z" fill="#e7b46a" stroke="#a8692e" ${st}/><path d="M17 20.5 L19 26 M22 20 L24 26.3 M27 20 L29 26" stroke="#8a4a1e" stroke-width="1" opacity=".7"/><path d="M11 24 l-5 -2 M11 24 l-5 1 M11 24 l-4 3" stroke="#c9873e" stroke-width="1.4" stroke-linecap="round"/>`;
+    case "oc": return PLATE + [[14, 24], [21, 25.5], [28, 24], [17.5, 21], [25, 21]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3.6" fill="#c98a4a" stroke="#6e4426" ${st}/><path d="M${x - 1.6} ${y} a1.6 1.6 0 1 1 1.6 1.6" stroke="#6e4426" stroke-width=".7" fill="none"/>`).join("") + `<g fill="#4f9a3a"><circle cx="11" cy="21" r="1"/><circle cx="32" cy="21.5" r="1"/></g>`;
+    case "ga": return PLATE + [[16, 23, -20], [28, 23, 20]].map(([x, y, a]) => `<g transform="rotate(${a} ${x} ${y})"><ellipse cx="${x}" cy="${y}" rx="6.5" ry="4.2" fill="#c96a2c" stroke="#7a3a14" ${st}/><rect x="${x + 5}" y="${y - 1}" width="5" height="2" fill="#f6efe2"/><circle cx="${x + 10.5}" cy="${y - 1}" r="1.3" fill="#f6efe2"/><circle cx="${x + 10.5}" cy="${y + 1}" r="1.3" fill="#f6efe2"/></g>`).join("");
+    case "dau": return PLATE + [[14, 22], [20.5, 24.5], [27, 22], [33, 24.5]].map(([x, y]) => `<rect x="${x - 3.5}" y="${y - 3.5}" width="7" height="6" rx="1.2" fill="#f2c35a" stroke="#b07f22" ${st}/><rect x="${x - 3}" y="${y - 3}" width="6" height="2" rx="1" fill="#ffe29a"/>`).join("");
+    case "nem": return PLATE + [[13, 24], [19, 22], [25, 24], [31, 22], [22, 26]].map(([x, y]) => `<rect x="${x - 3.5}" y="${y - 2}" width="7" height="4" rx="2" fill="#d9653a" stroke="#8a3414" ${st}/>`).join("") + `<g fill="#4f9a3a"><circle cx="35" cy="25" r="1.2"/><circle cx="9" cy="23" r="1.1"/></g>`;
+    case "lac": return `<ellipse cx="22" cy="29" rx="13" ry="3.5" fill="rgba(0,0,0,.15)"/><path d="M9 20 Q9 30 22 30 Q35 30 35 20Z" fill="#e9e2d2" stroke="#a89e8a"/><ellipse cx="22" cy="20" rx="13" ry="4" fill="#d9b06a" stroke="#a89e8a"/>`
+      + [[16, 19], [20, 18], [24, 19.5], [28, 18.5], [18, 21], [26, 21], [22, 16.5]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="2" ry="1.3" fill="#e9cf98" stroke="#a87a3a" stroke-width=".5"/>`).join("");
+    case "bia": return `<ellipse cx="22" cy="30" rx="10" ry="3" fill="rgba(0,0,0,.18)"/><rect x="14" y="27" width="16" height="3.5" rx="1.2" fill="#3a3a3a"/><rect x="16" y="3" width="12" height="25" rx="3" fill="#f2b33d" stroke="#8a5a1a" stroke-width="1"/>`
+      + `<path d="M16 6 h12 v-1 q-1.5 -3 -3 0 q-1.5 -3 -3 0 q-1.5 -3 -3 0 q-1.5 -3 -3 0z" fill="#fff"/><rect x="18" y="8" width="2.2" height="17" rx="1" fill="#fff" opacity=".4"/><path d="M28 22 h4 v3 h-2" stroke="#3a3a3a" stroke-width="1.6" fill="none"/>`;
+  }
+  return "";
+}
+const stoolSVG = `<svg viewBox="0 0 40 30" aria-hidden="true"><ellipse cx="20" cy="28" rx="15" ry="2.5" fill="rgba(0,0,0,.25)"/><path d="M5 8 L9 28 H13 L15 14 H25 L27 28 H31 L35 8 Z" fill="#2b6fae" stroke="#174a7a" stroke-width="1"/><ellipse cx="20" cy="7.5" rx="16" ry="5" fill="#3a86cc" stroke="#174a7a" stroke-width="1"/><ellipse cx="20" cy="7" rx="5" ry="1.6" fill="#174a7a" opacity=".5"/></svg>`;
+const tableSVG = `<svg viewBox="0 0 250 64" width="250" height="64" aria-hidden="true"><ellipse cx="125" cy="62" rx="120" ry="6" fill="rgba(0,0,0,.22)"/>`
+  + `<rect x="40" y="26" width="6" height="32" fill="#7d868f"/><rect x="204" y="26" width="6" height="32" fill="#7d868f"/>`
+  + `<rect x="13" y="30" width="7" height="32" rx="1" fill="#9aa4ad" stroke="#5e6670"/><rect x="230" y="30" width="7" height="32" rx="1" fill="#9aa4ad" stroke="#5e6670"/>`
+  + `<path d="M24 2 H226 L244 26 H6 Z" fill="#d7dee4" stroke="#6e7780" stroke-width="1.5"/><path d="M40 6 H140" stroke="#fff" stroke-width="3" opacity=".6" stroke-linecap="round"/>`
+  + `<rect x="6" y="26" width="238" height="7" fill="#a6b0b9" stroke="#6e7780" stroke-width="1.5"/></svg>`;
+const menuPropSVG = `<svg viewBox="0 0 40 34" aria-hidden="true"><g transform="rotate(-8 20 17)"><rect x="8" y="6" width="24" height="22" rx="2" fill="#a11d16" stroke="#5a0e0b" stroke-width="1.2"/><rect x="11" y="9" width="18" height="16" rx="1" fill="none" stroke="#ffd35a" stroke-width="1"/><text x="20" y="20" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="6.5" fill="#ffe08a">MENU</text></g></svg>`;
+
+let tableEls = [], tableSig = [], tableClink = [];
+function buildQuan(){
+  TABLES.forEach((T, t) => {
+    const el = document.createElement("div");
+    el.className = "qobj qtable"; el.style.left = T.x + "px"; el.style.top = T.y + "px"; el.style.zIndex = T.y;
+    el.innerHTML = tableSVG + `<div class="dishes"></div><div class="tmenu" data-menu="${t}" role="button" aria-label="Xem menu bàn ${t + 1}">${menuPropSVG}</div>`;
+    layer.appendChild(el); tableEls[t] = el;
+  });
+  Object.values(SEATS).forEach(S => {
+    const el = document.createElement("div");
+    el.className = "qobj qstool"; el.dataset.seat = S.id; el.title = "Ngồi ghế này";
+    el.style.left = S.x + "px"; el.style.top = S.y + "px"; el.style.zIndex = S.y - 1;
+    el.innerHTML = stoolSVG; layer.appendChild(el);
+  });
+}
+buildQuan();
+
+const arr = v => Array.isArray(v) ? v : (v && typeof v === "object" ? Object.values(v) : []);
+const seatIdOf = p => p.id === meId ? (me && me.seat) : p.d.seat;
+const seatOf = p => curMap === "quan" ? SEATS[seatIdOf(p)] || null : null;
+function seatTaken(id){
+  for (const q of players.values()) if (q.id !== meId && q.d.seat === id) return true;
+  return false;
+}
+function ordersOf(p){ return arr(p.id === meId ? me.orders : p.d.orders); }
+function renderTables(){
+  if (curMap !== "quan") return;
+  const now = Date.now(), per = TABLES.map(() => []);
+  for (const p of players.values()) for (const o of ordersOf(p)) {
+    if (o && per[o.t] && DISH_NAME[o.d] && now - o.ts < ORDER_MS) per[o.t].push(o);
+  }
+  per.forEach((list, t) => {
+    list.sort((a, b) => b.ts - a.ts);
+    const top = list.slice(0, 4), sig = top.map(o => o.d + o.ts).join("|");
+    if (sig === tableSig[t]) return;
+    tableSig[t] = sig;
+    tableEls[t].querySelector(".dishes").innerHTML = top.map(o => `<svg viewBox="0 0 44 34" aria-label="${DISH_NAME[o.d]}">${dishSVG(o.d)}</svg>`).join("");
+  });
+}
+setInterval(renderTables, 15000);
+
+function setMe(f){
+  Object.assign(me, f);
+  const p = players.get(meId); if (p && p.d !== me) Object.assign(p.d, f);
+  net.update(f);
+}
+function sitAt(id){
+  const S = SEATS[id]; if (!S || !me) return;
+  if (me.seat === id) return;
+  if (seatTaken(id)) { say(players.get(meId), "Ghế này có người rồi", 1800); return; }
+  if (me.seat) setMe({ seat: "" });
+  pending = () => {
+    if (seatTaken(id)) { say(players.get(meId), "Ghế này có người rồi", 1800); return; }
+    me.x = me.tx = S.x; me.y = me.ty = S.y;
+    setMe({ seat: id, seatTs: Date.now(), x: S.x, y: S.y, tx: S.x, ty: S.y });
+  };
+  if (Math.hypot(me.x - S.x, me.y - S.y) < 2) { const fn = pending; pending = null; fn(); }
+  else setTarget(S.x, S.y);
+}
+
+/* Tư thế nâng ly / gắp món (tay phải) */
+const POSE_MS = { zo: 2400, gap: 2600 };
+function startPose(p, pose){ p.pose = pose; p.poseUntil = performance.now() + POSE_MS[pose]; p.poseSeq = (p.poseSeq || 0) + 1; }
+function poseSVG(pose, front, SL, sleeveR, food){
+  const skin = `fill="url(#sk)" ${OL}`, rf = SL === "short" ? skin : `fill="${sleeveR}" ${OL}`;
+  const cap = SL === "short" ? `<path d="M42.5 52.5 Q49 54.5 48.8 61 L42.5 61.5 Q42.8 57.5 39.5 56.5 Z" fill="${sleeveR}" ${OL}/>` : "";
+  if (pose === "zo") {
+    const glass = `<rect x="47" y="14" width="8" height="11" rx="1.4" fill="#f2b33d" stroke="#8a5a1a" stroke-width=".6"/><path d="M46.8 15.2 q2 -2.8 4 0 q2 -2.8 4.2 0 v1.6 h-8.2z" fill="#fff"/><rect x="48.4" y="17" width="1.6" height="7" rx=".8" fill="#fff" opacity=".45"/>`;
+    return `<g class="pz"><path d="M42.5 53 Q52 50 53.5 41 Q51.5 37.5 48 39 Q47 46 40 50.5 Z" ${rf}/><path d="M53.3 41.5 Q55 33 52.5 26 L49 27 Q50.5 33 48.5 40 Z" ${rf}/>${cap}${glass}<circle cx="51" cy="25.5" r="3.1" ${skin}/></g>`;
+  }
+  const sticks = (x1, y1, x2, y2) => `<path d="M${x1} ${y1} L${x2} ${y2} M${x1 + .8} ${y1 + .6} L${x2 + .8} ${y2 + 1.2}" stroke="#b5864a" stroke-width="1" stroke-linecap="round"/>`;
+  if (!front) {
+    // nhìn từ sau: khuỷu tay phải nhấp lên xuống khi gắp
+    return `<g class="pgk"><g transform="translate(64 0) scale(-1 1)"><path d="M21.5 53 Q13 59 15 68 Q19 71.5 25 67 Q22.5 62 25.5 57.5 Z" ${rf}/></g></g>`;
+  }
+  const A = `<g class="pgA"><path d="M42.5 53 Q50 58 50 70 L45 71.5 Q45 62 40 57.5Z" ${rf}/>${cap}${sticks(47.5, 72.5, 41, 80)}<circle class="pgF" cx="41.2" cy="80.6" r="1.9" fill="${food}" stroke="rgba(0,0,0,.35)" stroke-width=".5"/><circle cx="47.5" cy="72.5" r="3" ${skin}/></g>`;
+  const B = `<g class="pgB"><path d="M42.5 53 Q50 57 50 64 L45.5 66 Q45 60 40 57.5Z" ${rf}/><path d="M50 63 Q46 52 38 46.5 L36 50 Q42 54 45.5 65Z" ${rf}/>${cap}${sticks(36.5, 48, 30.5, 44.8)}<circle class="pgF" cx="30.8" cy="45.2" r="1.9" fill="${food}" stroke="rgba(0,0,0,.35)" stroke-width=".5"/><circle cx="36.5" cy="48.2" r="3" ${skin}/></g>`;
+  return A + B;
+}
+function foodFor(p){
+  const S = seatOf(p); if (!S) return "#d9823b";
+  const now = Date.now(); let best = null;
+  for (const q of players.values()) for (const o of ordersOf(q)) if (o && o.t === S.t && now - o.ts < ORDER_MS && (!best || o.ts > best.ts)) best = o;
+  return best ? FOOD_COLOR[best.d] || "#d9823b" : "#d9823b";
+}
+
+/* Cụng ly: nhiều người cùng bàn bấm Zô trong 4 giây */
+function playClink(){
+  if (!soundOn) return;
+  const a = audio(), t = a.currentTime;
+  [[2093, .35, .5], [2637, .25, .45], [3136, .15, .35], [2349, .2, .6]].forEach(([f, v, d], i) => {
+    const o = a.createOscillator(), g = a.createGain(), st = t + (i === 3 ? .07 : 0);
+    o.type = "sine"; o.frequency.value = f;
+    g.gain.setValueAtTime(.0001, st); g.gain.exponentialRampToValueAtTime(v, st + .005); g.gain.exponentialRampToValueAtTime(.0001, st + d);
+    o.connect(g).connect(a.destination); o.start(st); o.stop(st + d);
+  });
+}
+function clinkFx(t){
+  const T = TABLES[t], el = document.createElement("div");
+  el.className = "clink"; el.style.left = T.x + "px"; el.style.top = (T.y - 150) + "px";
+  let rays = "";
+  for (let i = 0; i < 12; i++) { const a = i * 30 * Math.PI / 180; rays += `<path d="M${(75 + Math.cos(a) * 26).toFixed(1)} ${(75 + Math.sin(a) * 26).toFixed(1)} L${(75 + Math.cos(a) * 70).toFixed(1)} ${(75 + Math.sin(a) * 70).toFixed(1)}" stroke="#ffd35a" stroke-width="${i % 2 ? 3 : 6}" stroke-linecap="round" opacity=".8"/>`; }
+  el.innerHTML = `Zô!!!<svg viewBox="0 0 150 150" aria-hidden="true">${rays}</svg>`;
+  layer.appendChild(el); setTimeout(() => el.remove(), 1700);
+  playClink();
+}
+function checkClink(p){
+  const S = seatOf(p); if (!S) return;
+  const now = performance.now(); let n = 0;
+  for (const q of players.values()) { const sq = seatOf(q); if (sq && sq.t === S.t && now - (q.zoAt || 0) < 4000) n++; }
+  if (n >= 2 && now - (tableClink[S.t] || 0) > 3500) { tableClink[S.t] = now; clinkFx(S.t); }
+}
+
+/* Sổ menu */
+let menuTable = -1;
+$("dishGrid").innerHTML = DISHES.map(([id, name]) => `<button type="button" class="dish" data-dish="${id}"><svg viewBox="0 0 44 34" aria-hidden="true">${dishSVG(id)}</svg><span>${name}</span></button>`).join("");
+function openMenu(t, ev){
+  const S = seatOf(players.get(meId) || { id: meId, d: {} });
+  if (t == null || t < 0) t = S ? S.t : -1;
+  menuTable = t;
+  $("mMenuT").textContent = t >= 0 ? `Thực đơn - Bàn ${t + 1}` : "Thực đơn";
+  $("menuNote").textContent = S && S.t === t ? "Chọn món, món sẽ được dọn lên bàn của bạn (giữ 10 phút)." : "Ngồi vào một ghế của bàn này để gọi món.";
+  $("menuMsg").textContent = "";
+  const sh = $("mMenu").querySelector(".sheet");
+  if (ev) { sh.style.setProperty("--dx", (ev.clientX - innerWidth / 2) + "px"); sh.style.setProperty("--dy", (ev.clientY - innerHeight / 2) + "px"); }
+  else { sh.style.setProperty("--dx", "0px"); sh.style.setProperty("--dy", "40vh"); }
+  openModal("mMenu");
+}
+$("dishGrid").addEventListener("click", e => {
+  const b = e.target.closest("[data-dish]"); if (!b || !me) return;
+  const S = seatOf(players.get(meId));
+  if (!S || S.t !== menuTable) { $("menuMsg").textContent = "Hãy ngồi vào một ghế của bàn này rồi gọi món."; return; }
+  const now = Date.now(), d = b.dataset.dish;
+  const list = arr(me.orders).filter(o => o && now - o.ts < ORDER_MS);
+  list.push({ t: S.t, d, ts: now });
+  setMe({ orders: list.slice(-8) });
+  say(players.get(meId), `Cho bàn này một ${DISH_NAME[d]}!`, 2200);
+  closeModal("mMenu"); renderTables();
+});
+
+/* Chọn map */
+let lastPlayers = {};
+function mapCounts(){
+  const c = { chua: 0, quan: 0 };
+  for (const id in lastPlayers) { const d = lastPlayers[id]; if (d && d.name) c[d.map === "quan" ? "quan" : "chua"]++; }
+  if (me && !lastPlayers[meId]) c[curMap]++;
+  return c;
+}
+const MAP_THUMB = {
+  chua: `<svg viewBox="0 0 96 64"><rect width="96" height="40" fill="#8f1b16"/><rect y="40" width="96" height="24" fill="#b06a34"/><circle cx="48" cy="26" r="13" fill="#f2b33d"/><circle cx="48" cy="20" r="6" fill="#f7d99a"/><rect x="10" y="10" width="8" height="30" fill="#d03a2c"/><rect x="78" y="10" width="8" height="30" fill="#d03a2c"/></svg>`,
+  quan: `<svg viewBox="0 0 96 64"><rect width="96" height="40" fill="#e9be62"/><rect y="40" width="96" height="24" fill="#b9b1a3"/><rect x="26" y="6" width="44" height="12" rx="3" fill="#c8312f"/><rect x="14" y="40" width="68" height="6" fill="#cfd6dc"/><ellipse cx="22" cy="52" rx="6" ry="2.5" fill="#3a86cc"/><ellipse cx="48" cy="52" rx="6" ry="2.5" fill="#3a86cc"/><ellipse cx="74" cy="52" rx="6" ry="2.5" fill="#3a86cc"/><circle cx="20" cy="22" r="3" fill="#ffd35a"/><circle cx="48" cy="25" r="3" fill="#ff8a5a"/><circle cx="76" cy="22" r="3" fill="#8fd3ff"/></svg>`
+};
+function renderMapList(){
+  const c = mapCounts();
+  $("mapList").innerHTML = Object.entries(MAPS).map(([k, m]) => `<button type="button" class="mapcard" data-map="${k}" aria-current="${k === curMap}"><span class="thumb">${MAP_THUMB[k]}</span><span><b>${m.name}</b><small>${m.desc}</small><small>${c[k]} người đang ở đây${k === curMap ? " · Bạn đang ở đây" : ""}</small></span></button>`).join("");
+}
+$("btnMap").addEventListener("click", () => { renderMapList(); openModal("mMap"); });
+$("mapList").addEventListener("click", e => { const b = e.target.closest("[data-map]"); if (b) { closeModal("mMap"); switchMap(b.dataset.map); } });
+function applyMapUI(){
+  const m = MAPS[curMap];
+  $("stage").classList.toggle("map-quan", curMap === "quan");
+  $("mapTitle").textContent = m.name; $("roomName").textContent = m.room;
+  $("actsChua").hidden = curMap !== "chua"; $("actsQuan").hidden = curMap !== "quan";
+  WALK = m.walk;
+}
+function switchMap(k, silent){
+  if (!MAPS[k] || !me || (k === curMap && !silent)) return;
+  const p = players.get(meId);
+  if (p) { stopAct(p); p.pose = null; }
+  pending = null; keys.clear();
+  curMap = k; ls.set("chua_map", k); applyMapUI();
+  const pos = MAPS[k].spawn();
+  me.x = pos.x; me.y = pos.y; me.tx = pos.tx; me.ty = pos.ty;
+  setMe({ map: k, seat: "", x: pos.x, y: pos.y, tx: pos.tx, ty: pos.ty });
+  firstCam = true; tableSig = [];
+  syncPlayers(lastPlayers); renderTables();
+  if (k === "quan") hideHintNow();
+}
+
 /* ---------------- Hành động ---------------- */
 let moLast = 0;
 function doAct(act){
   if (!me) return;
   hideHint();
   try { const a = audio(); if (a.state === "suspended") a.resume(); } catch {}
+  if (act === "menu") { openMenu(-1); return; }
+  if (act === "zo" || act === "gap") {
+    const p = players.get(meId);
+    playAct(p, act, false);
+    net.update({ act, actTs: Date.now() });
+    return;
+  }
   const spot = SPOTS[act];
   const run = () => {
     const p = players.get(meId);
@@ -1495,7 +1942,11 @@ view.addEventListener("pointerdown", e => {
   if (!me || e.button > 0) return;
   hideHint();
   const hit = e.target.closest && e.target.closest("[data-act]");
-  if (hit) { doAct(hit.dataset.act); return; }
+  if (hit && !hit.classList.contains("av")) { doAct(hit.dataset.act); return; }
+  const seatEl = e.target.closest && e.target.closest("[data-seat]");
+  if (seatEl) { sitAt(seatEl.dataset.seat); return; }
+  const menuEl = e.target.closest && e.target.closest("[data-menu]");
+  if (menuEl) { openMenu(Number(menuEl.dataset.menu), e); return; }
   const [x, y] = toStage(e.clientX, e.clientY);
   if (y < WALK.y0 - 60) return;
   pending = null; setTarget(x, y);
@@ -1577,8 +2028,9 @@ $("btnEnter").addEventListener("click", async () => {
     net.update(prof); closeModal("mChar"); return;
   }
   const btn = $("btnEnter"); btn.disabled = true; btn.textContent = "Đang vào chùa...";
-  const start = { id: meId, ...prof, on: Math.round(onlineHours() * 10) / 10, x: 640 + Math.round(Math.random() * 240 - 120), y: 690, act: "", actTs: 0 };
-  start.tx = start.x; start.ty = 600 + Math.round(Math.random() * 40);
+  const startMap = ls.get("chua_map", "chua") === "quan" ? "quan" : "chua";
+  const start = { id: meId, ...prof, on: Math.round(onlineHours() * 10) / 10, map: startMap, seat: "", orders: [], act: "", actTs: 0, ...MAPS[startMap].spawn() };
+  curMap = startMap; applyMapUI();
   let res;
   try { res = await net.join(start); } catch (e) { res = { ok: false, err: true, msg: String((e && (e.code || e.message)) || e) }; console.error("join", e); }
   btn.disabled = false; btn.textContent = "Vào chùa";
@@ -1591,7 +2043,7 @@ $("btnEnter").addEventListener("click", async () => {
   me = { ...start };
   createPlayer(me);
   net.onPlayers(syncPlayers);
-  $("hudChat").hidden = false; $("btnChat").hidden = false;
+  $("hudChat").hidden = false; $("btnChat").hidden = false; $("btnMap").hidden = false;
   net.onChat(onChatMsg);
   onSent = start.on; startOnlineClock();
   $("closeChar").hidden = false; $("mCharT").textContent = "Đổi nhân vật"; $("btnEnter").textContent = "Lưu";
