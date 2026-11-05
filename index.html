@@ -1585,17 +1585,21 @@ async function makeFirebase(cfg){
     setCoin(n){ return D.set(D.ref(db, `users/${uid}/coin2`), n); },
     saveDaily(k, v){ return D.set(D.ref(db, `users/${uid}/daily/${k}`), v); },
     async sendGift(to, amt, name){
-      const r = await D.runTransaction(D.ref(db, `users/${uid}/coin2`), cur => (Number(cur) || 0) >= amt ? (Number(cur) || 0) - amt : undefined);
-      if (!r.committed) return { ok: false, bal: Number(r.snapshot.val()) || 0 };
+      // Không trả undefined (huỷ) khi chưa có số dư trong máy: trả lại nguyên giá trị để Firebase
+      // đối chiếu với máy chủ và chạy lại hàm này với số dư thật.
+      let enough = false;
+      const r = await D.runTransaction(D.ref(db, `users/${uid}/coin2`), cur => { const v = Number(cur) || 0; enough = v >= amt; return enough ? v - amt : cur; });
+      if (!r.committed || !enough) return { ok: false, bal: Number(r.snapshot.val()) || 0 };
       try { await D.push(D.ref(db, `gifts/${to}`), { from: uid, name, amt, ts: D.serverTimestamp() }); }
       catch (e) { await D.update(D.ref(db, `users/${uid}`), { coin2: D.increment(amt) }).catch(() => {}); throw e; }
       return { ok: true, bal: Number(r.snapshot.val()) || 0 };
     },
     onGifts(cb){ D.onChildAdded(D.ref(db, `gifts/${uid}`), s => cb(s.key, s.val())); },
+    onCoin(cb){ D.onValue(D.ref(db, `users/${uid}/coin2`), s => cb(s.val())); },
     async claimGift(key){
       // xoá quà bằng giao dịch: chỉ một tab nhận được, không cộng trùng
       const ref = D.ref(db, `gifts/${uid}/${key}`); let amt = 0;
-      const r = await D.runTransaction(ref, cur => { if (!cur) return undefined; amt = Number(cur.amt) || 0; return null; });
+      const r = await D.runTransaction(ref, cur => { amt = cur ? Number(cur.amt) || 0 : 0; return null; });
       if (!r.committed || !amt) return 0;
       await D.update(D.ref(db, `users/${uid}`), { coin2: D.increment(amt) });
       return amt;
@@ -1675,6 +1679,7 @@ function makeLocal(){
       ls.set("chua_gifts_" + to, box); send({ type: "gift", to });
       return { ok: true, bal: v.coin2 };
     },
+    onCoin(){},
     onGifts(cb){ giftCb = cb; const box = ls.get("chua_gifts_" + uid, {}); for (const k in box) cb(k, box[k]); },
     async claimGift(key){
       const box = ls.get("chua_gifts_" + uid, {}), g = box[key]; if (!g) return 0;
@@ -1942,7 +1947,7 @@ function setTarget(x, y){
 }
 
 function tick(now){
-  const dt = Math.min(.05, (now - last) / 1000); last = now;
+  const rawMs = now - last, dt = Math.min(.05, rawMs / 1000); last = now;
   if (me) {
     let kx = 0, ky = 0;
     if (keys.has("ArrowLeft") || keys.has("a")) kx--;
@@ -1976,7 +1981,8 @@ function tick(now){
     const medit = !!(S && S.kind === "cushion");
     if (medit && p.pose !== "thien") { p.pose = "thien"; p.poseUntil = Infinity; p.poseSeq = (p.poseSeq || 0) + 1; if (p.id === meId) say(p, `Ngồi thiền (tổng ${Math.floor(thienMs / 60000)} phút)`, 2500); }
     else if (!medit && p.pose === "thien") p.pose = null;
-    if (p.id === meId) tickThien(dt * 1000, medit);
+    // dùng thời gian thật; khoảng nghỉ > 2 giây (ẩn tab, khoá máy) không tính
+    if (p.id === meId) tickThien(Math.min(2000, rawMs), medit);
     p.el.classList.toggle("medit", medit);
     if (p.act) {
       if (moving) stopAct(p);
@@ -2565,7 +2571,8 @@ async function onGift(key, g){
   let amt = 0;
   try { amt = await net.claimGift(key); } catch {}
   if (!amt) return;
-  coin2 += amt; renderCoin(); coinFx(amt);
+  if (net.name !== "firebase") { coin2 += amt; renderCoin(); }
+  coinFx(amt);
   toast(`${g.name || "Một người bạn"} tặng bạn ${fmtCoin(amt)} đồng`, 5000);
 }
 
@@ -2938,6 +2945,8 @@ async function afterLogin(u){
   if (typeof data.coin2 === "number") coin2 = Math.max(0, Math.round(data.coin2));
   else { coin2 = COIN_START; net.setCoin(COIN_START).catch(() => {}); }
   renderCoin();
+  // số dư hiển thị luôn khớp máy chủ (cộng/trừ ở máy khác, quà nhận, lệnh bị từ chối đều tự cập nhật)
+  net.onCoin(v => { if (typeof v === "number" && isFinite(v)) { coin2 = Math.max(0, Math.round(v)); renderCoin(); } });
   if (data.profile) {
     Object.assign(draft, data.profile);
     $("mCharT").textContent = "Nhân vật của bạn";
