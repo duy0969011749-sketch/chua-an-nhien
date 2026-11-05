@@ -195,7 +195,7 @@
   @keyframes bwLeg{0%,20%,82%,100%{transform:none}30%,74%{transform:scaleY(0)}}
   @keyframes bwSit{0%,20%,82%,100%{opacity:0}30%,74%{opacity:1}}
   @keyframes bwTor{0%,20%,82%,100%{transform:none}30%,40%,70%,74%{transform:translateY(10px) scaleY(var(--ks))}50%,62%{transform:translateY(16px) scale(1.12,var(--kp))}}
-  @keyframes bwHd{0%,20%,82%,100%{transform:none}9%,14%{transform:translateY(2px)}30%,40%,70%,74%{transform:translateY(10px)}50%,62%{transform:translateY(32px) scale(.9)}}
+  @keyframes bwHd{0%,20%,82%,100%{transform:none}9%,14%{transform:translateY(2px)}30%,40%,70%,74%{transform:translateY(10px)}50%,62%{transform:translateY(42px) scale(.7)}}
   @keyframes bwArm{0%,20%,82%,100%{transform:none}30%,40%,70%,74%{transform:translateY(10px)}50%,62%{transform:translateY(16px)}}
   @keyframes bwJ{0%,3%,97%,100%{opacity:1}8%,92%{opacity:0}}
   @keyframes bwF{0%,3%{opacity:0}8%,41%{opacity:1}45%,66%{opacity:0}70%,92%{opacity:1}97%,100%{opacity:0}}
@@ -299,7 +299,7 @@
   @keyframes prLeg{0%,100%{transform:none}14%,88%{transform:scaleY(0)}}
   @keyframes prSit{0%,100%{opacity:0}14%,88%{opacity:1}}
   @keyframes prTor{0%,100%{transform:none}14%,60%,82%,88%{transform:translateY(10px) scaleY(var(--ks))}68%,76%{transform:translateY(16px) scale(1.12,var(--kp))}}
-  @keyframes prHd{0%,100%{transform:none}14%,60%,82%,88%{transform:translateY(10px)}24%,52%{transform:translateY(14px)}38%{transform:translateY(15px)}68%,76%{transform:translateY(32px) scale(.9)}}
+  @keyframes prHd{0%,100%{transform:none}14%,60%,82%,88%{transform:translateY(10px)}24%,52%{transform:translateY(14px)}38%{transform:translateY(15px)}68%,76%{transform:translateY(42px) scale(.7)}}
   @keyframes prArm{0%,100%{transform:none}14%,60%,82%,88%{transform:translateY(10px)}68%,76%{transform:translateY(16px)}}
   @keyframes prJ{0%,14%,85%,100%{opacity:1}19%,80%{opacity:0}}
   @keyframes prF{0%,14%{opacity:0}19%,58%{opacity:1}63%,100%{opacity:0}}
@@ -1173,69 +1173,103 @@ const braid = (x, y0, y1) => {
   for (let y = y0, i = 0; y <= y1; y += 5.5, i++) s += `<ellipse cx="${x + (i % 2 ? .7 : -.7)}" cy="${y}" rx="3.5" ry="3.4" fill="url(#hr)" ${OL}/>`;
   return s + `<path d="M${x - 3} ${y1 + 2.5} l3 2 l3 -2 l-.8 3.6 l-2.2 -1 l-2.2 1z" fill="#e2574c"/><path d="M${x - 2} ${y1 + 5} Q${x} ${y1 + 10} ${x + 2} ${y1 + 5}Z" fill="url(#hr)" ${OL}/>`;
 };
-// tóc rủ sau lưng (vẽ phía sau thân khi nhìn trước)
-const HAIR_BEHIND = {
-  dai: `M12 32 Q10 64 18 70 L46 70 Q54 64 52 32Z`,
-  xoandai: `M12 32 Q8 44 12 52 Q8 60 15 68 Q20 72 24 69 L40 69 Q44 72 49 68 Q56 60 52 52 Q56 44 52 32Z`,
-  duoi: `M44 18 Q60 22 56 44 Q55 52 50 56 Q53 44 49 30Z`
-};
-// phần tóc dài phủ lưng khi hành lễ (đầu vẽ sau thân nên phải vẽ riêng)
-function hairTail(d){
-  switch (d.hair) {
-    case "dai": return `<path class="k-hair" d="M14 47 Q13 62 18 70 L46 70 Q51 62 50 47 Q32 54 14 47Z" fill="url(#hr)" ${OL}/>`;
-    case "xoandai": return `<path class="k-hair" d="M14 47 Q10 56 15 66 Q20 72 24 69 L40 69 Q44 72 49 66 Q54 56 50 47 Q32 54 14 47Z" fill="url(#hr)" ${OL}/>`;
-    case "duoi": return `<path class="k-hair" d="M28.5 46 Q27.5 52 29 56 Q32 61 35 56 Q36.5 52 35.5 46Z" fill="url(#hr)" ${OL}/>`;
-    case "tet": return `<g class="k-hair">${braid(17, 48, 60)}${braid(47, 48, 60)}</g>`;
-    default: return "";
-  }
+// ---- Tóc mẫu A. Đầu: tâm (32,34.5), rx 21.5, ry 20. Màu tóc lấy từ url(#hr) để nhuộm được ----
+const HR = "url(#hr)", HRD = "#1a0f0a";
+const hShine = (p, w = 2.3) => `<path d="${p}" stroke="#fff" stroke-opacity=".34" stroke-width="${w}" fill="none" stroke-linecap="round" stroke-dasharray="7 2.6"/>`;
+const hStr = (p, op = .45) => `<path d="${p}" stroke="${HRD}" stroke-width=".8" fill="none" opacity="${op}" stroke-linecap="round"/>`;
+const hCurl = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${HR}" ${OL}/><path d="M${x - r * .45} ${y + r * .1} q${r * .45} ${-r * .55} ${r * .9} 0" stroke="#fff" stroke-opacity=".28" stroke-width=".8" fill="none"/>`;
+function hBraid(pts){
+  let s = "";
+  pts.forEach(([x, y], i) => { s += `<ellipse cx="${x + (i % 2 ? .6 : -.6)}" cy="${y}" rx="3.3" ry="3.1" transform="rotate(${i % 2 ? 18 : -18} ${x} ${y})" fill="${HR}" ${OL}/>`; });
+  const [x, y] = pts[pts.length - 1];
+  return s + `<rect x="${x - 2.4}" y="${y + 2.4}" width="4.8" height="2.2" rx="1" fill="#d6453c"/><path d="M${x - 1.8} ${y + 4.6} Q${x} ${y + 9.5} ${x + 1.8} ${y + 4.6}Z" fill="${HR}" ${OL}/>`;
 }
-function hairBack(d){
-  const h = d.hair, f = d.hair === "dinh" ? "url(#hrB)" : "url(#hr)";
+const hClip = (x, y) => `<g transform="translate(${x} ${y})"><circle r="2.6" fill="#f4f0e6" ${OL}/><circle cx="2.5" cy="-1.7" r="1.9" fill="#f4f0e6" ${OL}/><circle r=".95" fill="#e8b84a"/></g>`;
+const H_DOTS = `<g fill="#2a1d17" opacity=".35"><circle cx="20" cy="20" r=".7"/><circle cx="26" cy="16" r=".7"/><circle cx="32" cy="14.5" r=".7"/><circle cx="38" cy="16" r=".7"/><circle cx="44" cy="20" r=".7"/><circle cx="23" cy="22" r=".7"/><circle cx="29" cy="19.5" r=".7"/><circle cx="35" cy="19.5" r=".7"/><circle cx="41" cy="22" r=".7"/></g>`;
+// mái lệch bay cho tóc nữ: ngôi trái, hất chéo sang phải, hai má để trống
+const H_BANG = `<path d="M10.6 38 Q9 20 17 13.5 Q24 8.5 33 8.8 Q44 9 50 15 Q55.5 22 53.6 38 Q52.6 33.5 50.4 30.5 Q49.8 34 46.6 35 Q48.2 31.5 46.4 28.6 Q42.4 30.8 38.2 29.6 Q40.6 27.6 40 25.4 Q33.8 25.8 28.4 22.4 Q25 20.4 23.4 17.8 Q21.6 22.8 18.2 26.4 Q16.6 24.2 17 22 Q13.6 26 12.6 31 Q11.4 34 10.6 38Z" fill="${HR}" ${OL}/>`
+  + `<path d="M23.4 17.8 Q24.6 13 28 10" stroke="${HRD}" stroke-width="1" fill="none" opacity=".6"/>`
+  + hStr("M25.5 16.5 Q34 21 44 26.5 Q47 28.5 48 31 M28 13.5 Q38 15.5 47 21 Q50 23.5 51.5 28 M24 20 Q31 24.5 38 27 M21 21 Q18 25 14.5 30")
+  + `<path d="M12.4 31.5 Q10.6 36 11.4 41.5 M51.8 31.5 Q53.6 35.5 52.8 40" stroke="${HRD}" stroke-width="1.1" fill="none" stroke-linecap="round" opacity=".7"/>`
+  + hShine("M27.5 12.6 Q38 11.8 46.5 17.5", 2.2);
+
+/* nhìn trước: phần tóc nằm sau đầu và sau thân */
+function hairBehind(h){
   switch (h) {
-    case "dai": return `<path d="M12 30 Q10 12 32 12 Q54 12 52 30 Q53 62 46 70 L18 70 Q11 62 12 30Z" fill="${f}" ${OL}/>`;
-    case "bob": return `<path d="M11 42 Q8 11 32 11 Q56 11 53 42 Q32 49 11 42Z" fill="${f}" ${OL}/>`;
-    case "troc": return `<path d="M13 33 Q12 12 32 12 Q52 12 51 33 Q50 45 32 47 Q14 45 13 33Z" fill="#b98a6e" opacity=".22"/>`;
-    case "xoan": return `<path d="M13 33 Q12 12 32 12 Q52 12 51 33 Q50 47 32 49 Q14 47 13 33Z" fill="${f}" ${OL}/>`
-      + curls([[14, 30, 4.5], [16, 21, 4.8], [23, 15, 5], [32, 12.5, 5.2], [41, 15, 5], [48, 21, 4.8], [50, 30, 4.5], [16, 39, 4.2], [48, 39, 4.2], [24, 26, 4.5], [32, 22, 4.5], [40, 26, 4.5], [24, 40, 4.4], [32, 34, 4.6], [40, 40, 4.4], [32, 45, 4]]);
-    case "xoandai": return `<path d="M12 30 Q10 12 32 12 Q54 12 52 30 Q56 40 52 48 Q56 58 49 68 Q44 72 40 69 L24 69 Q20 72 15 68 Q8 58 12 48 Q8 40 12 30Z" fill="${f}" ${OL}/>`
-      + `<path d="M21 46 q3 6 0 12 M43 46 q-3 6 0 12 M32 48 q3 6 0 12" stroke="#6a4c3e" stroke-width="1.2" fill="none" opacity=".8"/>`;
-    case "duoi": return `<path d="M13 33 Q12 12 32 12 Q52 12 51 33 Q50 47 32 49 Q14 47 13 33Z" fill="${f}" ${OL}/>`
-      + `<path d="M28.5 24 Q25.5 38 29 50 Q32 57 35 50 Q38.5 38 35.5 24Z" fill="${f}" ${OL}/><circle cx="32" cy="24" r="2.8" fill="#e2574c" ${OL}/>`;
-    case "tet": return `<path d="M13 33 Q12 12 32 12 Q52 12 51 33 Q50 47 32 49 Q14 47 13 33Z" fill="${f}" ${OL}/>`
-      + `<path d="M32 13 V34" stroke="#6a4c3e" stroke-width="1.2"/>` + braid(17, 41, 60) + braid(47, 41, 60);
-    default: {
-      let s = `<path d="M13 33 Q12 12 32 12 Q52 12 51 33 Q50 47 32 49 Q14 47 13 33Z" fill="${f}" ${OL}/>`;
-      if (h === "bui") s += `<circle cx="32" cy="11" r="8" fill="url(#hr)" ${OL}/><path d="M22 9 L42 14" stroke="#d9a53c" stroke-width="2" stroke-linecap="round"/><circle cx="42.5" cy="14" r="2" fill="#f2c45a"/>`;
-      if (h === "lech") s += `<path d="M20 20 Q32 14 44 20" stroke="#6a4c3e" stroke-width="1.6" fill="none"/>`;
-      if (h === "dinh") s += `<g fill="#6a574c" opacity=".5"><circle cx="24" cy="22" r=".9"/><circle cx="30" cy="18" r=".9"/><circle cx="37" cy="19" r=".9"/><circle cx="42" cy="24" r=".9"/><circle cx="27" cy="28" r=".9"/><circle cx="36" cy="27" r=".9"/></g>`;
+    case "dai": return `<path d="M10.5 33 Q8.5 9.5 32 9.5 Q55.5 9.5 53.5 33 Q56.5 46 56 58 Q56 68 52 75 Q49.5 72.5 47.5 76 Q45 73 42.5 76.5 L21.5 76.5 Q19 73 16.5 76 Q14.5 72.5 12 75 Q8 68 8 58 Q7.5 46 10.5 33Z" fill="${HR}" ${OL}/>` + hStr("M11 46 Q9.5 60 13 72 M53 46 Q54.5 60 51 72");
+    case "xoandai": return `<path d="M10.5 33 Q8.5 9.5 32 9.5 Q55.5 9.5 53.5 33 Q58.5 41 55 49 Q59 57 55 65 Q57.5 73 51 76.5 Q47.5 73.5 44 77 L20 77 Q16.5 73.5 13 76.5 Q6.5 73 9 65 Q5 57 9 49 Q5.5 41 10.5 33Z" fill="${HR}" ${OL}/>` + hStr("M10 44 q3 5 0 10 q-3 5 0 10 M54 44 q-3 5 0 10 q3 5 0 10");
+    case "bob": return `<path d="M9.6 32 Q8 9.5 32 9.5 Q56 9.5 54.4 32 Q56 42 55 49 Q58.5 52 56.5 54.5 Q52 55.5 49.5 52 L14.5 52 Q12 55.5 7.5 54.5 Q5.5 52 9 49 Q8 42 9.6 32Z" fill="${HR}" ${OL}/>`;
+    case "duoi": return `<path d="M43 13 Q61 10 60.5 32 Q60.5 46 54.5 57 Q53 60.5 50.5 59 Q53.5 51 53.5 43 Q53.5 30 48.5 22.5 Q46 19 42 19.5Z" fill="${HR}" ${OL}/>` + hStr("M52.5 21 Q58 33 55 50 M50 24 Q53.5 35 52 48");
+    case "bui": return `<circle cx="33" cy="9" r="7.4" fill="${HR}" ${OL}/>` + hStr("M27 7.5 Q33 3.5 39 7.5 M26.5 11 Q33 7 39.5 11", .55);
+    case "xoan": return [[9, 34, 4.6], [10, 42, 4.2], [55, 34, 4.6], [54, 42, 4.2]].map(([x, y, r]) => hCurl(x, y, r)).join("");
+  }
+  return "";
+}
+/* nhìn trước: phần tóc trên đầu (vẽ sau mặt) */
+function hairFront(d, noClip){
+  const h = d.hair;
+  switch (h) {
+    case "ngan": return `<path d="M10.6 37 Q9 21 18 14 Q25 8.6 33 9 Q43 9 49 14.5 Q55 21 53.4 37 Q52 33 50.5 30.5 Q49.5 34 47.5 35 Q47.5 29.5 44.5 26.5 Q43 31.5 39.5 33 Q39.5 27.5 36.5 25 Q34 30.5 29.5 31 Q30.5 27 28.5 24.5 Q25.5 29.5 21 30.5 Q22 27.5 21.5 25.5 Q18 30 14.5 31.5 Q13.5 34.5 13.5 38 Q11.5 38.5 10.6 37Z" fill="${HR}" ${OL}/>`
+      + hStr("M44.5 27 Q46.5 31 47.5 34.5 M36.5 25.5 Q38.5 29 39.5 32.5 M28.5 25 Q27 28 23.5 30 M33 12 Q30 17 30 23 M24 14 Q21 19 21.5 25") + hShine("M17 20.5 Q24 13.6 33 13.3 Q41 13.6 46.5 17.5");
+    case "dinh": return `<path d="M11 35 Q10 12 32 11 Q54 12 53 35 Q51.5 28.5 47 26 Q40 24.2 32 25 Q24 24.2 17 26 Q12.5 28.5 11 35Z" fill="url(#hrB)" ${OL}/>` + H_DOTS
+      + `<path d="M17 26 Q24 24.4 32 25.2 Q40 24.4 47 26" stroke="#2a1d17" stroke-width=".7" stroke-dasharray="1 1.2" fill="none" opacity=".5"/>` + hShine("M18 19 Q25 14.5 34 14.5", 2);
+    case "lech": return `<path d="M10.6 38 Q9 20 17 13.5 Q24 8.5 33 8.8 Q44 9 50 15 Q55.5 22 53.4 38 Q52.5 32 50 29 Q47.5 31.5 45 31 Q44.5 28 42 26.5 Q36 27.5 30 24.5 Q25.5 22.5 22.5 20.5 Q20.5 25 17 29 Q13 32 10.6 38Z" fill="${HR}" ${OL}/>`
+      + `<path d="M22.5 20.5 Q23.5 15 27 11" stroke="${HRD}" stroke-width="1.1" fill="none" opacity=".6"/>` + hStr("M24.5 18.5 Q34 21 44 27 M27 14.5 Q38 16 48 23 M20 23 Q17 27 14 32") + hShine("M28 12.5 Q38 12 46 17");
+    case "troc": return `<path d="M13 30 Q14 14 32 13 Q50 14 51 30 Q46 22 32 21.5 Q18 22 13 30Z" fill="#a8775a" opacity=".16"/><path d="M19 21 Q25 15 34 15" stroke="#fff" stroke-opacity=".6" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
+    case "xoan": {
+      let s = `<path d="M11 36 Q9 11 32 10 Q55 11 53 36 Q50 29 44 27.5 Q38 29.5 32 28 Q26 29.5 20 27.5 Q14 29 11 36Z" fill="${HR}" ${OL}/>`;
+      [[12, 30, 4.4], [13.5, 22, 4.8], [19, 15.5, 5], [26, 11.5, 5.2], [34, 10.5, 5.2], [42, 12.5, 5], [48.5, 17, 4.8], [52, 24, 4.6], [52.5, 31, 4.2], [26, 18, 4.2], [36, 17.5, 4.2], [18.5, 26.5, 3.7], [25, 26.5, 3.8], [31.5, 26, 3.8], [38, 26.5, 3.8], [44.5, 27, 3.7]].forEach(([x, y, r]) => s += hCurl(x, y, r));
       return s;
     }
+    case "dai": return H_BANG + `<path d="M52 45 Q56.5 53 53.5 61 Q51 68 52.5 74 Q48 71.5 47.6 64 Q47.4 57 49.4 51 Q50 48 50 45.5Z" fill="${HR}" ${OL}/>` + hStr("M51.5 50 Q52 58 50 66") + (noClip ? "" : hClip(18, 24));
+    case "xoandai": return H_BANG + `<path d="M52 45 Q57.5 51 53.5 57 Q57.5 63 52.5 69 Q53.5 73 51 75 Q47 72 49 67 Q46.5 62 49.5 57 Q47 52 50 45.5Z" fill="${HR}" ${OL}/><path d="M50.2 73 q1.5 2.2 3 0" stroke="#fff" stroke-opacity=".28" stroke-width=".8" fill="none"/>` + (noClip ? "" : hClip(18, 24));
+    case "bob": return H_BANG + `<path d="M48 18 L53 21.5 M47 20.5 L52 24" stroke="#e8b84a" stroke-width="1.8" stroke-linecap="round"/>`;
+    case "duoi": return H_BANG + `<ellipse cx="46.5" cy="15" rx="3.8" ry="2.7" transform="rotate(-30 46.5 15)" fill="#e2574c" ${OL}/>`;
+    case "bui": return H_BANG + `<path d="M23.5 5 L42.5 10" stroke="#c9963a" stroke-width="1.8" stroke-linecap="round"/><circle cx="43.2" cy="10.2" r="1.9" fill="#f2c45a" ${OL}/><path d="M43.2 12 v3.2" stroke="#c9963a" stroke-width=".8"/><circle cx="43.2" cy="15.8" r=".9" fill="#d6453c"/>`;
+    case "tet": return H_BANG + hBraid([[10.5, 47], [12, 52], [13.4, 57], [14.6, 62], [15.6, 67]]) + hBraid([[53.5, 47], [52, 52], [50.6, 57], [49.4, 62], [48.4, 67]]);
   }
+  return "";
 }
-
-function hairFront(d){
-  const hl = `<path d="M19 21 Q25 14.5 34 15" stroke="#fff" stroke-opacity=".38" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+/* nhìn sau lưng: tóc phủ đầu và lưng */
+function hairBack(d){
   switch (d.hair) {
-    case "dinh": return `<path d="M13.5 30 Q13 13 32 13 Q51 13 50.5 30 Q46 21 32 21 Q18 21 13.5 30Z" fill="url(#hrB)" ${OL}/><g fill="#6a574c" opacity=".55"><circle cx="24" cy="18" r=".9"/><circle cx="30" cy="16" r=".9"/><circle cx="37" cy="16.5" r=".9"/><circle cx="42" cy="19" r=".9"/></g>`;
-    case "lech": return `<path d="M12.5 34 Q10 10 33 10 Q54 11 51.5 32 Q49 22 41 20 Q30 22 22 30 Q17 31 12.5 34Z" fill="url(#hr)" ${OL}/><path d="M22 28 Q30 19 44 19" stroke="#6a4c3e" stroke-width="1.4" fill="none"/>` + hl;
-    case "bui": return `<circle cx="32" cy="10" r="8" fill="url(#hr)" ${OL}/><path d="M22 7.5 L42 12.5" stroke="#d9a53c" stroke-width="2" stroke-linecap="round"/><circle cx="42.5" cy="12.5" r="2" fill="#f2c45a"/>`
-      + `<path d="M13 32 Q12 13 32 13 Q52 13 51 32 Q48 23 40 21 Q34 24 32 20 Q30 24 24 21 Q16 23 13 32Z" fill="url(#hr)" ${OL}/>` + hl;
-    case "dai": return `<path d="M12.5 36 Q10 11 32 11.5 Q54 11 51.5 36 Q50 24 42 20 Q35 19 32 23 Q29 19 22 20 Q14 24 12.5 36Z" fill="url(#hr)" ${OL}/>`
-      + `<path d="M13 33 Q11.5 50 15.5 58 L19 56.5 Q16 46 17 33Z M51 33 Q52.5 50 48.5 58 L45 56.5 Q48 46 47 33Z" fill="url(#hr)" ${OL}/>`
-      + `<circle cx="47" cy="21" r="2.6" fill="#e2574c"/><circle cx="49.5" cy="19.5" r="1.8" fill="#f07a6c"/>` + hl;
-    case "bob": return `<path d="M11 44 Q8 11 32 11 Q56 11 53 44 Q50 46 47 44 Q49 29 44 23.5 Q37 26 30 23 Q22 26 19 23.5 Q15 29 17 44 Q14 46 11 44Z" fill="url(#hr)" ${OL}/>` + hl;
-    case "troc": return `<path d="M13.5 29 Q13 13 32 13 Q51 13 50.5 29 Q46 21 32 21 Q18 21 13.5 29Z" fill="#b98a6e" opacity=".22"/>`
-      + `<path d="M20 20 Q26 14.5 35 15.5" stroke="#fff" stroke-opacity=".55" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
-    case "xoan": return `<path d="M12.5 31 Q11 12 32 11.5 Q53 12 51.5 31 Q48 24 42 23 Q32 26 22 23 Q16 24 12.5 31Z" fill="url(#hr)" ${OL}/>`
-      + curls([[14, 27, 4.2], [17, 19, 4.6], [24, 14, 4.8], [32, 12, 5], [40, 14, 4.8], [47, 19, 4.6], [50, 27, 4.2], [21, 23, 3.6], [28, 22, 3.4], [36, 22, 3.4], [43, 23, 3.6]]) + hl;
-    case "tet": return `<path d="M12.5 34 Q10 11 32 11.5 Q54 11 51.5 34 Q50 24 42 20 Q35 19 32 23 Q29 19 22 20 Q14 24 12.5 34Z" fill="url(#hr)" ${OL}/>`
-      + braid(13.5, 40, 62) + braid(50.5, 40, 62) + hl;
-    case "duoi": return `<path d="M12.5 33 Q10 11 32 11 Q54 11 51.5 33 Q49 23 40 21 Q30 23 22 29 Q17 30 12.5 33Z" fill="url(#hr)" ${OL}/><path d="M22 28 Q30 21 44 20" stroke="#6a4c3e" stroke-width="1.2" fill="none"/>` + hl;
-    case "xoandai": return `<path d="M12.5 36 Q10 11 32 11.5 Q54 11 51.5 36 Q50 24 42 20 Q35 19 32 23 Q29 19 22 20 Q14 24 12.5 36Z" fill="url(#hr)" ${OL}/>`
-      + `<path d="M13 33 Q9.5 42 13.5 48 Q10 55 15 61 L19 58 Q16 52 18 47 Q15 41 17 33Z M51 33 Q54.5 42 50.5 48 Q54 55 49 61 L45 58 Q48 52 46 47 Q49 41 47 33Z" fill="url(#hr)" ${OL}/>` + hl;
-    default: return `<path d="M12.5 33 Q11 10 32 10.5 Q53 10 51.5 33 Q50 26 46 23 L44 27 L41 21 L37 25 L34 20 L30 25 L27 21 L24 26 L21 22 Q15 25 12.5 33Z" fill="url(#hr)" ${OL}/>` + hl;
+    case "ngan": return `<path d="M10.4 37 Q8.5 9 32 8.8 Q55.5 9 53.6 37 Q53.5 44 50 48 Q47 47 45.5 50 Q43 48.5 40.5 51.5 Q37.5 49.5 35 52 Q32 50 29 52 Q26.5 49.5 23.5 51.5 Q21 48.5 18.5 50 Q17 47 14 48 Q10.5 44 10.4 37Z" fill="${HR}" ${OL}/>`
+      + hStr("M32 21 Q21 24 15 36 M32 21 Q43 24 49 36 M32 21 Q27 33 25.5 47 M32 21 Q37 33 38.5 47 M32 21 Q32 35 32 49") + `<path d="M30 21.5 q2 -3 4.5 -.5 q1.5 3 -1.5 3.6 q-3 .4 -3 -2.4" stroke="${HRD}" stroke-width="1" fill="none" opacity=".7"/>` + hShine("M16 22 Q23 13.6 32 13 Q41 13.6 47 20");
+    case "dinh": return `<path d="M10.8 36 Q10 11.5 32 11 Q54 11.5 53.2 36 Q52.5 45 46 48.5 Q32 51 18 48.5 Q11.5 45 10.8 36Z" fill="url(#hrB)" ${OL}/>` + H_DOTS
+      + `<g fill="#2a1d17" opacity=".3"><circle cx="18" cy="30" r=".7"/><circle cx="24" cy="34" r=".7"/><circle cx="31" cy="30" r=".7"/><circle cx="38" cy="34" r=".7"/><circle cx="45" cy="30" r=".7"/><circle cx="21" cy="42" r=".7"/><circle cx="28" cy="44" r=".7"/><circle cx="36" cy="44" r=".7"/><circle cx="43" cy="42" r=".7"/></g>` + hShine("M17 21 Q24 15 33 14.6", 2);
+    case "lech": return `<path d="M10.4 37 Q8.5 9 32 8.8 Q55.5 9 53.6 37 Q53.5 45 48.5 49.5 Q32 53.5 15.5 49.5 Q10.5 45 10.4 37Z" fill="${HR}" ${OL}/>`
+      + `<path d="M43 12 Q40 16 39.5 21" stroke="${HRD}" stroke-width="1.1" fill="none" opacity=".6"/>` + hStr("M40 19 Q28 22 17 33 M41 23 Q30 30 24 47 M45 22 Q42 34 41 49 M37 15 Q24 16 14 26") + hShine("M17 22 Q24 13.6 34 13.2");
+    case "troc": return `<path d="M12 36 Q11 13 32 12.5 Q53 13 52 36 Q51 49 32 52 Q13 49 12 36Z" fill="#a8775a" opacity=".14"/><path d="M19 21 Q25 15 34 15" stroke="#fff" stroke-opacity=".6" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
+    case "xoan": {
+      let s = `<path d="M10.5 37 Q8.5 9 32 8.8 Q55.5 9 53.5 37 Q53 47 46 51 Q32 54 18 51 Q11 47 10.5 37Z" fill="${HR}" ${OL}/>`;
+      [[13.5, 22, 4.8], [19, 15.5, 5], [26, 11.5, 5.2], [34, 10.5, 5.2], [42, 12.5, 5], [48.5, 17, 4.8], [11.5, 31, 4.4], [52.5, 25, 4.6], [52.5, 33, 4.4], [21, 24, 4.6], [30, 20, 4.8], [39, 21, 4.8], [46.5, 27, 4.4], [17, 33, 4.5], [26, 31, 4.7], [35.5, 30, 4.7], [44.5, 35, 4.5], [13, 40, 4.2], [51, 41, 4.2], [20.5, 42, 4.4], [29.5, 40, 4.6], [38.5, 41, 4.6], [24.5, 49, 4], [33, 49.5, 4.2], [42, 48, 4]].forEach(([x, y, r]) => s += hCurl(x, y, r));
+      return s;
+    }
+    case "bui": return `<path d="M10.4 36 Q8.5 9 32 8.8 Q55.5 9 53.6 36 Q53.5 46 46 50 Q32 53.5 18 50 Q10.5 46 10.4 36Z" fill="${HR}" ${OL}/>`
+      + hStr("M15 44 Q20 26 29 19 M49 44 Q44 26 35 19 M24 50 Q25 32 30 21 M40 50 Q39 32 34 21 M32 51 V22")
+      + `<circle cx="32" cy="16" r="8.4" fill="${HR}" ${OL}/><path d="M25.5 14.5 Q32 9.5 38.5 14.5 M25 18.5 Q32 13.5 39 18.5 M27 22 Q32 18.5 37 22" stroke="${HRD}" stroke-width=".9" fill="none" opacity=".6"/>`
+      + `<path d="M21 13 L43 19.5" stroke="#c9963a" stroke-width="1.8" stroke-linecap="round"/><circle cx="43.6" cy="19.7" r="1.9" fill="#f2c45a" ${OL}/>` + hShine("M26 11.5 Q32 8.6 37.5 10.5", 1.8);
+    case "dai": return `<path d="M10.5 34 Q8.5 9.5 32 9.5 Q55.5 9.5 53.5 34 Q55 46 53 56 Q51.5 62 52.5 66 Q49 66.5 47 64.5 Q45 69 41.5 66.5 Q38.5 70.5 35 67.5 Q32 70.5 29 67.5 Q25.5 70.5 22.5 66.5 Q19 69 17 64.5 Q15 66.5 11.5 66 Q12.5 62 11 56 Q9 46 10.5 34Z" fill="${HR}" ${OL}/>`
+      + hStr("M20 22 Q15 44 17.5 63 M26 18 Q22 44 23.5 65 M32 16 V67 M38 18 Q42 44 40.5 65 M44 22 Q49 44 46.5 63") + hClip(44, 24) + hShine("M15.5 24 Q22 13.6 32 13.2 Q42 13.6 48.5 24");
+    case "bob": return `<path d="M9.8 34 Q8.5 9.5 32 9.5 Q55.5 9.5 54.2 34 Q55.5 45 54 51 Q57.5 54 55.5 56 Q50 56.5 46 54 Q32 56.5 18 54 Q14 56.5 8.5 56 Q6.5 54 10 51 Q8.5 45 9.8 34Z" fill="${HR}" ${OL}/>`
+      + hStr("M20 20 Q16 36 18 52 M26 16 Q24 36 25 54 M32 15 V55 M38 16 Q40 36 39 54 M44 20 Q48 36 46 52", .4) + hShine("M15.5 24 Q22 13.6 32 13.2 Q42 13.6 48.5 24");
+    case "tet": return `<path d="M10.4 36 Q8.5 9 32 8.8 Q55.5 9 53.6 36 Q53.5 46 46 50.5 Q32 53 18 50.5 Q10.5 46 10.4 36Z" fill="${HR}" ${OL}/>`
+      + `<path d="M32 9.5 V51" stroke="${HRD}" stroke-width="1.1" opacity=".6"/>` + hStr("M30 14 Q20 26 15 45 M34 14 Q44 26 49 45 M28 12 Q14 24 12 40 M36 12 Q50 24 52 40")
+      + hBraid([[14, 46], [12.5, 51]]) + hBraid([[50, 46], [51.5, 51]]) + hShine("M15 25 Q20 14.5 29 12.6", 2) + hShine("M35 12.6 Q44 14.5 49 25", 2);
+    case "duoi": return `<path d="M10.4 36 Q8.5 9 32 8.8 Q55.5 9 53.6 36 Q53.5 46 46 50 Q32 53 18 50 Q10.5 46 10.4 36Z" fill="${HR}" ${OL}/>`
+      + hStr("M15 44 Q20 28 30 21 M49 44 Q44 28 34 21 M23 50 Q25 34 30.5 22.5 M41 50 Q39 34 33.5 22.5")
+      + `<path d="M28.5 21 Q24.5 36 27 52 Q28.5 60 32 64 Q35.5 60 37 52 Q39.5 36 35.5 21Z" fill="${HR}" ${OL}/>` + hStr("M30.5 24 Q29 40 31 60 M33.5 24 Q35 40 33 60")
+      + `<ellipse cx="32" cy="20.5" rx="4.6" ry="3" fill="#e2574c" ${OL}/>` + hShine("M15.5 24 Q22 13.6 32 13.2 Q42 13.6 48.5 24");
+    case "xoandai": return `<path d="M10.5 34 Q8.5 9.5 32 9.5 Q55.5 9.5 53.5 34 Q57 42 53.5 49 Q57 56 52.5 62 Q51 67.5 46.5 65.5 Q44 69.5 40 67 Q36.5 70 32 68 Q27.5 70 24 67 Q20 69.5 17.5 65.5 Q13 67.5 11.5 62 Q7 56 10.5 49 Q7 42 10.5 34Z" fill="${HR}" ${OL}/>`
+      + hStr("M20 22 q-3 10 0 18 q3 8 -1 18 M26 18 q-2 12 0 22 q2 10 -1 22 M32 16 q2 12 0 24 q-2 12 0 26 M38 18 q2 12 0 22 q-2 10 1 22 M44 22 q3 10 0 18 q-3 8 1 18")
+      + [[17.5, 64.5], [24, 66.5], [32, 67.5], [40, 66.5], [46.5, 64.5]].map(([x, y]) => `<path d="M${x - 1.6} ${y - 1} q1.6 2.6 3.2 0" stroke="#fff" stroke-opacity=".28" stroke-width=".8" fill="none"/>`).join("")
+      + hClip(44, 24) + hShine("M15.5 24 Q22 13.6 32 13.2 Q42 13.6 48.5 24");
   }
+  return "";
 }
+// tóc dài phủ lưng khi hành lễ: đầu vẽ sau thân nên phần dưới gáy vẽ riêng, đi theo thân
+const LONG_BACK = new Set(["dai", "xoandai", "duoi", "tet", "bob"]);
+const hairTail = (d, k) => LONG_BACK.has(d.hair) ? `<g class="k-hair" clip-path="url(#tl${k})">${hairBack(d)}</g>` : "";
 
 const OUTFITS = [["trang", "Áo tràng"], ["aodai", "Áo dài"], ["baba", "Áo bà ba"], ["thun", "Áo thun"], ["casa", "Cà sa"], ["lam", "Áo lam"], ["tuthan", "Áo tứ thân"], ["somi", "Sơ mi"], ["vay", "Váy liền"]];
 // kiểu tay áo: rộng (áo tràng, cà sa), ngắn (áo thun, váy), còn lại tay dài ôm
@@ -1361,7 +1395,7 @@ function avatarSVG(d, view, act, opt){
   let s = `<svg viewBox="0 0 64 96" width="64" height="96" aria-hidden="true"${act ? ` style="--ks:${ks};--kp:${kp}"` : ""}><defs>
     <linearGradient id="rb${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${light}"/><stop offset=".5" stop-color="${c}"/><stop offset="1" stop-color="${dark}"/></linearGradient>
     <linearGradient id="sl${k}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${dark}"/><stop offset="1" stop-color="${c}"/></linearGradient>
-    <linearGradient id="sr${k}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${c}"/><stop offset="1" stop-color="${dark}"/></linearGradient></defs>`;
+    <linearGradient id="sr${k}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${c}"/><stop offset="1" stop-color="${dark}"/></linearGradient><clipPath id="tl${k}"><rect x="-20" y="49" width="104" height="60"/></clipPath><clipPath id="hc${k}"><rect x="-20" y="-30" width="104" height="79.5"/></clipPath></defs>`;
   s += `<ellipse cx="32" cy="92" rx="17" ry="4" fill="rgba(0,0,0,.28)"/>`;
 
   // chân
@@ -1384,18 +1418,23 @@ function avatarSVG(d, view, act, opt){
 
   // tóc dài phía sau thân
   const muni = acc.has("muni"), flower = ["hong", "hue", "lav"].find(f => acc.has(f));
-  if (front && !muni && HAIR_BEHIND[d.hair]) s += `<path d="${HAIR_BEHIND[d.hair]}" fill="url(#hr)" ${OL}/>`;
+  if (front && !muni) s += hairBehind(d.hair);
 
   // thân áo
   if (o === "trang") {
     s += `<path d="M20 52 Q32 46 44 52 L49 86 Q32 91 15 86 Z" fill="${robe}" ${OL}/>`;
     s += `<path d="M24 66 Q23 76 21.5 86 M40 66 Q41 76 42.5 86" stroke="${dark}" stroke-width="1" opacity=".45" fill="none"/>`;
-    if (front) s += `<path d="M25.5 50 L32 59 L38.5 50" fill="none" stroke="#f6f1e6" stroke-width="3" stroke-linejoin="round"/><path d="M25.5 50 L32 59 L38.5 50" fill="none" stroke="${dark}" stroke-width=".8" opacity=".6"/><path d="M32 59 L32 86" stroke="${dark}" stroke-width=".8" opacity=".35"/>`;
+    // cổ giao lĩnh: vạt trái đè vạt phải
+    if (front) s += `<path d="M32 66 V86" stroke="${dark}" stroke-width=".8" opacity=".35"/><path d="M39 51.6 L31 61" stroke="#f6f1e6" stroke-width="3.2" stroke-linecap="round"/><path d="M25 51.6 L37 67" stroke="#f6f1e6" stroke-width="3.4" stroke-linecap="round"/><path d="M26.6 50.7 L38.6 66.1" stroke="${dark}" stroke-width=".7" opacity=".5"/>`;
   } else if (o === "aodai") {
-    s += `<path d="M22 52 Q32 47 42 52 L44.5 70 L50 86 Q32 90 14 86 L19.5 70 Z" fill="${robe}" ${OL}/>`;
-    s += `<path d="M32 57 V87" stroke="${light}" stroke-width="1.4" opacity=".8"/><path d="M19.5 70 L22 74 M44.5 70 L42 74" stroke="${dark}" stroke-width="1" opacity=".6"/>`;
-    s += `<g fill="${light}" opacity=".75"><circle cx="26" cy="64" r="1.3"/><circle cx="38.5" cy="76" r="1.3"/><circle cx="24" cy="80" r="1.1"/><circle cx="40" cy="62" r="1.1"/></g>`;
-    if (front) s += `<rect x="26.5" y="46.5" width="11" height="5.5" rx="2.5" fill="${light}" ${OL}/><path d="M32 52 Q37 54.5 41 54" stroke="${dark}" stroke-width="1" fill="none" opacity=".7"/>`;
+    s += `<path d="M20.5 68 L18.5 88.5 L45.5 88.5 L43.5 68Z" fill="#f6f2ea" ${OL}/>`;
+    s += `<path d="M22 52 Q32 47 42 52 Q44.5 56 43.8 69 L20.2 69 Q19.5 56 22 52Z" fill="${robe}" ${OL}/>`;
+    s += `<path d="M21 68.5 L43 68.5 L46.5 87.5 Q32 90 17.5 87.5Z" fill="${robe}" ${OL}/>`;
+    if (front) {
+      s += `<path d="M36.5 53.5 Q41 55 43 59" stroke="${dark}" stroke-width=".9" fill="none"/><g fill="#f6e7b0" stroke="${dark}" stroke-width=".35"><circle cx="38.5" cy="54.6" r=".8"/><circle cx="41" cy="56.3" r=".8"/></g>`;
+      s += `<rect x="27" y="47.5" width="10" height="5" rx="2.2" fill="${light}" ${OL}/>`;
+      for (const [x, y, r] of [[26, 76, 1], [37, 82, .85], [29, 85, .7]]) s += `<g transform="translate(${x} ${y}) scale(${r})" fill="${light}" opacity=".85"><path d="M0 -3 Q2 0 0 2 Q-2 0 0 -3Z"/><path d="M-3 0 Q-1 -.5 0 2 Q-2.6 1.8 -3 0Z"/><path d="M3 0 Q1 -.5 0 2 Q2.6 1.8 3 0Z"/></g>`;
+    } else s += `<path d="M32 54 V69" stroke="${dark}" stroke-width=".8" opacity=".45"/>`;
   } else if (o === "baba") {
     s += `<path d="M20 52 Q32 47 44 52 L46.5 74.5 Q32 78 17.5 74.5 Z" fill="${robe}" ${OL}/>`;
     if (front) s += `<path d="M27 50 Q32 55.5 37 50" fill="none" stroke="${dark}" stroke-width="1.2"/><g fill="${light}" stroke="${dark}" stroke-width=".5"><circle cx="32" cy="59" r="1.1"/><circle cx="32" cy="64.5" r="1.1"/><circle cx="32" cy="70" r="1.1"/></g><path d="M21.5 70 q3 2.2 6 0 M36.5 70 q3 2.2 6 0" stroke="${dark}" stroke-width=".9" fill="none" opacity=".7"/>`;
@@ -1433,7 +1472,7 @@ function avatarSVG(d, view, act, opt){
   if (!front) s += `<path d="M26 50 Q32 53.5 38 50" stroke="${SL === "wide" ? "#f6f1e6" : light}" stroke-width="2.2" fill="none"/>`;
   if (front && acc.has("trang")) s += beadsSVG();
   if (act) {
-    if (!muni) s += hairTail(d);
+    if (!muni) s += hairTail(d, k);
     s += `</g>` + soles + actArms(SL, sleeve, sleeveR, light);
   }
 
@@ -1469,28 +1508,32 @@ function avatarSVG(d, view, act, opt){
   // cổ & đầu
   let body = "";
   if (act) { body = s; s = `<g class="k-hd">`; }
-  s += `<rect x="28.5" y="45" width="7" height="8" rx="2" fill="#f1c4a5"/><g class="head">`;
-  s += `<ellipse cx="13.6" cy="35" rx="3" ry="4" fill="url(#sk)" ${OL}/><ellipse cx="50.4" cy="35" rx="3" ry="4" fill="url(#sk)" ${OL}/>`;
-  s += `<circle cx="32" cy="32" r="19" fill="url(#sk)" ${OL}/>`;
+  s += `<rect x="28.5" y="46" width="7" height="8" rx="2" fill="#f1c4a5"/><g class="head">`;
+  s += `<ellipse cx="11.4" cy="39" rx="2.8" ry="3.6" fill="url(#sk)" ${OL}/><ellipse cx="52.6" cy="39" rx="2.8" ry="3.6" fill="url(#sk)" ${OL}/>`;
+  s += `<ellipse cx="32" cy="34.5" rx="21.5" ry="20" fill="url(#sk)" ${OL}/>`;
+  // mũ ni vẽ theo đầu cũ (tròn r19), phóng theo đầu mới
+  const muniT = c => `<g transform="translate(32 34.5) scale(1.13 1.05) translate(-32 -32)">${c}</g>`;
   if (!front) {
-    s += muni ? muniSVG(false) : hairBack(d) + `<path d="M20 19 Q32 12.5 44 19" stroke="#fff" stroke-opacity=".3" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+    // khi hành lễ, phần tóc dưới gáy đã vẽ theo thân (hairTail)
+    s += muni ? muniT(muniSVG(false)) : act ? `<g clip-path="url(#hc${k})">${hairBack(d)}</g>` : hairBack(d);
   } else {
-    s += `<g class="eyes"><ellipse cx="25" cy="35.5" rx="3.3" ry="4.2" fill="#2b1d18"/><ellipse cx="39" cy="35.5" rx="3.3" ry="4.2" fill="#2b1d18"/>`;
-    s += `<ellipse cx="25" cy="36.6" rx="2.2" ry="2.7" fill="#7a4a30"/><ellipse cx="39" cy="36.6" rx="2.2" ry="2.7" fill="#7a4a30"/>`;
-    s += `<circle cx="26.3" cy="33.9" r="1.35" fill="#fff"/><circle cx="40.3" cy="33.9" r="1.35" fill="#fff"/><circle cx="24" cy="37.6" r=".65" fill="#fff"/><circle cx="38" cy="37.6" r=".65" fill="#fff"/>`;
-    if (fem) s += `<path d="M21.3 33.4 Q25 30.2 28.7 33.4 M35.3 33.4 Q39 30.2 42.7 33.4" stroke="#2b1d18" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M21.6 33.2 L20.4 32.4 M42.4 33.2 L43.6 32.4" stroke="#2b1d18" stroke-width="1" stroke-linecap="round"/>`;
+    s += `<g class="eyes">`;
+    for (const x of [24.3, 39.7]) {
+      s += `<ellipse cx="${x}" cy="39" rx="3.6" ry="4.6" fill="#2b1d18"/><ellipse cx="${x}" cy="40.3" rx="2.5" ry="3" fill="#7a4a30"/><ellipse cx="${x}" cy="41.4" rx="1.6" ry="1.4" fill="#b07a52" opacity=".7"/><circle cx="${x + 1.4}" cy="37.3" r="1.5" fill="#fff"/><circle cx="${x - 1.1}" cy="41" r=".7" fill="#fff"/>`;
+      if (fem) s += `<path d="M${x - 3.8} 36.6 Q${x} 33.2 ${x + 3.8} 36.6" stroke="#2b1d18" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M${x + (x < 32 ? -3.6 : 3.6)} 36.4 l${x < 32 ? -1.3 : 1.3} -1" stroke="#2b1d18" stroke-width="1" stroke-linecap="round"/>`;
+    }
     s += `</g>`;
-    s += `<path d="M22 29 Q25 27.2 28 28.6 M36 28.6 Q39 27.2 42 29" stroke="#4a3328" stroke-width="1.2" fill="none" stroke-linecap="round"/>`;
-    s += `<ellipse cx="20.5" cy="41" rx="3.2" ry="1.9" fill="#f59a9a" opacity=".55"/><ellipse cx="43.5" cy="41" rx="3.2" ry="1.9" fill="#f59a9a" opacity=".55"/>`;
-    s += `<path d="M31.4 39.6 q.6 .8 1.2 0" stroke="#d49a80" stroke-width=".9" fill="none" stroke-linecap="round"/>`;
+    s += `<path d="M21 33 Q24 31.6 27 32.6 M37 32.6 Q40 31.6 43 33" stroke="#4a3328" stroke-width="1.1" fill="none" stroke-linecap="round"/>`;
+    s += `<ellipse cx="19.2" cy="44.6" rx="3.2" ry="1.9" fill="#f59a9a" opacity=".55"/><ellipse cx="44.8" cy="44.6" rx="3.2" ry="1.9" fill="#f59a9a" opacity=".55"/>`;
+    s += `<path d="M31.4 43 q.6 .7 1.2 0" stroke="#d49a80" stroke-width=".9" fill="none" stroke-linecap="round"/>`;
     s += fem
-      ? `<path d="M29.6 42.6 Q32 45.2 34.4 42.6 Q32 43.6 29.6 42.6Z" fill="#d9655a" stroke="#a0503f" stroke-width=".8"/>`
-      : `<path d="M29.4 42.6 Q32 45 34.6 42.6" stroke="#a0503f" stroke-width="1.3" fill="none" stroke-linecap="round"/>`;
-    if (acc.has("kinh")) s += `<g fill="rgba(255,255,255,.16)" stroke="#2e2420" stroke-width="1.15"><circle cx="25" cy="35.8" r="5.3"/><circle cx="39" cy="35.8" r="5.3"/></g><path d="M30.3 35.2 Q32 34 33.7 35.2 M19.7 35 L14.5 33.5 M44.3 35 L49.5 33.5" stroke="#2e2420" stroke-width="1" fill="none"/>`;
-    s += muni ? muniSVG(true) : hairFront(d);
+      ? `<path d="M29.8 46 Q32 48.4 34.2 46 Q32 46.9 29.8 46Z" fill="#d9655a" stroke="#a0503f" stroke-width=".7"/>`
+      : `<path d="M29.6 46 Q32 48.2 34.4 46" stroke="#a0503f" stroke-width="1.2" fill="none" stroke-linecap="round"/>`;
+    if (acc.has("kinh")) s += `<g fill="rgba(255,255,255,.16)" stroke="#2e2420" stroke-width="1.15"><circle cx="24.3" cy="39.2" r="5.4"/><circle cx="39.7" cy="39.2" r="5.4"/></g><path d="M29.7 38.6 Q32 37.4 34.3 38.6 M18.9 38.4 L13.6 36.8 M45.1 38.4 L50.4 36.8" stroke="#2e2420" stroke-width="1" fill="none"/>`;
+    s += muni ? muniT(muniSVG(true)) : hairFront(d, acc.has("hoa"));
   }
-  if (acc.has("hoa")) s += flowerSVG(17.5, 19.5);
-  if (acc.has("non") && !muni) s += hatSVG(front);
+  if (acc.has("hoa")) s += flowerSVG(17, 23);
+  if (acc.has("non") && !muni) s += `<g transform="translate(32 0) scale(1.12 1.06) translate(-32 -3.5)">${hatSVG(front)}</g>`;
   let out = act ? body.replace("<!--HEAD-->", s + `</g></g>`) + `<path class="prop p-fall" d="M49 44 V52" stroke="#d9b36a" stroke-width="1.6" stroke-linecap="round"/></svg>` : s + `</g>` + (front ? poseG : "") + `</svg>`;
   if (isHex(d.hc)) {
     const hc = d.hc, hg = `<linearGradient id="hr${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(hc, .22)}"/><stop offset="1" stop-color="${shade(hc, -.38)}"/></linearGradient>`
@@ -2137,7 +2180,7 @@ function poseSVG(pose, front, SL, sleeveR, food){
     const lap = `<path d="M10 85 Q11 76 22 75.5 L42 75.5 Q53 76 54 85 Q54 92 32 92 Q10 92 10 85Z" fill="${food}" ${OL}/><ellipse cx="21" cy="85.5" rx="4.2" ry="2.2" fill="url(#sk)" ${OL}/><ellipse cx="43" cy="85.5" rx="4.2" ry="2.2" fill="url(#sk)" ${OL}/>`;
     const arms = `<path d="M21.5 53 Q13.5 62 19 74 L26 77.5 Q22.5 68 25 58Z" fill="${SL === "short" ? "url(#sk)" : sleeveR}" ${OL}/><g transform="translate(64 0) scale(-1 1)"><path d="M21.5 53 Q13.5 62 19 74 L26 77.5 Q22.5 68 25 58Z" fill="${SL === "short" ? "url(#sk)" : sleeveR}" ${OL}/></g>`;
     const hands = `<ellipse cx="32" cy="77" rx="7.5" ry="3.3" fill="url(#sk)" ${OL}/><path d="M28 75.5 Q32 73.5 36 75.5" stroke="#d9a688" stroke-width=".8" fill="none"/>`;
-    const eyes = front ? `<ellipse cx="25" cy="35.6" rx="3.9" ry="4.7" fill="url(#sk)"/><ellipse cx="39" cy="35.6" rx="3.9" ry="4.7" fill="url(#sk)"/><path d="M21.6 36 Q25 38.6 28.4 36 M35.6 36 Q39 38.6 42.4 36" stroke="#2b1d18" stroke-width="1.4" fill="none" stroke-linecap="round"/>` : "";
+    const eyes = front ? `<ellipse cx="24.3" cy="38.8" rx="4.4" ry="5.8" fill="url(#sk)"/><ellipse cx="39.7" cy="38.8" rx="4.4" ry="5.8" fill="url(#sk)"/><path d="M20.7 39.5 Q24.3 42.4 27.9 39.5 M36.1 39.5 Q39.7 42.4 43.3 39.5" stroke="#2b1d18" stroke-width="1.4" fill="none" stroke-linecap="round"/>` : "";
     return lap + arms + hands + eyes;
   }
   if (pose === "quet") {
@@ -2156,7 +2199,7 @@ function poseSVG(pose, front, SL, sleeveR, food){
     const cup = (x, y) => `<path d="M${x - 3.6} ${y - 3} L${x - 2.6} ${y + 1} H${x + 2.6} L${x + 3.6} ${y - 3}Z" fill="#f6f1e6" stroke="#8a8478" stroke-width=".6"/><ellipse cx="${x}" cy="${y - 3}" rx="3.6" ry="1" fill="#c9a04a"/>`;
     if (!front) return `<g class="pgk"><g transform="translate(64 0) scale(-1 1)"><path d="M21.5 53 Q13 59 15 68 Q19 71.5 25 67 Q22.5 62 25.5 57.5 Z" ${rf}/></g></g>`;
     const A = `<g class="pgA"><path d="M42.5 53 Q50 58 50 70 L45 71.5 Q45 62 40 57.5Z" ${rf}/>${cap}${cup(46, 72)}<circle cx="47.5" cy="73.5" r="3" ${skin}/></g>`;
-    const B = `<g class="pgB"><path d="M42.5 53 Q50 57 50 64 L45.5 66 Q45 60 40 57.5Z" ${rf}/><path d="M50 63 Q46 52 38 46.5 L36 50 Q42 54 45.5 65Z" ${rf}/>${cap}${cup(33, 45)}<circle cx="36.5" cy="48.2" r="3" ${skin}/></g>`;
+    const B = `<g class="pgB"><g transform="translate(0 2.5)"><path d="M42.5 53 Q50 57 50 64 L45.5 66 Q45 60 40 57.5Z" ${rf}/><path d="M50 63 Q46 52 38 46.5 L36 50 Q42 54 45.5 65Z" ${rf}/>${cap}${cup(33, 45)}<circle cx="36.5" cy="48.2" r="3" ${skin}/></g></g>`;
     return A + B;
   }
   if (pose === "zo") {
@@ -2169,7 +2212,7 @@ function poseSVG(pose, front, SL, sleeveR, food){
     return `<g class="pgk"><g transform="translate(64 0) scale(-1 1)"><path d="M21.5 53 Q13 59 15 68 Q19 71.5 25 67 Q22.5 62 25.5 57.5 Z" ${rf}/></g></g>`;
   }
   const A = `<g class="pgA"><path d="M42.5 53 Q50 58 50 70 L45 71.5 Q45 62 40 57.5Z" ${rf}/>${cap}${sticks(47.5, 72.5, 41, 80)}<circle class="pgF" cx="41.2" cy="80.6" r="1.9" fill="${food}" stroke="rgba(0,0,0,.35)" stroke-width=".5"/><circle cx="47.5" cy="72.5" r="3" ${skin}/></g>`;
-  const B = `<g class="pgB"><path d="M42.5 53 Q50 57 50 64 L45.5 66 Q45 60 40 57.5Z" ${rf}/><path d="M50 63 Q46 52 38 46.5 L36 50 Q42 54 45.5 65Z" ${rf}/>${cap}${sticks(36.5, 48, 30.5, 44.8)}<circle class="pgF" cx="30.8" cy="45.2" r="1.9" fill="${food}" stroke="rgba(0,0,0,.35)" stroke-width=".5"/><circle cx="36.5" cy="48.2" r="3" ${skin}/></g>`;
+  const B = `<g class="pgB"><g transform="translate(0 2.5)"><path d="M42.5 53 Q50 57 50 64 L45.5 66 Q45 60 40 57.5Z" ${rf}/><path d="M50 63 Q46 52 38 46.5 L36 50 Q42 54 45.5 65Z" ${rf}/>${cap}${sticks(36.5, 48, 30.5, 44.8)}<circle class="pgF" cx="30.8" cy="45.2" r="1.9" fill="${food}" stroke="rgba(0,0,0,.35)" stroke-width=".5"/><circle cx="36.5" cy="48.2" r="3" ${skin}/></g></g>`;
   return A + B;
 }
 function foodFor(p){
