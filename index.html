@@ -871,12 +871,12 @@
     <button class="act" data-do="tra" type="button"><i class="cost free">Free</i><span class="disc">Trà</span><span class="lbl">Uống trà</span></button>
   </div>
   <div class="acts" id="actsChua" role="toolbar" aria-label="Hành động">
-    <button class="act" data-do="bow" type="button"><i class="cost">0,5đ</i><span class="disc">Lạy</span><span class="lbl">Lễ Phật</span></button>
+    <button class="act" data-do="bow" type="button"><i class="cost free">Free</i><span class="disc">Lạy</span><span class="lbl">Lễ Phật</span></button>
     <button class="act" data-do="incense" type="button"><i class="cost">0,5đ</i><span class="disc">Hương</span><span class="lbl">Thắp hương</span></button>
-    <button class="act" data-do="mo" type="button"><i class="cost">0,5đ</i><span class="disc">Mõ</span><span class="lbl">Gõ mõ</span></button>
-    <button class="act" data-do="bell" type="button"><i class="cost">0,5đ</i><span class="disc">Chuông</span><span class="lbl">Thỉnh chuông</span></button>
-    <button class="act" data-do="xam" type="button"><i class="cost">0,5đ</i><span class="disc">Xăm</span><span class="lbl">Xin xăm</span></button>
-    <button class="act" data-do="so" type="button"><i class="cost">0,5đ</i><span class="disc">Số</span><span class="lbl">Xin 8 số</span></button>
+    <button class="act" data-do="mo" type="button"><i class="cost free">Free</i><span class="disc">Mõ</span><span class="lbl">Gõ mõ</span></button>
+    <button class="act" data-do="bell" type="button"><i class="cost free">Free</i><span class="disc">Chuông</span><span class="lbl">Thỉnh chuông</span></button>
+    <button class="act" data-do="xam" type="button"><i class="cost free">1/ngày</i><span class="disc">Xăm</span><span class="lbl">Xin xăm</span></button>
+    <button class="act" data-do="so" type="button"><i class="cost free">1/ngày</i><span class="disc">Số</span><span class="lbl">Xin 8 số</span></button>
   </div>
 </div>
 
@@ -1425,7 +1425,7 @@ async function makeFirebase(cfg){
     },
     async loadUser(){
       const s = await D.get(D.ref(db, `users/${uid}`)); const v = s.val() || {};
-      return { profile: v.profile || null, onlineMs: Number(v.onlineMs) || 0, thienMs: Number(v.thienMs) || 0, coin2: typeof v.coin2 === "number" ? v.coin2 : null };
+      return { profile: v.profile || null, onlineMs: Number(v.onlineMs) || 0, thienMs: Number(v.thienMs) || 0, coin2: typeof v.coin2 === "number" ? v.coin2 : null, daily: v.daily || {} };
     },
     saveProfile(prof){ return D.set(D.ref(db, `users/${uid}/profile`), prof); },
     addOnline(ms){ return D.update(D.ref(db, `users/${uid}`), { onlineMs: D.increment(Math.round(ms)) }); },
@@ -1464,6 +1464,7 @@ async function makeFirebase(cfg){
     // Ví lưu theo đơn vị nửa đồng (coin2 = số đồng x 2) để luôn là số nguyên
     addCoin(n){ return D.update(D.ref(db, `users/${uid}`), { coin2: D.increment(n) }); },
     setCoin(n){ return D.set(D.ref(db, `users/${uid}/coin2`), n); },
+    saveDaily(k, v){ return D.set(D.ref(db, `users/${uid}/daily/${k}`), v); },
     async sendGift(to, amt, name){
       const r = await D.runTransaction(D.ref(db, `users/${uid}/coin2`), cur => (Number(cur) || 0) >= amt ? (Number(cur) || 0) - amt : undefined);
       if (!r.committed) return { ok: false, bal: Number(r.snapshot.val()) || 0 };
@@ -1543,7 +1544,8 @@ function makeLocal(){
       async signOut(){ await this.leave(); sess.set(null); },
       leave: async () => { if (me) send({ type: "bye", id: me.id }); me = null; }
     },
-    async loadUser(){ const v = ls.get("chua_user_" + uid, {}); return { profile: v.profile || null, onlineMs: Number(v.onlineMs) || 0, thienMs: Number(v.thienMs) || 0, coin2: typeof v.coin2 === "number" ? v.coin2 : null }; },
+    async loadUser(){ const v = ls.get("chua_user_" + uid, {}); return { profile: v.profile || null, onlineMs: Number(v.onlineMs) || 0, thienMs: Number(v.thienMs) || 0, coin2: typeof v.coin2 === "number" ? v.coin2 : null, daily: v.daily || {} }; },
+    async saveDaily(k, val){ const v = ls.get("chua_user_" + uid, {}); v.daily = { ...(v.daily || {}), [k]: val }; ls.set("chua_user_" + uid, v); },
     async addCoin(n){ const v = ls.get("chua_user_" + uid, {}); v.coin2 = (Number(v.coin2) || 0) + n; ls.set("chua_user_" + uid, v); },
     async setCoin(n){ const v = ls.get("chua_user_" + uid, {}); v.coin2 = n; ls.set("chua_user_" + uid, v); },
     async sendGift(to, amt, name){
@@ -2379,7 +2381,7 @@ function switchMap(k, silent){
 }
 
 /* ---------------- Hành động ---------------- */
-const CHUA_PAID = new Set(["bow", "incense", "mo", "bell", "xam", "so"]);
+const CHUA_PAID = new Set(["incense"]);
 let moLast = 0;
 function doAct(act){
   if (!me) return;
@@ -2432,8 +2434,8 @@ function doAct(act){
     const p = players.get(meId);
     const newMo = act === "mo" && !(p.act === "mo" && !p.actOut);
     if ((act !== "mo" || newMo) && CHUA_PAID.has(act) && !spend(1)) return;
-    if (act === "xam") { openModal("mXam"); }
-    if (act === "so") { openModal("mSo"); }
+    if (act === "xam") { refreshDaily(); openModal("mXam"); }
+    if (act === "so") { refreshDaily(); openModal("mSo"); }
     if (act === "mo") {
       net.bump("mo").catch(() => {});
       const now = Date.now();
@@ -2692,6 +2694,7 @@ async function afterLogin(u){
   let data = { profile: null, onlineMs: 0 };
   try { data = await net.loadUser(); } catch {}
   onlineMs = data.onlineMs; thienMs = data.thienMs || 0;
+  daily = data.daily || {}; refreshDaily();
   if (typeof data.coin2 === "number") coin2 = Math.max(0, Math.round(data.coin2));
   else { coin2 = COIN_START; net.setCoin(COIN_START).catch(() => {}); }
   renderCoin();
@@ -2743,16 +2746,39 @@ const XAM = [
   ["Thượng", "Gia đạo yên vui. Dành thời gian cho người thân sẽ thấy lòng nhẹ."],
   ["Trung", "Học thêm điều mới sẽ mở ra cơ hội. Đừng ngại bắt đầu từ việc nhỏ."]
 ];
+/* Mỗi tài khoản xin xăm và xin số 1 lần/ngày (qua 0 giờ giờ Việt Nam là ngày mới) */
+let daily = {};
+const todayVN = () => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }).format(new Date());
+const AGAIN = "Hôm nay đã xin. Qua 0 giờ xin lại được.";
+function refreshDaily(){
+  const t = todayVN(), x = daily.xam, n = daily.so;
+  if (x && x.d === t && XAM[x.i]) {
+    const [lv, text] = XAM[x.i];
+    $("xamResult").innerHTML = `<div class="no">Quẻ số ${x.i + 1}<span class="lv ${lv === "Hạ" ? "ha" : ""}">${lv}</span></div><p>${text}</p><p class="muted">${AGAIN}</p>`;
+    $("btnShake").disabled = true; $("btnShake").textContent = "Đã xin xăm hôm nay";
+  } else if ($("btnShake").textContent === "Đã xin xăm hôm nay") {
+    $("btnShake").disabled = false; $("btnShake").textContent = "Lắc ống xăm";
+    $("xamResult").innerHTML = `<div class="no">Lá xăm</div><p class="muted">Lá xăm của bạn sẽ hiện ở đây.</p>`;
+  }
+  if (n && n.d === t && Array.isArray(n.nums)) {
+    $("balls").innerHTML = n.nums.map(v => `<div class="ball">${pad(v)}</div>`).join("") + `<p class="muted" style="width:100%;margin:8px 0 0">${AGAIN}</p>`;
+    $("btnNum").disabled = true; $("btnNum").textContent = "Đã xin số hôm nay";
+  } else if ($("btnNum").textContent === "Đã xin số hôm nay") {
+    $("btnNum").disabled = false; $("btnNum").textContent = "Xin số"; ballsQ();
+  }
+}
 $("btnShake").addEventListener("click", () => {
   const btn = $("btnShake"), out = $("xamResult"), tube = $("tube");
+  if (daily.xam && daily.xam.d === todayVN()) { refreshDaily(); return; }
   btn.disabled = true;
   tube.classList.remove("shake"); void tube.getBBox(); tube.classList.add("shake");
   out.innerHTML = `<div class="no">Lá xăm</div><p class="muted">Đang lắc ống xăm...</p>`;
   if (me) { say(players.get(meId), "Đang xin xăm"); net.update({ act: "xam", actTs: Date.now() }); }
   setTimeout(() => {
     const i = Math.floor(Math.random() * XAM.length), [lv, text] = XAM[i];
+    daily.xam = { d: todayVN(), i }; net.saveDaily("xam", daily.xam).catch(() => {});
     out.innerHTML = `<div class="no">Quẻ số ${i + 1}<span class="lv ${lv === "Hạ" ? "ha" : ""}">${lv}</span></div><p>${text}</p>`;
-    btn.disabled = false; btn.textContent = "Lắc lại";
+    refreshDaily();
   }, 950);
 });
 
@@ -2760,10 +2786,12 @@ $("btnShake").addEventListener("click", () => {
 const ballsQ = () => { $("balls").innerHTML = Array(8).fill('<div class="ball q">?</div>').join(""); };
 ballsQ();
 $("btnNum").addEventListener("click", () => {
+  if (daily.so && daily.so.d === todayVN()) { refreshDaily(); return; }
   const pool = new Set(), buf = new Uint32Array(1);
   while (pool.size < 8) { crypto.getRandomValues(buf); pool.add(buf[0] % 100); }
   $("balls").innerHTML = [...pool].sort((a, b) => a - b).map((n, i) => `<div class="ball in" style="animation-delay:${i * 80}ms">${pad(n)}</div>`).join("");
-  $("btnNum").textContent = "Xin lại";
+  daily.so = { d: todayVN(), nums: [...pool].sort((a, b) => a - b) }; net.saveDaily("so", daily.so).catch(() => {});
+  setTimeout(refreshDaily, 900);
   if (me) net.update({ act: "so", actTs: Date.now() });
 });
 

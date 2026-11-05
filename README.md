@@ -28,7 +28,9 @@ Hành động: Lạy, Thắp hương, Gõ mõ, Thỉnh chuông, Xin xăm, Xin 8 
 
 - Người mới được tặng sẵn 10 đồng. Ví hiện ở bảng thông tin góc trên trái, lưu theo tài khoản.
 - Kiếm tiền: mỗi phút ngồi thiền trên bồ đoàn ở Vườn chùa được 1 đồng.
-- Tiêu tiền (0,5 đồng mỗi lần): lạy, thắp hương, thỉnh chuông, xin xăm, xin 8 số, gửi lời nguyện, gõ mõ (tính theo lượt ngồi gõ, gõ bao nhiêu tiếng liên tục cũng chỉ tính 1 lần), cho cá ăn, gọi 1 món ở quán. Uống trà, quét lá, nâng ly, gắp món miễn phí. Không đủ tiền thì hành động bị chặn.
+- Tiêu tiền (0,5 đồng mỗi lần): thắp hương, gửi lời nguyện, cho cá ăn, gọi 1 món ở quán. Không đủ tiền thì hành động bị chặn.
+- Miễn phí: lạy, gõ mõ, thỉnh chuông, xin xăm, xin 8 số, uống trà, quét lá, nâng ly, gắp món.
+- Xin xăm và xin 8 số: mỗi tài khoản 1 lần mỗi ngày, qua 0 giờ (giờ Việt Nam) là ngày mới. Bấm lại trong ngày thì xem lại quẻ xăm / 8 số đã xin. Kết quả lưu theo tài khoản (users/{uid}/daily).
 - Tặng tiền: chạm vào nhân vật người khác, hoặc bấm nút "Ví ... · Tặng" để chọn từ danh sách người đang online; nhập số tiền (bội số 0,5, tối đa 1000 đồng mỗi lần). Người nhận thấy thông báo; nếu đang offline thì nhận khi đăng nhập lại.
 - Ví lưu dưới dạng `coin2` (= số đồng x 2) để luôn là số nguyên.
 - Mức chống gian lận cơ bản: quy tắc Firebase chặn sửa ví người khác, chặn ví âm, chặn tặng số âm hoặc quá lớn, chặn tự tặng mình. Người rành kỹ thuật vẫn có thể tự sửa ví của chính mình; muốn chặn tuyệt đối cần Cloud Functions (gói Blaze).
