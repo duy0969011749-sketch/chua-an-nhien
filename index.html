@@ -36,6 +36,9 @@
   #stage.map-trasua #scene{display:none}
   #stage.map-trasua #sceneTra{display:block}
   #stage:not(.map-trasua) .tobj{display:none}
+  #stage.map-quan .cobj,#stage.map-vuon .cobj,#stage.map-trasua .cobj{display:none}
+  .qstool.hmat{width:92px;height:34px;margin:-24px 0 0 -46px;border-radius:50%}
+  .qstool.hmat:hover{box-shadow:0 0 0 2px rgba(255,236,160,.75),0 0 16px rgba(255,236,160,.55)}
   .tcounter{position:absolute;width:330px;height:96px;margin:-96px 0 0 -165px;pointer-events:auto;cursor:pointer}
   .tcounter svg,.tbar svg,.ttable svg{display:block;overflow:visible}
   .tbar{position:absolute;width:390px;height:70px;margin:-60px 0 0 -195px;pointer-events:none}
@@ -72,6 +75,12 @@
   .pl:not(.lotus) .lotusB,.pl:not(.lotus) .lotusF{display:none}
   .pl.lotus .av{z-index:1}
   @keyframes lotusIn{from{transform:scale(.3);opacity:0}}
+  /* thiền ở chánh điện: vầng sáng vàng; đủ 5 phút thì sen nở và hào quang vàng có tia */
+  .pl.medit.hall::before{background:radial-gradient(circle,rgba(255,226,120,.8),rgba(255,214,90,0) 68%)}
+  .pl.medit.lotus.hall::before{background:radial-gradient(circle,rgba(255,240,160,.95),rgba(255,198,60,.5) 42%,rgba(255,190,60,0) 70%)}
+  .pl.medit.lotus.hall::after{content:"";position:absolute;left:50%;top:-34px;width:150px;height:150px;margin-left:-75px;border-radius:50%;pointer-events:none;z-index:-1;
+    background:repeating-conic-gradient(rgba(255,208,80,.42) 0 5deg,rgba(255,208,80,0) 5deg 15deg);
+    -webkit-mask:radial-gradient(circle,transparent 26%,#000 30%,#000 56%,transparent 70%);mask:radial-gradient(circle,transparent 26%,#000 30%,#000 56%,transparent 70%);animation:spin 40s linear infinite}
   .pl .av.medit .side,.pl .av.medit .pray{display:none!important}
   .av.medit .lg{display:none}
   .av .pq{transform-origin:43px 53px;animation:pqSweep .55s ease-in-out 4 alternate}
@@ -971,6 +980,7 @@
     <button class="act" data-do="incense" type="button"><i class="cost">0,5đ</i><span class="disc">Hương</span><span class="lbl">Thắp hương</span></button>
     <button class="act" data-do="mo" type="button"><i class="cost free">Free</i><span class="disc">Mõ</span><span class="lbl">Gõ mõ</span></button>
     <button class="act" data-do="bell" type="button"><i class="cost free">Free</i><span class="disc">Chuông</span><span class="lbl">Thỉnh chuông</span></button>
+    <button class="act" data-do="thien" type="button"><i class="cost free">+1đ</i><span class="disc">Thiền</span><span class="lbl">Ngồi thiền</span></button>
     <button class="act" data-do="xam" type="button"><i class="cost free">1/ngày</i><span class="disc">Xăm</span><span class="lbl">Xin xăm</span></button>
     <button class="act" data-do="so" type="button"><i class="cost free">1/ngày</i><span class="disc">Số</span><span class="lbl">Xin 8 số</span></button>
     <button class="act hutbtn" data-do="hut" type="button" hidden><i class="cost free">Free</i><span class="disc">Hút</span><span class="lbl">Hút trà sữa</span></button>
@@ -1416,6 +1426,14 @@ const bellLog = `<g class="prop p-log"><path d="M8 38 L5 -16 M56 38 L59 -16" str
   + `<rect x="1" y="36" width="62" height="7.5" rx="3.7" fill="#9a6a3c" ${OL}/><path d="M3 38.6 H61" stroke="#c09060" stroke-width="1" opacity=".6"/>`
   + `<ellipse cx="62.4" cy="39.75" rx="1.6" ry="3.6" fill="#c9965a" ${OL}/><path d="M14 36.4 v6.8 M50 36.4 v6.8" stroke="#6e4426" stroke-width="1.2" opacity=".6"/></g>`;
 
+function thienBack(SL, sleeve, lapFill){
+  const W = SL === "wide" ? 7 : SL === "short" ? 4.6 : 5.2, col = SL === "short" ? "#f1c4a5" : sleeve;
+  const d = "M24 56 L14 66.5 L20.5 76";
+  const arm = `<path d="${d}" stroke="#4a2e22" stroke-opacity=".55" stroke-width="${W + 1.8}" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" stroke="${col}" stroke-width="${W}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const lap = `<path d="M7.5 87 Q8 78 19 77 L45 77 Q56 78 56.5 87 Q56.5 92.5 32 92.5 Q7.5 92.5 7.5 87Z" fill="${lapFill}" ${OL}/><path d="M12 87 Q20 84 30 88 M52 87 Q44 84 34 88" stroke="rgba(0,0,0,.18)" stroke-width="1" fill="none"/>`;
+  return lap + arm + `<g transform="translate(64 0) scale(-1 1)">${arm}</g>`;
+}
+
 let avSeq = 0;
 function avatarSVG(d, view, act, opt){
   if (act) view = "back";
@@ -1545,7 +1563,12 @@ function avatarSVG(d, view, act, opt){
   const aR = `<g class="foreR" style="transform-origin:${64 - eo[0]}px ${eo[1]}px">${aRf}</g>${mir(up)}`;
   // nhìn trước: tay cầm ly/đũa vẽ sau đầu (đưa đũa lên miệng không bị đầu che)
   if (front) s += `<g class="side"><g class="armL">${aL}</g><g class="armR">${aR}</g></g>`;
-  else s = s.replace("<!--ARMS-->", `<g class="side"><g class="armL"><g transform="translate(-2.5 0)">${aL}</g></g><g class="armR"><g transform="translate(2.5 0)">${aR}</g></g></g>`) + poseG;
+  else {
+    // thiền quay vào bàn thờ: chân xếp bằng ló hai bên, tay đặt trên gối, vẽ sau lưng
+    const tb = opt && opt.pose === "thien";
+    const lapB = tb ? thienBack(SL, sleeve, PANTS.has(o) ? L.c : robe) : "";
+    s = s.replace("<!--ARMS-->", lapB + `<g class="side"><g class="armL"><g transform="translate(-2.5 0)">${aL}</g></g><g class="armR"><g transform="translate(2.5 0)">${aR}</g></g></g>`) + (tb ? "" : poseG);
+  }
 
   // tay chắp (đứng yên, quay mặt)
   if (front) {
@@ -2139,6 +2162,7 @@ function tick(now){
     const lotusOn = medit && !!p.d.lotus;
     if (lotusOn && !p.el.querySelector(".lotusB")) p.el.insertAdjacentHTML("afterbegin", LOTUS_SVG);
     p.el.classList.toggle("lotus", lotusOn);
+    p.el.classList.toggle("hall", medit && S.map === "chua");
     if (p.act) {
       if (moving) stopAct(p);
       else if (now > p.actUntil) {
@@ -2405,6 +2429,8 @@ function pondEdge(x, y){
 const STONE = { x: 560, y: 640 };
 [[214, 520], [292, 528], [400, 528], [478, 520]].forEach(([x, y], i) => { SEATS[`c${i}`] = { id: `c${i}`, map: "vuon", t: "thien", kind: "cushion", x, y, face: "front" }; });
 [[-38, -30, "front"], [38, -30, "front"], [-38, 30, "back"], [38, 30, "back"]].forEach(([dx, dy, face], i) => { SEATS[`s${i}`] = { id: `s${i}`, map: "vuon", t: "da", kind: "stone", x: STONE.x + dx, y: STONE.y + dy, face }; });
+// 6 tọa cụ đỏ trong chánh điện: ngồi thiền quay vào bàn thờ
+[[420, 548], [860, 548], [560, 560], [720, 560], [360, 640], [920, 640]].forEach(([x, y], i) => { SEATS[`h${i}`] = { id: `h${i}`, map: "chua", t: "thien", kind: "cushion", x, y: y + 2, face: "back" }; });
 const cushionSVG = `<svg viewBox="0 0 40 30" aria-hidden="true"><ellipse cx="20" cy="25" rx="18" ry="4" fill="rgba(0,0,0,.22)"/><ellipse cx="20" cy="18" rx="18" ry="8" fill="#b5652f" stroke="#6e3a1c" stroke-width="1.2"/><ellipse cx="20" cy="15" rx="17" ry="6.5" fill="#e3a73a" stroke="#8a5a1a" stroke-width="1"/><path d="M6 15 Q20 9 34 15" stroke="#c9822e" stroke-width="1" fill="none"/><circle cx="20" cy="14.5" r="1.6" fill="#8a5a1a"/></svg>`;
 const stoneStoolSVG = `<svg viewBox="0 0 40 30" aria-hidden="true"><ellipse cx="20" cy="27" rx="14" ry="3" fill="rgba(0,0,0,.25)"/><path d="M8 9 Q7 22 11 27 H29 Q33 22 32 9Z" fill="#9a9488" stroke="#6e685d" stroke-width="1.2"/><ellipse cx="20" cy="9" rx="12" ry="4.5" fill="#b9b2a4" stroke="#6e685d" stroke-width="1.2"/></svg>`;
 const stoneTableSVG = `<svg viewBox="0 0 190 70" width="190" height="70" aria-hidden="true"><ellipse cx="95" cy="66" rx="70" ry="6" fill="rgba(0,0,0,.25)"/>`
@@ -2429,6 +2455,13 @@ function buildVuon(){
   });
 }
 buildVuon();
+// vùng chạm trên tọa cụ chánh điện (tọa cụ đã vẽ sẵn trong cảnh)
+Object.values(SEATS).forEach(S => {
+  if (S.map !== "chua") return;
+  const e = document.createElement("div");
+  e.className = "cobj qstool hmat"; e.dataset.seat = S.id; e.title = "Ngồi thiền ở đây";
+  e.style.left = S.x + "px"; e.style.top = S.y + "px"; e.style.zIndex = S.y - 1; layer.appendChild(e);
+});
 
 /* Lá rụng: 8 khu sân, mỗi khu rụng thêm 1 lá sau mỗi ~40 giây, tối đa 6 lá.
    Thời điểm quét gần nhất của từng khu lưu chung ở stats (lf0..lf7) nên ai quét cũng sạch với mọi người. */
