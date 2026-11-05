@@ -28,6 +28,29 @@
   #stage.map-quan #scene{display:none}
   #stage.map-quan #sceneQuan{display:block}
   #stage:not(.map-quan) .qobj{display:none}
+  #sceneVuon{display:none}
+  #stage.map-vuon #scene{display:none}
+  #stage.map-vuon #sceneVuon{display:block}
+  #stage:not(.map-vuon) .vobj{display:none}
+  .vtable{position:absolute;width:190px;height:70px;margin:-56px 0 0 -95px;pointer-events:none}
+  .vtable svg{display:block;overflow:visible}
+  .fleaf{transform-box:fill-box;animation:fleaf 12s linear infinite;opacity:0}
+  @keyframes fleaf{0%{transform:translate(0,0) rotate(0);opacity:0}5%{opacity:1}50%{transform:translate(40px,150px) rotate(200deg)}90%{opacity:1}100%{transform:translate(-10px,300px) rotate(420deg);opacity:0}}
+  .leaf.fall{transform-box:fill-box;animation:leafFall 1.6s ease-out}
+  @keyframes leafFall{from{transform:translate(20px,-160px) rotate(220deg);opacity:0}20%{opacity:1}}
+  .ripple{fill:none;stroke:#e8f7fb;stroke-width:2;transform-box:fill-box;transform-origin:center;animation:ripple 1.6s ease-out forwards}
+  @keyframes ripple{from{transform:scale(.2);opacity:1}to{transform:scale(2.6);opacity:0}}
+  .pellet{fill:#a8703e;animation:pellet 5s linear forwards}
+  @keyframes pellet{0%,80%{opacity:1}100%{opacity:0}}
+  .pl.medit::before{content:"";position:absolute;left:50%;top:30px;width:130px;height:130px;margin-left:-65px;border-radius:50%;background:radial-gradient(circle,rgba(255,236,160,.75),rgba(255,236,160,0) 68%);animation:aura 3.4s ease-in-out infinite;z-index:-1}
+  @keyframes aura{50%{transform:scale(1.15);opacity:.7}}
+  .pl .av.medit .side,.pl .av.medit .pray{display:none!important}
+  .av.medit .lg{display:none}
+  .av .pq{transform-origin:43px 53px;animation:pqSweep .55s ease-in-out 4 alternate}
+  @keyframes pqSweep{from{transform:rotate(14deg)}to{transform:rotate(-12deg) translateX(-2px)}}
+  .av .pf{transform-origin:43px 53px;animation:pfThrow 1.8s ease-in-out both}
+  @keyframes pfThrow{0%{opacity:0;transform:rotate(60deg)}15%{opacity:1;transform:rotate(30deg)}35%{transform:rotate(-14deg)}50%{transform:rotate(20deg)}70%{transform:rotate(-14deg)}85%{opacity:1;transform:rotate(0)}100%{opacity:0;transform:rotate(50deg)}}
+  .tea{position:absolute;z-index:3000;pointer-events:none;white-space:nowrap;font:800 30px "Baloo 2",sans-serif;color:#eaffd6;text-shadow:0 2px 0 #2f5a24,0 0 12px rgba(160,230,140,.9);animation:clinkPop 1.9s ease-out forwards}
   /* quán: bàn, ghế, món */
   .qtable{position:absolute;width:250px;height:64px;margin:-50px 0 0 -125px;pointer-events:none}
   .qtable svg{display:block;overflow:visible}
@@ -690,6 +713,101 @@
   <path d="M996 444 L1000 400 H1036 L1040 444Z" fill="#b5652f" stroke="#6e3a1c" stroke-width="2"/>
   <g fill="#4f8a3c" stroke="#2f5a24" stroke-width="1.5"><ellipse cx="1004" cy="380" rx="10" ry="22" transform="rotate(-30 1004 380)"/><ellipse cx="1018" cy="370" rx="10" ry="26"/><ellipse cx="1032" cy="380" rx="10" ry="22" transform="rotate(30 1032 380)"/></g>
 </svg>
+<svg id="sceneVuon" viewBox="0 0 1280 720" width="1280" height="720" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="vSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9d8ee"/><stop offset="1" stop-color="#e4f2df"/></linearGradient>
+    <linearGradient id="vGrass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#86b452"/><stop offset="1" stop-color="#5f9238"/></linearGradient>
+    <linearGradient id="vWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0d38c"/><stop offset="1" stop-color="#d9ad5a"/></linearGradient>
+    <linearGradient id="vTrunk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a3c28"/><stop offset=".5" stop-color="#8a6446"/><stop offset="1" stop-color="#5a3c28"/></linearGradient>
+    <radialGradient id="vWater" cx=".45" cy=".4" r=".7"><stop offset="0" stop-color="#7cc7d9"/><stop offset="1" stop-color="#2f7f93"/></radialGradient>
+    <clipPath id="vPondClip"><ellipse cx="950" cy="560" rx="222" ry="76"/></clipPath>
+  </defs>
+  <rect width="1280" height="720" fill="url(#vSky)"/>
+  <path d="M20 210 V120" stroke="#5f8f3a" stroke-width="6"/><path d="M20 130 l14 -8 M20 150 l-14 -8" stroke="#6fa346" stroke-width="5" stroke-linecap="round"/>
+  <path d="M46 210 V131" stroke="#5f8f3a" stroke-width="6"/><path d="M46 141 l14 -8 M46 161 l-14 -8" stroke="#6fa346" stroke-width="5" stroke-linecap="round"/>
+  <path d="M72 210 V115" stroke="#5f8f3a" stroke-width="6"/><path d="M72 125 l14 -8 M72 145 l-14 -8" stroke="#6fa346" stroke-width="5" stroke-linecap="round"/>
+  <path d="M98 210 V99" stroke="#5f8f3a" stroke-width="6"/><path d="M98 109 l14 -8 M98 129 l-14 -8" stroke="#6fa346" stroke-width="5" stroke-linecap="round"/>
+  <path d="M124 210 V137" stroke="#5f8f3a" stroke-width="6"/><path d="M124 147 l14 -8 M124 167 l-14 -8" stroke="#6fa346" stroke-width="5" stroke-linecap="round"/>
+  <path d="M150 210 V136" stroke="#5f8f3a" stroke-width="6"/><path d="M150 146 l14 -8 M150 166 l-14 -8" stroke="#6fa346" stroke-width="5" stroke-linecap="round"/>
+  <path d="M176 210 V106" stroke="#5f8f3a" stroke-width="6"/><path d="M176 116 l14 -8 M176 136 l-14 -8" stroke="#6fa346" stroke-width="5" stroke-linecap="round"/>
+  <path d="M1060 210 V134" stroke="#5f8f3a" stroke-width="6"/><path d="M1060 144 l14 -8 M1060 164 l-14 -8" stroke="#6fa346" stroke-width="5" stroke-linecap="round"/>
+  <path d="M1086 210 V117" stroke="#5f8f3a" stroke-width="6"/><path d="M1086 127 l14 -8 M1086 147 l-14 -8" stroke="#6fa346" stroke-width="5" stroke-linecap="round"/>
+  <path d="M1112 210 V103" stroke="#5f8f3a" stroke-width="6"/><path d="M1112 113 l14 -8 M1112 133 l-14 -8" stroke="#6fa346" stroke-width="5" stroke-linecap="round"/>
+  <path d="M1138 210 V137" stroke="#5f8f3a" stroke-width="6"/><path d="M1138 147 l14 -8 M1138 167 l-14 -8" stroke="#6fa346" stroke-width="5" stroke-linecap="round"/>
+  <path d="M1164 210 V108" stroke="#5f8f3a" stroke-width="6"/><path d="M1164 118 l14 -8 M1164 138 l-14 -8" stroke="#6fa346" stroke-width="5" stroke-linecap="round"/>
+  <path d="M1190 210 V127" stroke="#5f8f3a" stroke-width="6"/><path d="M1190 137 l14 -8 M1190 157 l-14 -8" stroke="#6fa346" stroke-width="5" stroke-linecap="round"/>
+  <path d="M1216 210 V138" stroke="#5f8f3a" stroke-width="6"/><path d="M1216 148 l14 -8 M1216 168 l-14 -8" stroke="#6fa346" stroke-width="5" stroke-linecap="round"/>
+  <path d="M1242 210 V135" stroke="#5f8f3a" stroke-width="6"/><path d="M1242 145 l14 -8 M1242 165 l-14 -8" stroke="#6fa346" stroke-width="5" stroke-linecap="round"/>
+  <path d="M1268 210 V113" stroke="#5f8f3a" stroke-width="6"/><path d="M1268 123 l14 -8 M1268 143 l-14 -8" stroke="#6fa346" stroke-width="5" stroke-linecap="round"/>
+  <rect y="200" width="1280" height="140" fill="url(#vWall)"/>
+  <path d="M-10 206 L20 170 H1260 L1290 206 Z" fill="#9c2a21" stroke="#5e1612" stroke-width="3"/>
+  <path d="M30 172 V204 M54 172 V204 M78 172 V204 M102 172 V204 M126 172 V204 M150 172 V204 M174 172 V204 M198 172 V204 M222 172 V204 M246 172 V204 M270 172 V204 M294 172 V204 M318 172 V204 M342 172 V204 M366 172 V204 M390 172 V204 M414 172 V204 M438 172 V204 M462 172 V204 M486 172 V204 M510 172 V204 M534 172 V204 M558 172 V204 M582 172 V204 M606 172 V204 M630 172 V204 M654 172 V204 M678 172 V204 M702 172 V204 M726 172 V204 M750 172 V204 M774 172 V204 M798 172 V204 M822 172 V204 M846 172 V204 M870 172 V204 M894 172 V204 M918 172 V204 M942 172 V204 M966 172 V204 M990 172 V204 M1014 172 V204 M1038 172 V204 M1062 172 V204 M1086 172 V204 M1110 172 V204 M1134 172 V204 M1158 172 V204 M1182 172 V204 M1206 172 V204 M1230 172 V204 M1254 172 V204" stroke="#6e1815" stroke-width="2" opacity=".6"/>
+  <path d="M-10 206 Q-20 190 -6 178 M1290 206 Q1300 190 1286 178" stroke="#9c2a21" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <rect y="330" width="1280" height="10" fill="#b8873e"/>
+  <circle cx="700" cy="300" r="96" fill="#9c2a21"/><circle cx="700" cy="300" r="84" fill="#cfe9d8"/>
+  <path d="M616 340 Q660 300 700 318 Q740 290 784 336 V384 H616Z" fill="#7fb55a"/>
+  <path d="M640 240 V330 M660 230 V320" stroke="#5f8f3a" stroke-width="5"/><path d="M640 262 l12 -7 M660 252 l-12 -7" stroke="#6fa346" stroke-width="4" stroke-linecap="round"/>
+  <rect x="604" y="330" width="192" height="12" fill="#b8873e"/>
+  <rect x="660" y="190" width="80" height="22" rx="4" fill="#7a1a14" stroke="#ffd35a" stroke-width="2"/>
+  <text x="700" y="207" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="14" fill="#ffe08a">VƯỜN THIỀN</text>
+  <rect y="340" width="1280" height="380" fill="url(#vGrass)"/>
+  <path d="M856 360 q2 -6 4 0 M143 363 q2 -6 4 0 M492 374 q2 -6 4 0 M185 377 q2 -6 4 0 M1128 388 q2 -6 4 0 M869 391 q2 -6 4 0 M121 402 q2 -6 4 0 M1158 405 q2 -6 4 0 M253 416 q2 -6 4 0 M457 419 q2 -6 4 0 M1193 430 q2 -6 4 0 M126 433 q2 -6 4 0 M1181 444 q2 -6 4 0 M1199 447 q2 -6 4 0 M812 458 q2 -6 4 0 M101 461 q2 -6 4 0 M452 472 q2 -6 4 0 M95 475 q2 -6 4 0 M1140 486 q2 -6 4 0 M272 489 q2 -6 4 0 M593 500 q2 -6 4 0 M858 503 q2 -6 4 0 M295 514 q2 -6 4 0 M1107 517 q2 -6 4 0 M241 528 q2 -6 4 0 M1169 531 q2 -6 4 0 M631 542 q2 -6 4 0 M1147 545 q2 -6 4 0 M370 556 q2 -6 4 0 M211 559 q2 -6 4 0 M1191 570 q2 -6 4 0 M1169 573 q2 -6 4 0 M384 584 q2 -6 4 0 M762 587 q2 -6 4 0 M199 598 q2 -6 4 0 M1121 601 q2 -6 4 0 M128 612 q2 -6 4 0 M1155 615 q2 -6 4 0 M122 626 q2 -6 4 0 M1267 629 q2 -6 4 0 M421 640 q2 -6 4 0 M1016 643 q2 -6 4 0 M1088 654 q2 -6 4 0 M875 657 q2 -6 4 0 M643 668 q2 -6 4 0 M953 671 q2 -6 4 0 M1199 682 q2 -6 4 0 M928 685 q2 -6 4 0 M740 696 q2 -6 4 0 M613 699 q2 -6 4 0 M508 710 q2 -6 4 0 M368 713 q2 -6 4 0" stroke="#4f7f2e" stroke-width="1.6" fill="none" opacity=".6"/>
+  <ellipse cx="700" cy="352" rx="23.0" ry="10.666666666666668" fill="#c9c3b5" stroke="#8f887a" stroke-width="2"/>
+  <ellipse cx="690" cy="380" rx="26.0" ry="11.666666666666666" fill="#c9c3b5" stroke="#8f887a" stroke-width="2"/>
+  <ellipse cx="706" cy="412" rx="29.0" ry="12.666666666666666" fill="#c9c3b5" stroke="#8f887a" stroke-width="2"/>
+  <ellipse cx="690" cy="450" rx="32.0" ry="13.666666666666666" fill="#c9c3b5" stroke="#8f887a" stroke-width="2"/>
+  <ellipse cx="708" cy="494" rx="35.0" ry="14.666666666666666" fill="#c9c3b5" stroke="#8f887a" stroke-width="2"/>
+  <ellipse cx="686" cy="544" rx="39.0" ry="16.0" fill="#c9c3b5" stroke="#8f887a" stroke-width="2"/>
+  <ellipse cx="704" cy="600" rx="43.0" ry="17.333333333333336" fill="#c9c3b5" stroke="#8f887a" stroke-width="2"/>
+  <ellipse cx="684" cy="662" rx="47.0" ry="18.666666666666664" fill="#c9c3b5" stroke="#8f887a" stroke-width="2"/>
+  <ellipse cx="880" cy="346" rx="44" ry="22" fill="#4f8a3c"/><circle cx="858" cy="334" r="4" fill="#f490b0"/><circle cx="874" cy="328" r="4" fill="#fff"/><circle cx="892" cy="336" r="4" fill="#f490b0"/><circle cx="906" cy="330" r="4" fill="#ffd35a"/><circle cx="850" cy="344" r="4" fill="#fff"/>
+  <ellipse cx="960" cy="346" rx="44" ry="22" fill="#4f8a3c"/><circle cx="938" cy="334" r="4" fill="#f490b0"/><circle cx="954" cy="328" r="4" fill="#fff"/><circle cx="972" cy="336" r="4" fill="#f490b0"/><circle cx="986" cy="330" r="4" fill="#ffd35a"/><circle cx="930" cy="344" r="4" fill="#fff"/>
+  <ellipse cx="1040" cy="346" rx="44" ry="22" fill="#4f8a3c"/><circle cx="1018" cy="334" r="4" fill="#f490b0"/><circle cx="1034" cy="328" r="4" fill="#fff"/><circle cx="1052" cy="336" r="4" fill="#f490b0"/><circle cx="1066" cy="330" r="4" fill="#ffd35a"/><circle cx="1010" cy="344" r="4" fill="#fff"/>
+  <ellipse cx="1130" cy="346" rx="44" ry="22" fill="#4f8a3c"/><circle cx="1108" cy="334" r="4" fill="#f490b0"/><circle cx="1124" cy="328" r="4" fill="#fff"/><circle cx="1142" cy="336" r="4" fill="#f490b0"/><circle cx="1156" cy="330" r="4" fill="#ffd35a"/><circle cx="1100" cy="344" r="4" fill="#fff"/>
+  <ellipse cx="1210" cy="346" rx="44" ry="22" fill="#4f8a3c"/><circle cx="1188" cy="334" r="4" fill="#f490b0"/><circle cx="1204" cy="328" r="4" fill="#fff"/><circle cx="1222" cy="336" r="4" fill="#f490b0"/><circle cx="1236" cy="330" r="4" fill="#ffd35a"/><circle cx="1180" cy="344" r="4" fill="#fff"/>
+  <ellipse cx="560" cy="346" rx="44" ry="22" fill="#4f8a3c"/><circle cx="538" cy="334" r="4" fill="#f490b0"/><circle cx="554" cy="328" r="4" fill="#fff"/><circle cx="572" cy="336" r="4" fill="#f490b0"/><circle cx="586" cy="330" r="4" fill="#ffd35a"/><circle cx="530" cy="344" r="4" fill="#fff"/>
+  <g><rect x="1188" y="440" width="44" height="12" fill="#8f887a"/><rect x="1200" y="404" width="20" height="38" fill="#a8a194"/>
+  <rect x="1186" y="384" width="48" height="22" rx="3" fill="#b9b2a4" stroke="#7d766a" stroke-width="2"/><rect x="1200" y="388" width="20" height="14" fill="#ffe9a0"/>
+  <path d="M1176 386 L1210 360 L1244 386Z" fill="#a8a194" stroke="#7d766a" stroke-width="2"/></g>
+  <ellipse cx="950" cy="566" rx="244" ry="94" fill="#4f6b3a" opacity=".5"/>
+  <ellipse cx="714" cy="560" rx="20" ry="12" fill="#9a9488" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="721" cy="539" rx="14" ry="9" fill="#aaa496" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="741" cy="520" rx="20" ry="12" fill="#8a8478" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="773" cy="502" rx="14" ry="9" fill="#9a9488" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="816" cy="488" rx="17" ry="11" fill="#8a8478" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="866" cy="479" rx="20" ry="12" fill="#aaa496" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="922" cy="474" rx="19" ry="12" fill="#8a8478" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="978" cy="474" rx="18" ry="11" fill="#9a9488" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="1034" cy="479" rx="20" ry="12" fill="#aaa496" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="1084" cy="488" rx="15" ry="9" fill="#8a8478" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="1127" cy="502" rx="14" ry="9" fill="#aaa496" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="1159" cy="520" rx="13" ry="8" fill="#9a9488" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="1179" cy="539" rx="17" ry="11" fill="#9a9488" stroke="#6e685d" stroke-width="1.5"/>
+  <ellipse cx="950" cy="560" rx="230" ry="82" fill="url(#vWater)" stroke="#2f6b7a" stroke-width="3"/>
+  <g clip-path="url(#vPondClip)">
+    <path d="M790 530 q30 -8 60 0 M990 516 q30 -8 60 0 M890 590 q30 -8 60 0" stroke="#bfe6ef" stroke-width="2" fill="none" opacity=".6"/>
+    <g id="koiLayer"></g><g id="feedLayer"></g>
+    <path d="M800 580 m18 0 a18 9.9 0 1 1 -5.4 -8.1 L800 580Z" fill="#5f9a3e" stroke="#3c6a2a" stroke-width="1.2"/>
+    <path d="M1070 530 m16 0 a16 8.8 0 1 1 -4.8 -7.2 L1070 530Z" fill="#5f9a3e" stroke="#3c6a2a" stroke-width="1.2"/>
+    <path d="M1120 586 m20 0 a20 11.0 0 1 1 -6.0 -9.0 L1120 586Z" fill="#5f9a3e" stroke="#3c6a2a" stroke-width="1.2"/>
+    <path d="M890 514 m14 0 a14 7.700000000000001 0 1 1 -4.2 -6.3 L890 514Z" fill="#5f9a3e" stroke="#3c6a2a" stroke-width="1.2"/>
+    <g transform="translate(1070 526)"><path d="M0 0 Q-9 -4 -6 -14 Q-2 -6 0 -16 Q2 -6 6 -14 Q9 -4 0 0Z" fill="#f4a3c0" stroke="#c45a7c" stroke-width=".8"/><circle cy="-4" r="2.4" fill="#ffd35a"/></g>
+    <g transform="translate(800 574)"><path d="M0 0 Q-9 -4 -6 -14 Q-2 -6 0 -16 Q2 -6 6 -14 Q9 -4 0 0Z" fill="#f4a3c0" stroke="#c45a7c" stroke-width=".8"/><circle cy="-4" r="2.4" fill="#ffd35a"/></g>
+  </g>
+  <ellipse cx="1186" cy="560" rx="16" ry="10" fill="#9a9488" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="1179" cy="581" rx="17" ry="11" fill="#8a8478" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="1159" cy="600" rx="20" ry="12" fill="#aaa496" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="1127" cy="618" rx="20" ry="12" fill="#aaa496" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="1084" cy="632" rx="14" ry="9" fill="#9a9488" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="1034" cy="641" rx="19" ry="12" fill="#9a9488" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="978" cy="646" rx="18" ry="11" fill="#9a9488" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="922" cy="646" rx="20" ry="12" fill="#aaa496" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="866" cy="641" rx="13" ry="8" fill="#8a8478" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="816" cy="632" rx="14" ry="9" fill="#8a8478" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="773" cy="618" rx="18" ry="11" fill="#aaa496" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="741" cy="600" rx="18" ry="11" fill="#8a8478" stroke="#6e685d" stroke-width="1.5"/><ellipse cx="721" cy="581" rx="20" ry="12" fill="#8a8478" stroke="#6e685d" stroke-width="1.5"/>
+  <path d="M262 482 Q250 440 282 400 Q300 330 290 230 L400 230 Q392 330 410 400 Q446 440 432 482 Q400 470 380 486 Q350 470 320 486 Q296 470 262 482Z" fill="url(#vTrunk)" stroke="#3e2818" stroke-width="3"/>
+  <path d="M314 470 Q318 420 330 380 M368 470 Q366 420 360 380 M296 300 Q306 260 300 230 M392 300 Q384 260 392 230" stroke="#4a3020" stroke-width="3" fill="none" opacity=".6"/>
+  <path d="M262 482 Q230 486 214 498 M432 482 Q462 486 478 498 M300 484 Q290 500 270 506 M394 484 Q404 500 424 506" stroke="#5a3c28" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <path d="M150 150 Q149 257 150 364" stroke="#6e4a30" stroke-width="2.4" fill="none" opacity=".85"/>
+  <path d="M190 150 Q197 235 185 320" stroke="#6e4a30" stroke-width="2.4" fill="none" opacity=".85"/>
+  <path d="M230 150 Q236 220 230 291" stroke="#6e4a30" stroke-width="2.4" fill="none" opacity=".85"/>
+  <path d="M470 150 Q470 245 466 340" stroke="#6e4a30" stroke-width="2.4" fill="none" opacity=".85"/>
+  <path d="M510 150 Q510 237 515 325" stroke="#6e4a30" stroke-width="2.4" fill="none" opacity=".85"/>
+  <path d="M548 150 Q551 236 552 323" stroke="#6e4a30" stroke-width="2.4" fill="none" opacity=".85"/>
+  <path d="M110 150 Q109 234 106 318" stroke="#6e4a30" stroke-width="2.4" fill="none" opacity=".85"/>
+  <path d="M590 150 Q587 215 586 280" stroke="#6e4a30" stroke-width="2.4" fill="none" opacity=".85"/>
+  <circle cx="330" cy="120" r="150" fill="#3f7a32"/>
+  <circle cx="170" cy="150" r="110" fill="#356b2a"/>
+  <circle cx="500" cy="150" r="115" fill="#356b2a"/>
+  <circle cx="90" cy="70" r="100" fill="#3f7a32"/>
+  <circle cx="580" cy="70" r="95" fill="#3f7a32"/>
+  <circle cx="330" cy="20" r="130" fill="#4a8a3a"/>
+  <circle cx="220" cy="60" r="90" fill="#4f913e"/>
+  <circle cx="450" cy="50" r="90" fill="#4f913e"/>
+  <circle cx="260" cy="190" r="80" fill="#457f36"/>
+  <circle cx="410" cy="190" r="80" fill="#457f36"/>
+  <g fill="#5fa64a" opacity=".55"><circle cx="277" cy="148" r="21"/><circle cx="52" cy="104" r="19"/><circle cx="309" cy="52" r="14"/><circle cx="189" cy="87" r="25"/><circle cx="619" cy="61" r="18"/><circle cx="567" cy="223" r="15"/><circle cx="507" cy="210" r="26"/><circle cx="447" cy="82" r="26"/><circle cx="146" cy="103" r="26"/><circle cx="103" cy="28" r="16"/><circle cx="253" cy="92" r="19"/><circle cx="152" cy="67" r="15"/><circle cx="144" cy="-20" r="18"/><circle cx="589" cy="5" r="25"/><circle cx="66" cy="-2" r="20"/><circle cx="425" cy="18" r="22"/><circle cx="395" cy="134" r="25"/><circle cx="525" cy="11" r="17"/><circle cx="539" cy="230" r="28"/><circle cx="531" cy="103" r="23"/><circle cx="127" cy="16" r="17"/><circle cx="390" cy="169" r="22"/></g>
+  <g class="fleaves"><path class="fleaf" style="animation-delay:0s" d="M200 230 q4 3 0 9 q-4 -6 0 -9Z" fill="#e3b23c"/><path class="fleaf" style="animation-delay:2.5s" d="M420 240 q4 3 0 9 q-4 -6 0 -9Z" fill="#c9822e"/><path class="fleaf" style="animation-delay:5s" d="M310 250 q4 3 0 9 q-4 -6 0 -9Z" fill="#9bbf4a"/><path class="fleaf" style="animation-delay:7.5s" d="M520 220 q4 3 0 9 q-4 -6 0 -9Z" fill="#e3b23c"/><path class="fleaf" style="animation-delay:9.5s" d="M140 240 q4 3 0 9 q-4 -6 0 -9Z" fill="#c9822e"/></g>
+  <g id="leafLayer"></g>
+</svg>
     <div id="players"></div>
   </div>
 </div>
@@ -699,7 +817,7 @@
   <div class="pill info">
     <h1 id="mapTitle">Chùa An Nhiên</h1>
     <div class="room"><span class="dot"></span><span id="roomName">Chánh điện</span> · <b id="count">1</b>/50 người</div>
-    <div class="stats"><span>Hương <b id="sIncense">0</b></span><span>Mõ <b id="sMo">0</b></span><span>Chuông <b id="sBell">0</b></span><span>Lời nguyện <b id="sPrayer">0</b></span></div>
+    <div class="stats"><span>Hương <b id="sIncense">0</b></span><span>Mõ <b id="sMo">0</b></span><span>Chuông <b id="sBell">0</b></span><span>Lời nguyện <b id="sPrayer">0</b></span><span>Lá đã quét <b id="sLeaf">0</b></span></div>
     <div class="mode" id="modeNotice"></div>
   </div>
 </div>
@@ -731,6 +849,12 @@
     <button class="act" data-do="zo" type="button"><span class="disc">Zô</span><span class="lbl">Nâng ly</span></button>
     <button class="act" data-do="gap" type="button"><span class="disc">Gắp</span><span class="lbl">Gắp món</span></button>
     <button class="act" data-do="menu" type="button"><span class="disc">Menu</span><span class="lbl">Gọi món</span></button>
+  </div>
+  <div class="acts" id="actsVuon" role="toolbar" aria-label="Hành động ở vườn" hidden>
+    <button class="act" data-do="feed" type="button"><span class="disc">Cá</span><span class="lbl">Cho cá ăn</span></button>
+    <button class="act" data-do="quet" type="button"><span class="disc">Quét</span><span class="lbl">Quét lá</span></button>
+    <button class="act" data-do="thien" type="button"><span class="disc">Thiền</span><span class="lbl">Ngồi thiền</span></button>
+    <button class="act" data-do="tra" type="button"><span class="disc">Trà</span><span class="lbl">Uống trà</span></button>
   </div>
   <div class="acts" id="actsChua" role="toolbar" aria-label="Hành động">
     <button class="act" data-do="bow" type="button"><span class="disc">Lạy</span><span class="lbl">Lễ Phật</span></button>
@@ -1194,7 +1318,7 @@ function avatarSVG(d, view, act, opt){
     aL = `<path d="M21.5 53 Q15.3 58 15.3 72 L20.7 72.5 Q20.6 63 24 58 Z" fill="${sleeve}" ${OL}/>` + hand(18, 74.6);
     aR = `<path d="M42.5 53 Q48.7 58 48.7 72 L43.3 72.5 Q43.4 63 40 58 Z" fill="${sleeveR}" ${OL}/>` + hand(46, 74.6);
   }
-  const poseG = opt && opt.pose ? poseSVG(opt.pose, front, SL, sleeveR, opt.food || "#d9823b") : "";
+  const poseG = opt && opt.pose ? poseSVG(opt.pose, front, SL, sleeveR, opt.pose === "thien" ? (PANTS.has(o) ? L.c : robe) : (opt.food || "#d9823b")) : "";
   if (flower) aR += handFlower(flower, SL === "wide" ? 45.5 : 46, SL === "wide" ? 76.5 : 74.5, 18);
   // nhìn trước: tay cầm ly/đũa vẽ sau đầu (đưa đũa lên miệng không bị đầu che)
   s += `<g class="side"><g class="armL">${aL}</g><g class="armR">${aR}</g></g>` + (front ? "" : poseG);
@@ -1270,7 +1394,7 @@ async function makeFirebase(cfg){
     },
     async loadUser(){
       const s = await D.get(D.ref(db, `users/${uid}`)); const v = s.val() || {};
-      return { profile: v.profile || null, onlineMs: Number(v.onlineMs) || 0 };
+      return { profile: v.profile || null, onlineMs: Number(v.onlineMs) || 0, thienMs: Number(v.thienMs) || 0 };
     },
     saveProfile(prof){ return D.set(D.ref(db, `users/${uid}/profile`), prof); },
     addOnline(ms){ return D.update(D.ref(db, `users/${uid}`), { onlineMs: D.increment(Math.round(ms)) }); },
@@ -1304,7 +1428,9 @@ async function makeFirebase(cfg){
       };
       on(playersRef, info); on(posRef, pos);
     },
-    bump(f){ return D.update(statsRef, { [f]: D.increment(1) }); },
+    bump(f, n = 1){ return D.update(statsRef, { [f]: D.increment(n) }); },
+    markStat(f){ return D.update(statsRef, { [f]: D.serverTimestamp() }); },
+    addThien(ms){ return D.update(D.ref(db, `users/${uid}`), { thienMs: D.increment(Math.round(ms)) }); },
     // Tin nhắn và mốc gửi gần nhất ghi cùng lúc, quy tắc Firebase dùng mốc này để chặn gửi dồn
     async sendChat(m){
       const id = D.push(chatRef).key;
@@ -1366,7 +1492,9 @@ function makeLocal(){
       async signOut(){ await this.leave(); sess.set(null); },
       leave: async () => { if (me) send({ type: "bye", id: me.id }); me = null; }
     },
-    async loadUser(){ const v = ls.get("chua_user_" + uid, {}); return { profile: v.profile || null, onlineMs: Number(v.onlineMs) || 0 }; },
+    async loadUser(){ const v = ls.get("chua_user_" + uid, {}); return { profile: v.profile || null, onlineMs: Number(v.onlineMs) || 0, thienMs: Number(v.thienMs) || 0 }; },
+    async addThien(ms){ const v = ls.get("chua_user_" + uid, {}); v.thienMs = (Number(v.thienMs) || 0) + Math.round(ms); ls.set("chua_user_" + uid, v); },
+    async markStat(f){ const s = ls.get("chua_stats", {}); s[f] = Math.max(Date.now(), (s[f] || 0) + 1); ls.set("chua_stats", s); statsCb(s); send({ type: "stats" }); },
     async saveProfile(prof){ const v = ls.get("chua_user_" + uid, {}); v.profile = prof; ls.set("chua_user_" + uid, v); },
     async addOnline(ms){ const v = ls.get("chua_user_" + uid, {}); v.onlineMs = (Number(v.onlineMs) || 0) + Math.round(ms); ls.set("chua_user_" + uid, v); },
     async join(p){
@@ -1377,7 +1505,7 @@ function makeLocal(){
     },
     update(p){ if (!me) return; Object.assign(me, p); send({ type: "state", p: me }); emit(); },
     onPlayers(cb){ playersCb = cb; },
-    async bump(f){ const s = ls.get("chua_stats", {}); s[f] = (s[f] || 0) + 1; ls.set("chua_stats", s); statsCb(s); send({ type: "stats" }); },
+    async bump(f, n = 1){ const s = ls.get("chua_stats", {}); s[f] = (s[f] || 0) + n; ls.set("chua_stats", s); statsCb(s); send({ type: "stats" }); },
     onStats(cb){ statsCb = cb; cb(ls.get("chua_stats", {})); },
     async sendChat(m){ const msg = { ...m, ts: Date.now() }; ls.set("chua_chat", [...ls.get("chua_chat", []), msg].slice(-30)); chatCb(msg, true); send({ type: "chat", m: msg }); },
     onChat(cb){ chatCb = cb; ls.get("chua_chat", []).forEach(m => cb(m, false)); },
@@ -1402,6 +1530,7 @@ try {
 
 /* ---------------- Số liệu & lời nguyện ---------------- */
 net.onStats(s => {
+  statsCache = s || {}; $("sLeaf").textContent = fmt(s.leaves); try { renderLeaves(); } catch {}
   $("sIncense").textContent = fmt(s.incense); $("sMo").textContent = fmt(s.mo);
   $("sBell").textContent = fmt(s.bell); $("sPrayer").textContent = fmt(s.prayers);
   $("statLine").textContent = `Mọi người đã thắp ${fmt(s.incense)} lượt hương, gõ ${fmt(s.mo)} tiếng mõ, thỉnh ${fmt(s.bell)} tiếng chuông, gửi ${fmt(s.prayers)} lời nguyện.`;
@@ -1447,7 +1576,10 @@ const MAPS = {
   quan: { name: "Quán nhậu Zô Zô", room: "Quán nhậu", desc: "5 bàn, 30 ghế, gọi món, nâng ly", walk: { x0: 70, x1: 1210, y0: 470, y1: 708 },
     spawn: () => { const x = 640 + Math.round(Math.random() * 200 - 100); return { x, y: 708, tx: x, ty: 700 }; } }
 };
+MAPS.vuon = { name: "Vườn chùa", room: "Vườn thiền", desc: "Cây đa, hồ cá koi, quét lá, ngồi thiền, bàn đá uống trà", walk: { x0: 60, x1: 1220, y0: 440, y1: 708 },
+  spawn: () => { const x = 690 + Math.round(Math.random() * 60 - 30); return { x, y: 708, tx: x, ty: 690 }; } };
 let curMap = "chua", WALK = MAPS.chua.walk;
+var statsCache; // var: được gán sớm từ net.onStats trước khi tới đoạn khai báo này
 const SPOTS = { incense: { x: 640, y: 530 }, bell: { x: 250, y: 528 }, mo: { x: 1056, y: 528 }, bow: null };
 const view = $("view"), stage = $("stage"), layer = $("players");
 let scale = 1, camX = 0, camY = 0, firstCam = true;
@@ -1568,6 +1700,9 @@ function playAct(p, act, remote){
     case "so": startAct(p, "so"); say(p, "Đang xin số may mắn", 3000); break;
     case "zo": startPose(p, "zo"); say(p, "Zô!", 1500); p.zoAt = performance.now(); checkClink(p); break;
     case "gap": startPose(p, "gap"); break;
+    case "feed": startPose(p, "feed"); say(p, "Cá ơi, ăn đi nào", 1800); { const src = p.id === meId ? me : p; later(p, 500, () => feedFish(src.x, src.y)); } break;
+    case "quet": startPose(p, "quet"); say(p, "Quét lá sân chùa", 1800); break;
+    case "tra": startPose(p, "tra"); say(p, "Mời trà", 1500); p.teaAt = performance.now(); checkTea(p); break;
     case "pray": startAct(p, "pray"); say(p, "Vừa gửi một lời nguyện", 3000); break;
   }
 }
@@ -1580,7 +1715,7 @@ function syncPlayers(obj){
     const d = obj[id]; if (!d || !d.name) continue;
     n++;
     if (id === meId) continue;
-    if ((d.map === "quan" ? "quan" : "chua") !== curMap) continue;
+    if ((MAPS[d.map] ? d.map : "chua") !== curMap) continue;
     seen.add(id);
     let p = players.get(id);
     if (!p) { p = createPlayer({ ...d, id }); continue; }
@@ -1635,13 +1770,22 @@ function tick(now){
     let moving = false;
     if (dist > 1.5) {
       const st = Math.min(dist, SPEED * dt);
-      src.x += dx / dist * st; src.y += dy / dist * st; moving = true;
+      const nx = src.x + dx / dist * st, ny = src.y + dy / dist * st;
+      if (p.id === meId && curMap === "vuon" && inPond(nx, ny) && !inPond(src.x, src.y)) {
+        // không đi xuống hồ: dừng ở bờ
+        me.tx = me.x; me.ty = me.y; pending = null; sendMove(true);
+      } else { src.x = nx; src.y = ny; moving = true; }
       if (Math.abs(dx) > 2) p.flip = dx < 0;
     } else if (p.id === meId && pending) { const fn = pending; pending = null; fn(); }
     const av = p.el.querySelector(".av");
     if (moving && p.id === meId && me.seat) setMe({ seat: "" });
     if (p.pose && (moving || now > p.poseUntil)) p.pose = null;
     const S = moving ? null : seatOf(p);
+    const medit = !!(S && S.kind === "cushion");
+    if (medit && p.pose !== "thien") { p.pose = "thien"; p.poseUntil = Infinity; p.poseSeq = (p.poseSeq || 0) + 1; if (p.id === meId) say(p, `Ngồi thiền (tổng ${Math.floor(thienMs / 60000)} phút)`, 2500); }
+    else if (!medit && p.pose === "thien") p.pose = null;
+    if (p.id === meId) tickThien(dt * 1000, medit);
+    p.el.classList.toggle("medit", medit);
     if (p.act) {
       if (moving) stopAct(p);
       else if (now > p.actUntil) {
@@ -1665,6 +1809,7 @@ function tick(now){
       p.view = key; av.innerHTML = avatarSVG(p.d, v, p.act, p.pose && !p.act ? { pose: p.pose, food: p.pose === "gap" ? foodFor(p) : "" } : null);
       av.classList.toggle("v-front", v === "front"); av.classList.toggle("acting", !!p.act);
       av.classList.toggle("posing", !!(p.pose && !p.act));
+      av.classList.toggle("medit", p.pose === "thien" && !p.act);
       av.dataset.act = p.act || ""; delete av.dataset.out;
     }
     av.classList.toggle("sit", !!S);
@@ -1675,6 +1820,7 @@ function tick(now){
     p.el.style.zIndex = Math.round(src.y);
   }
   // chưa vào chùa vẫn phóng cảnh vừa màn hình, nhìn vào giữa chánh điện
+  tickKoi(now, dt);
   if (me) updateCamera(me.x, me.y, dt); else updateCamera(640, 600, dt);
   requestAnimationFrame(tick);
 }
@@ -1685,8 +1831,8 @@ const TABLES = [{ x: 300, y: 548 }, { x: 640, y: 548 }, { x: 980, y: 548 }, { x:
 const SEATS = {};
 TABLES.forEach((T, t) => {
   [-70, 0, 70].forEach((dx, i) => {
-    SEATS[`t${t}b${i}`] = { id: `t${t}b${i}`, t, x: T.x + dx, y: T.y - 34, face: "front" };
-    SEATS[`t${t}f${i}`] = { id: `t${t}f${i}`, t, x: T.x + dx, y: T.y + 30, face: "back" };
+    SEATS[`t${t}b${i}`] = { id: `t${t}b${i}`, map: "quan", t, x: T.x + dx, y: T.y - 34, face: "front" };
+    SEATS[`t${t}f${i}`] = { id: `t${t}f${i}`, map: "quan", t, x: T.x + dx, y: T.y + 30, face: "back" };
   });
 });
 const DISHES = [["lau", "Lẩu thái"], ["muc", "Mực nướng"], ["oc", "Ốc xào"], ["ga", "Gà nướng"], ["dau", "Đậu phụ chiên"], ["nem", "Nem chua rán"], ["lac", "Lạc rang"], ["bia", "Tháp bia"]];
@@ -1730,6 +1876,7 @@ function buildQuan(){
   });
   Object.values(SEATS).forEach(S => {
     const el = document.createElement("div");
+    if (S.map !== "quan") return;
     el.className = "qobj qstool"; el.dataset.seat = S.id; el.title = "Ngồi ghế này";
     el.style.left = S.x + "px"; el.style.top = S.y + "px"; el.style.zIndex = S.y - 1;
     el.innerHTML = stoolSVG; layer.appendChild(el);
@@ -1739,7 +1886,7 @@ buildQuan();
 
 const arr = v => Array.isArray(v) ? v : (v && typeof v === "object" ? Object.values(v) : []);
 const seatIdOf = p => p.id === meId ? (me && me.seat) : p.d.seat;
-const seatOf = p => curMap === "quan" ? SEATS[seatIdOf(p)] || null : null;
+const seatOf = p => { const S = SEATS[seatIdOf(p)]; return S && S.map === curMap ? S : null; };
 function seatTaken(id){
   for (const q of players.values()) if (q.id !== meId && q.d.seat === id) return true;
   return false;
@@ -1781,11 +1928,33 @@ function sitAt(id){
 }
 
 /* Tư thế nâng ly / gắp món (tay phải) */
-const POSE_MS = { zo: 2400, gap: 2600 };
+const POSE_MS = { zo: 2400, gap: 2600, tra: 2600, quet: 2200, feed: 1800 };
 function startPose(p, pose){ p.pose = pose; p.poseUntil = performance.now() + POSE_MS[pose]; p.poseSeq = (p.poseSeq || 0) + 1; }
 function poseSVG(pose, front, SL, sleeveR, food){
   const skin = `fill="url(#sk)" ${OL}`, rf = SL === "short" ? skin : `fill="${sleeveR}" ${OL}`;
   const cap = SL === "short" ? `<path d="M42.5 52.5 Q49 54.5 48.8 61 L42.5 61.5 Q42.8 57.5 39.5 56.5 Z" fill="${sleeveR}" ${OL}/>` : "";
+  if (pose === "thien") {
+    // kiết già: chân xếp bằng, hai tay đặt trong lòng, mắt nhắm
+    const lap = `<path d="M10 85 Q11 76 22 75.5 L42 75.5 Q53 76 54 85 Q54 92 32 92 Q10 92 10 85Z" fill="${food}" ${OL}/><ellipse cx="21" cy="85.5" rx="4.2" ry="2.2" fill="url(#sk)" ${OL}/><ellipse cx="43" cy="85.5" rx="4.2" ry="2.2" fill="url(#sk)" ${OL}/>`;
+    const arms = `<path d="M21.5 53 Q13.5 62 19 74 L26 77.5 Q22.5 68 25 58Z" fill="${SL === "short" ? "url(#sk)" : sleeveR}" ${OL}/><g transform="translate(64 0) scale(-1 1)"><path d="M21.5 53 Q13.5 62 19 74 L26 77.5 Q22.5 68 25 58Z" fill="${SL === "short" ? "url(#sk)" : sleeveR}" ${OL}/></g>`;
+    const hands = `<ellipse cx="32" cy="77" rx="7.5" ry="3.3" fill="url(#sk)" ${OL}/><path d="M28 75.5 Q32 73.5 36 75.5" stroke="#d9a688" stroke-width=".8" fill="none"/>`;
+    const eyes = front ? `<ellipse cx="25" cy="35.6" rx="3.9" ry="4.7" fill="url(#sk)"/><ellipse cx="39" cy="35.6" rx="3.9" ry="4.7" fill="url(#sk)"/><path d="M21.6 36 Q25 38.6 28.4 36 M35.6 36 Q39 38.6 42.4 36" stroke="#2b1d18" stroke-width="1.4" fill="none" stroke-linecap="round"/>` : "";
+    return lap + arms + hands + eyes;
+  }
+  if (pose === "quet") {
+    const broom = `<path d="M44.5 58 L52 92" stroke="#b5864a" stroke-width="2.4" stroke-linecap="round"/><path d="M49 86 L46 98 Q53 101 60 97 L55 85Z" fill="#d9b36a" stroke="#8a6a2f" stroke-width=".8"/><path d="M49 92 L48.5 98 M52 91 L52.5 99 M55 90 L57 98" stroke="#8a6a2f" stroke-width=".6"/>`;
+    return `<g class="pq"><path d="M42.5 53 Q50 58 50 70 L45 71.5 Q45 62 40 57.5Z" ${rf}/>${cap}${broom}<circle cx="47.5" cy="72.5" r="3" ${skin}/></g>`;
+  }
+  if (pose === "feed") {
+    return `<g class="pf"><path d="M42.5 53 Q52 50 53.5 41 Q51.5 37.5 48 39 Q47 46 40 50.5 Z" ${rf}/><path d="M53.3 41.5 Q55 33 52.5 26 L49 27 Q50.5 33 48.5 40 Z" ${rf}/>${cap}<circle cx="51" cy="25.5" r="3.1" ${skin}/><g fill="#a8703e"><circle cx="54" cy="21" r="1"/><circle cx="56.5" cy="23.5" r=".9"/><circle cx="55" cy="18" r=".8"/></g></g>`;
+  }
+  if (pose === "tra") {
+    const cup = (x, y) => `<path d="M${x - 3.6} ${y - 3} L${x - 2.6} ${y + 1} H${x + 2.6} L${x + 3.6} ${y - 3}Z" fill="#f6f1e6" stroke="#8a8478" stroke-width=".6"/><ellipse cx="${x}" cy="${y - 3}" rx="3.6" ry="1" fill="#c9a04a"/>`;
+    if (!front) return `<g class="pgk"><g transform="translate(64 0) scale(-1 1)"><path d="M21.5 53 Q13 59 15 68 Q19 71.5 25 67 Q22.5 62 25.5 57.5 Z" ${rf}/></g></g>`;
+    const A = `<g class="pgA"><path d="M42.5 53 Q50 58 50 70 L45 71.5 Q45 62 40 57.5Z" ${rf}/>${cap}${cup(46, 72)}<circle cx="47.5" cy="73.5" r="3" ${skin}/></g>`;
+    const B = `<g class="pgB"><path d="M42.5 53 Q50 57 50 64 L45.5 66 Q45 60 40 57.5Z" ${rf}/><path d="M50 63 Q46 52 38 46.5 L36 50 Q42 54 45.5 65Z" ${rf}/>${cap}${cup(33, 45)}<circle cx="36.5" cy="48.2" r="3" ${skin}/></g>`;
+    return A + B;
+  }
   if (pose === "zo") {
     const glass = `<rect x="47" y="14" width="8" height="11" rx="1.4" fill="#f2b33d" stroke="#8a5a1a" stroke-width=".6"/><path d="M46.8 15.2 q2 -2.8 4 0 q2 -2.8 4.2 0 v1.6 h-8.2z" fill="#fff"/><rect x="48.4" y="17" width="1.6" height="7" rx=".8" fill="#fff" opacity=".45"/>`;
     return `<g class="pz"><path d="M42.5 53 Q52 50 53.5 41 Q51.5 37.5 48 39 Q47 46 40 50.5 Z" ${rf}/><path d="M53.3 41.5 Q55 33 52.5 26 L49 27 Q50.5 33 48.5 40 Z" ${rf}/>${cap}${glass}<circle cx="51" cy="25.5" r="3.1" ${skin}/></g>`;
@@ -1860,17 +2029,170 @@ $("dishGrid").addEventListener("click", e => {
   closeModal("mMenu"); renderTables();
 });
 
+
+/* ================= Vườn chùa: hồ cá, lá rụng, thiền, bàn đá ================= */
+const POND = { cx: 950, cy: 560, rx: 230, ry: 82 };
+const inPond = (x, y, pad = 1) => ((x - POND.cx) / (POND.rx + 12 * pad)) ** 2 + ((y - POND.cy) / (POND.ry + 22 * pad)) ** 2 < 1;
+function pondEdge(x, y){
+  // điểm trên bờ hồ gần (x, y) nhất, phía ngoài mép đá
+  const a = Math.atan2((y - POND.cy) / (POND.ry + 26), (x - POND.cx) / (POND.rx + 16));
+  return { x: POND.cx + (POND.rx + 18) * Math.cos(a), y: POND.cy + (POND.ry + 30) * Math.sin(a), a };
+}
+// bồ đoàn dưới gốc đa và 4 ghế đá quanh bàn đá
+const STONE = { x: 560, y: 640 };
+[[214, 520], [292, 528], [400, 528], [478, 520]].forEach(([x, y], i) => { SEATS[`c${i}`] = { id: `c${i}`, map: "vuon", t: "thien", kind: "cushion", x, y, face: "front" }; });
+[[-38, -30, "front"], [38, -30, "front"], [-38, 30, "back"], [38, 30, "back"]].forEach(([dx, dy, face], i) => { SEATS[`s${i}`] = { id: `s${i}`, map: "vuon", t: "da", kind: "stone", x: STONE.x + dx, y: STONE.y + dy, face }; });
+const cushionSVG = `<svg viewBox="0 0 40 30" aria-hidden="true"><ellipse cx="20" cy="25" rx="18" ry="4" fill="rgba(0,0,0,.22)"/><ellipse cx="20" cy="18" rx="18" ry="8" fill="#b5652f" stroke="#6e3a1c" stroke-width="1.2"/><ellipse cx="20" cy="15" rx="17" ry="6.5" fill="#e3a73a" stroke="#8a5a1a" stroke-width="1"/><path d="M6 15 Q20 9 34 15" stroke="#c9822e" stroke-width="1" fill="none"/><circle cx="20" cy="14.5" r="1.6" fill="#8a5a1a"/></svg>`;
+const stoneStoolSVG = `<svg viewBox="0 0 40 30" aria-hidden="true"><ellipse cx="20" cy="27" rx="14" ry="3" fill="rgba(0,0,0,.25)"/><path d="M8 9 Q7 22 11 27 H29 Q33 22 32 9Z" fill="#9a9488" stroke="#6e685d" stroke-width="1.2"/><ellipse cx="20" cy="9" rx="12" ry="4.5" fill="#b9b2a4" stroke="#6e685d" stroke-width="1.2"/></svg>`;
+const stoneTableSVG = `<svg viewBox="0 0 190 70" width="190" height="70" aria-hidden="true"><ellipse cx="95" cy="66" rx="70" ry="6" fill="rgba(0,0,0,.25)"/>`
+  + `<path d="M78 30 Q72 52 66 64 H124 Q118 52 112 30Z" fill="#9a9488" stroke="#6e685d" stroke-width="1.5"/>`
+  + `<ellipse cx="95" cy="26" rx="82" ry="18" fill="#a8a194" stroke="#6e685d" stroke-width="2"/><ellipse cx="95" cy="22" rx="80" ry="16" fill="#c4bdaf" stroke="#8a8478" stroke-width="1.5"/>`
+  + `<path d="M40 18 Q70 12 100 14" stroke="#fff" stroke-width="2.5" opacity=".4" fill="none" stroke-linecap="round"/>`
+  // ấm trà và 4 chén
+  + `<ellipse cx="95" cy="24" rx="16" ry="4" fill="rgba(0,0,0,.18)"/><path d="M82 12 Q80 24 95 25 Q110 24 108 12Z" fill="#7a3e24" stroke="#4a2414" stroke-width="1.2"/><ellipse cx="95" cy="12" rx="13" ry="3.5" fill="#8f4a2c" stroke="#4a2414" stroke-width="1"/><circle cx="95" cy="8.5" r="2.5" fill="#7a3e24"/>`
+  + `<path d="M108 15 Q118 10 120 4" stroke="#7a3e24" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M82 14 Q74 14 75 20 Q76 23 82 21" stroke="#7a3e24" stroke-width="2.4" fill="none"/>`
+  + [[55, 22], [70, 28], [122, 28], [137, 22]].map(([x, y]) => `<path d="M${x - 5} ${y - 4} L${x - 3.5} ${y + 1} H${x + 3.5} L${x + 5} ${y - 4}Z" fill="#f6f1e6" stroke="#8a8478" stroke-width=".8"/><ellipse cx="${x}" cy="${y - 4}" rx="5" ry="1.4" fill="#c9a04a"/>`).join("")
+  + `</svg>`;
+function buildVuon(){
+  const el = document.createElement("div");
+  el.className = "vobj vtable"; el.style.left = STONE.x + "px"; el.style.top = STONE.y + "px"; el.style.zIndex = STONE.y;
+  el.innerHTML = stoneTableSVG; layer.appendChild(el);
+  Object.values(SEATS).forEach(S => {
+    if (S.map !== "vuon") return;
+    const e = document.createElement("div");
+    e.className = "vobj qstool"; e.dataset.seat = S.id; e.title = S.kind === "cushion" ? "Ngồi thiền ở đây" : "Ngồi ghế đá";
+    e.style.left = S.x + "px"; e.style.top = S.y + "px"; e.style.zIndex = S.y - 1;
+    e.innerHTML = S.kind === "cushion" ? cushionSVG : stoneStoolSVG; layer.appendChild(e);
+  });
+}
+buildVuon();
+
+/* Lá rụng: 8 khu sân, mỗi khu rụng thêm 1 lá sau mỗi ~40 giây, tối đa 6 lá.
+   Thời điểm quét gần nhất của từng khu lưu chung ở stats (lf0..lf7) nên ai quét cũng sạch với mọi người. */
+const LEAF_SPOTS = [[110, 560], [560, 500], [200, 640], [330, 612], [470, 660], [120, 690], [790, 690], [1150, 690]];
+const LEAF_MAX = 6, leafMs = i => 40000 + i * 3500;
+let leafShown = [];
+const seeded = (a, b) => { const x = Math.sin(a * 127.1 + b * 311.7) * 43758.5453; return x - Math.floor(x); };
+const LEAF_COLORS = ["#e3b23c", "#c9822e", "#9bbf4a", "#d9a03a", "#b5652f"];
+function leafCount(i){
+  const t = Number((statsCache || {})["lf" + i]) || 0;
+  if (!t) return LEAF_MAX;
+  return Math.max(0, Math.min(LEAF_MAX, Math.floor((Date.now() - t) / leafMs(i))));
+}
+function renderLeaves(){
+  if (curMap !== "vuon") return;
+  const g = $("leafLayer"); let html = "";
+  LEAF_SPOTS.forEach(([x, y], i) => {
+    const n = leafCount(i), prev = leafShown[i] ?? n;
+    for (let k = 0; k < n; k++) {
+      const lx = x + (seeded(i, k) - .5) * 70, ly = y + (seeded(k, i + 9) - .5) * 26, rot = Math.round(seeded(i + 3, k) * 360);
+      const c = LEAF_COLORS[Math.floor(seeded(i + 5, k + 2) * LEAF_COLORS.length)];
+      html += `<g transform="translate(${lx.toFixed(1)} ${ly.toFixed(1)})"><g class="leaf${k >= prev ? " fall" : ""}"><path d="M0 -6 Q5 -2 0 6 Q-5 -2 0 -6Z" fill="${c}" stroke="rgba(60,40,10,.5)" stroke-width=".6" transform="rotate(${rot}) scale(1.5)"/></g></g>`;
+    }
+    leafShown[i] = n;
+  });
+  g.innerHTML = html;
+}
+setInterval(renderLeaves, 5000);
+function nearestLeafSpot(x, y){
+  let best = -1, bd = Infinity;
+  LEAF_SPOTS.forEach(([lx, ly], i) => { if (!leafCount(i)) return; const d = Math.hypot(lx - x, ly - y); if (d < bd) { bd = d; best = i; } });
+  return best;
+}
+
+/* Cá koi: mỗi máy tự mô phỏng, lệnh cho ăn đồng bộ qua hành động */
+const KOI_COLORS = [["#f28a2e", "#fff"], ["#fff", "#e2572c"], ["#f2c35a", "#fff"], ["#2b2730", "#fff"], ["#e2572c", "#f2c35a"], ["#fff", "#2b2730"], ["#f28a2e", "#2b2730"]];
+const koi = KOI_COLORS.map(([a, b], i) => {
+  const ang = i / KOI_COLORS.length * Math.PI * 2;
+  return { x: POND.cx + Math.cos(ang) * 120, y: POND.cy + Math.sin(ang) * 40, vx: 0, vy: 0, tx: 0, ty: 0, next: 0, el: null, a, b };
+});
+(function buildKoi(){
+  const g = $("koiLayer");
+  koi.forEach((f, i) => {
+    const e = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    e.innerHTML = `<path d="M-15 0 L-24 -7 L-21 0 L-24 7Z" fill="${f.a}" opacity=".9"/><path d="M-15 0 Q-6 -7 7 -5 Q14 -2 14 0 Q14 2 7 5 Q-6 7 -15 0Z" fill="${f.a}" stroke="rgba(0,0,0,.25)" stroke-width=".6"/>`
+      + `<ellipse cx="-3" cy="-1" rx="5" ry="3" fill="${f.b}" opacity=".9"/><ellipse cx="6" cy="1.5" rx="2.6" ry="1.6" fill="${f.b}" opacity=".8"/><path d="M-2 -5 L2 -9 L4 -4.5Z M-2 5 L2 9 L4 4.5Z" fill="${f.a}" opacity=".8"/><circle cx="10" cy="-2" r="1" fill="#111"/>`;
+    g.appendChild(e); f.el = e;
+  });
+})();
+let feedPt = null, feedUntil = 0;
+function feedFish(px, py){
+  const e = pondEdge(px, py);
+  const wx = POND.cx + (e.x - POND.cx) * .62, wy = POND.cy + (e.y - POND.cy) * .55;
+  feedPt = { x: wx, y: wy }; feedUntil = performance.now() + 7000;
+  const g = $("feedLayer");
+  for (let i = 0; i < 9; i++) {
+    const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    c.setAttribute("cx", (wx + (Math.random() - .5) * 40).toFixed(1)); c.setAttribute("cy", (wy + (Math.random() - .5) * 16).toFixed(1));
+    c.setAttribute("r", "2.2"); c.setAttribute("class", "pellet"); c.style.animationDelay = (i * 60) + "ms";
+    g.appendChild(c); setTimeout(() => c.remove(), 5200);
+  }
+  for (let i = 0; i < 3; i++) {
+    const r = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+    r.setAttribute("cx", wx.toFixed(1)); r.setAttribute("cy", wy.toFixed(1)); r.setAttribute("rx", "14"); r.setAttribute("ry", "5");
+    r.setAttribute("class", "ripple"); r.style.animationDelay = (i * 350) + "ms";
+    g.appendChild(r); setTimeout(() => r.remove(), 2600);
+  }
+}
+function tickKoi(now, dt){
+  if (curMap !== "vuon") return;
+  const feeding = feedPt && now < feedUntil;
+  koi.forEach((f, i) => {
+    if (feeding) { f.tx = feedPt.x + Math.cos(i * 2.1 + now / 700) * 16; f.ty = feedPt.y + Math.sin(i * 1.7 + now / 600) * 6; }
+    else if (now > f.next || Math.hypot(f.tx - f.x, f.ty - f.y) < 10) {
+      const a = Math.random() * Math.PI * 2, r = Math.sqrt(Math.random()) * .8;
+      f.tx = POND.cx + Math.cos(a) * POND.rx * r; f.ty = POND.cy + Math.sin(a) * POND.ry * r; f.next = now + 3000 + Math.random() * 4000;
+    }
+    const dx = f.tx - f.x, dy = f.ty - f.y, d = Math.hypot(dx, dy) || 1, sp = feeding ? 75 : 28;
+    const k = Math.min(1, dt * 1.6);
+    f.vx += (dx / d * sp - f.vx) * k; f.vy += (dy / d * sp * .6 - f.vy) * k;
+    f.x += f.vx * dt; f.y += f.vy * dt;
+    if (((f.x - POND.cx) / (POND.rx - 18)) ** 2 + ((f.y - POND.cy) / (POND.ry - 10)) ** 2 > 1) { f.x -= f.vx * dt * 2; f.y -= f.vy * dt * 2; f.next = 0; }
+    const ang = Math.atan2(f.vy, f.vx) * 180 / Math.PI;
+    f.el.setAttribute("transform", `translate(${f.x.toFixed(1)} ${f.y.toFixed(1)}) rotate(${ang.toFixed(0)}) scale(.9)`);
+  });
+}
+
+/* Thiền: ngồi trên bồ đoàn là tự vào thế thiền, đếm phút */
+let thienMs = 0, thienPending = 0, thienSession = 0, thienShownMin = 0;
+function tickThien(dtMs, seated){
+  if (!seated) { thienSession = 0; thienShownMin = 0; return; }
+  thienSession += dtMs; thienMs += dtMs; thienPending += dtMs;
+  const m = Math.floor(thienSession / 60000);
+  if (m > thienShownMin) { thienShownMin = m; say(players.get(meId), `Đã thiền ${m} phút (tổng ${Math.floor(thienMs / 60000)} phút)`, 3500); }
+}
+setInterval(() => { if (thienPending > 1000 && net.addThien) { const ms = thienPending; thienPending = 0; net.addThien(ms).catch(() => { thienPending += ms; }); } }, 60000);
+function freeSeat(kind){
+  let best = null, bd = Infinity;
+  for (const S of Object.values(SEATS)) {
+    if (S.map !== curMap || S.kind !== kind || seatTaken(S.id)) continue;
+    const d = Math.hypot(S.x - me.x, S.y - me.y); if (d < bd) { bd = d; best = S; }
+  }
+  return best;
+}
+function checkTea(p){
+  const S = seatOf(p); if (!S || S.t !== "da") return;
+  const now = performance.now(); let n = 0;
+  for (const q of players.values()) { const sq = seatOf(q); if (sq && sq.t === "da" && now - (q.teaAt || 0) < 5000) n++; }
+  if (n >= 2 && now - (tableClink.da || 0) > 4000) {
+    tableClink.da = now;
+    const el = document.createElement("div"); el.className = "tea"; el.style.left = STONE.x + "px"; el.style.top = (STONE.y - 140) + "px";
+    el.textContent = "Mời trà"; layer.appendChild(el); setTimeout(() => el.remove(), 1900);
+  }
+}
+
 /* Chọn map */
 let lastPlayers = {};
 function mapCounts(){
-  const c = { chua: 0, quan: 0 };
-  for (const id in lastPlayers) { const d = lastPlayers[id]; if (d && d.name) c[d.map === "quan" ? "quan" : "chua"]++; }
+  const c = { chua: 0, quan: 0, vuon: 0 };
+  for (const id in lastPlayers) { const d = lastPlayers[id]; if (d && d.name) c[MAPS[d.map] ? d.map : "chua"]++; }
   if (me && !lastPlayers[meId]) c[curMap]++;
   return c;
 }
 const MAP_THUMB = {
   chua: `<svg viewBox="0 0 96 64"><rect width="96" height="40" fill="#8f1b16"/><rect y="40" width="96" height="24" fill="#b06a34"/><circle cx="48" cy="26" r="13" fill="#f2b33d"/><circle cx="48" cy="20" r="6" fill="#f7d99a"/><rect x="10" y="10" width="8" height="30" fill="#d03a2c"/><rect x="78" y="10" width="8" height="30" fill="#d03a2c"/></svg>`,
-  quan: `<svg viewBox="0 0 96 64"><rect width="96" height="40" fill="#e9be62"/><rect y="40" width="96" height="24" fill="#b9b1a3"/><rect x="26" y="6" width="44" height="12" rx="3" fill="#c8312f"/><rect x="14" y="40" width="68" height="6" fill="#cfd6dc"/><ellipse cx="22" cy="52" rx="6" ry="2.5" fill="#3a86cc"/><ellipse cx="48" cy="52" rx="6" ry="2.5" fill="#3a86cc"/><ellipse cx="74" cy="52" rx="6" ry="2.5" fill="#3a86cc"/><circle cx="20" cy="22" r="3" fill="#ffd35a"/><circle cx="48" cy="25" r="3" fill="#ff8a5a"/><circle cx="76" cy="22" r="3" fill="#8fd3ff"/></svg>`
+  quan: `<svg viewBox="0 0 96 64"><rect width="96" height="40" fill="#e9be62"/><rect y="40" width="96" height="24" fill="#b9b1a3"/><rect x="26" y="6" width="44" height="12" rx="3" fill="#c8312f"/><rect x="14" y="40" width="68" height="6" fill="#cfd6dc"/><ellipse cx="22" cy="52" rx="6" ry="2.5" fill="#3a86cc"/><ellipse cx="48" cy="52" rx="6" ry="2.5" fill="#3a86cc"/><ellipse cx="74" cy="52" rx="6" ry="2.5" fill="#3a86cc"/><circle cx="20" cy="22" r="3" fill="#ffd35a"/><circle cx="48" cy="25" r="3" fill="#ff8a5a"/><circle cx="76" cy="22" r="3" fill="#8fd3ff"/></svg>`,
+  vuon: `<svg viewBox="0 0 96 64"><rect width="96" height="64" fill="#86b452"/><rect width="96" height="22" fill="#e9c77a"/><circle cx="26" cy="12" r="20" fill="#3f7a32"/><rect x="22" y="22" width="9" height="20" fill="#7a5638"/><ellipse cx="68" cy="46" rx="22" ry="9" fill="#4fa3b8" stroke="#8a8478" stroke-width="2"/><ellipse cx="64" cy="46" rx="4" ry="2" fill="#f28a2e"/><ellipse cx="74" cy="44" rx="3.5" ry="1.8" fill="#fff"/><rect x="30" y="50" width="16" height="6" rx="2" fill="#a8a194"/></svg>`
 };
 function renderMapList(){
   const c = mapCounts();
@@ -1881,6 +2203,8 @@ $("mapList").addEventListener("click", e => { const b = e.target.closest("[data-
 function applyMapUI(){
   const m = MAPS[curMap];
   $("stage").classList.toggle("map-quan", curMap === "quan");
+  $("stage").classList.toggle("map-vuon", curMap === "vuon");
+  $("actsVuon").hidden = curMap !== "vuon";
   $("mapTitle").textContent = m.name; $("roomName").textContent = m.room;
   $("actsChua").hidden = curMap !== "chua"; $("actsQuan").hidden = curMap !== "quan";
   WALK = m.walk;
@@ -1896,7 +2220,8 @@ function switchMap(k, silent){
   setMe({ map: k, seat: "", x: pos.x, y: pos.y, tx: pos.tx, ty: pos.ty });
   firstCam = true; tableSig = [];
   syncPlayers(lastPlayers); renderTables();
-  if (k === "quan") hideHintNow();
+  if (k !== "chua") hideHintNow();
+  if (k === "vuon") renderLeaves();
 }
 
 /* ---------------- Hành động ---------------- */
@@ -1906,6 +2231,41 @@ function doAct(act){
   hideHint();
   try { const a = audio(); if (a.state === "suspended") a.resume(); } catch {}
   if (act === "menu") { openMenu(-1); return; }
+  if (act === "thien") {
+    const p = players.get(meId), S = seatOf(p);
+    if (S && S.kind === "cushion") { say(p, "Đang ngồi thiền", 1500); return; }
+    const F = freeSeat("cushion"); if (!F) { say(p, "Bồ đoàn đã có người ngồi hết", 2000); return; }
+    sitAt(F.id); return;
+  }
+  if (act === "tra") {
+    const p = players.get(meId), S = seatOf(p);
+    if (!S || S.t !== "da") {
+      const F = freeSeat("stone"); if (!F) { say(p, "Bàn đá đã đủ người", 2000); return; }
+      sitAt(F.id); say(p, "Ra bàn đá uống trà", 1500); return;
+    }
+    playAct(p, "tra", false); net.update({ act, actTs: Date.now() }); return;
+  }
+  if (act === "feed") {
+    const e2 = pondEdge(me.x, me.y);
+    const go = () => { playAct(players.get(meId), "feed", false); net.update({ act, actTs: Date.now(), x: Math.round(me.x), y: Math.round(me.y), tx: Math.round(me.tx), ty: Math.round(me.ty) }); };
+    if (Math.hypot(me.x - e2.x, me.y - e2.y) > 30) { setTarget(e2.x, e2.y); pending = go; } else go();
+    return;
+  }
+  if (act === "quet") {
+    const i = nearestLeafSpot(me.x, me.y), p = players.get(meId);
+    if (i < 0) { say(p, "Sân sạch rồi, chưa có lá rụng", 2000); return; }
+    const [lx, ly] = LEAF_SPOTS[i];
+    const go = () => {
+      playAct(players.get(meId), "quet", false); net.update({ act, actTs: Date.now() });
+      later(players.get(meId), 1800, () => {
+        const n = leafCount(i); if (!n) return;
+        statsCache = { ...(statsCache || {}), ["lf" + i]: Date.now() }; renderLeaves();
+        net.markStat("lf" + i).catch(() => {}); net.bump("leaves", n).catch(() => {});
+      });
+    };
+    if (Math.hypot(me.x - lx, me.y - (ly + 18)) > 30) { setTarget(lx, ly + 18); pending = go; } else go();
+    return;
+  }
   if (act === "zo" || act === "gap") {
     const p = players.get(meId);
     playAct(p, act, false);
@@ -1949,7 +2309,9 @@ view.addEventListener("pointerdown", e => {
   if (menuEl) { openMenu(Number(menuEl.dataset.menu), e); return; }
   const [x, y] = toStage(e.clientX, e.clientY);
   if (y < WALK.y0 - 60) return;
-  pending = null; setTarget(x, y);
+  pending = null;
+  if (curMap === "vuon" && inPond(x, y)) { const e2 = pondEdge(x, y); setTarget(e2.x, e2.y); return; }
+  setTarget(x, y);
   const m = document.createElement("div"); m.className = "tapmark";
   m.style.left = clamp(x, WALK.x0, WALK.x1) + "px"; m.style.top = clamp(y, WALK.y0, WALK.y1) + "px";
   layer.appendChild(m); setTimeout(() => m.remove(), 600);
@@ -2028,7 +2390,7 @@ $("btnEnter").addEventListener("click", async () => {
     net.update(prof); closeModal("mChar"); return;
   }
   const btn = $("btnEnter"); btn.disabled = true; btn.textContent = "Đang vào chùa...";
-  const startMap = ls.get("chua_map", "chua") === "quan" ? "quan" : "chua";
+  const startMap = MAPS[ls.get("chua_map", "chua")] ? ls.get("chua_map", "chua") : "chua";
   const start = { id: meId, ...prof, on: Math.round(onlineHours() * 10) / 10, map: startMap, seat: "", orders: [], act: "", actTs: 0, ...MAPS[startMap].spawn() };
   curMap = startMap; applyMapUI();
   let res;
@@ -2169,7 +2531,7 @@ async function afterLogin(u){
   $("btnLogout").hidden = false;
   let data = { profile: null, onlineMs: 0 };
   try { data = await net.loadUser(); } catch {}
-  onlineMs = data.onlineMs;
+  onlineMs = data.onlineMs; thienMs = data.thienMs || 0;
   if (data.profile) {
     Object.assign(draft, data.profile);
     $("mCharT").textContent = "Nhân vật của bạn";

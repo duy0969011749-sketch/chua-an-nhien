@@ -36,6 +36,16 @@ Hành động: Lạy, Thắp hương, Gõ mõ, Thỉnh chuông, Xin xăm, Xin 8 
 - Nút Zô: nâng ly bia. Từ 2 người cùng bàn bấm Zô trong vòng 4 giây thì cả bàn cụng ly: chữ "Zô!!!" nổ trên bàn kèm tiếng keng.
 - Nút Gắp: cầm đũa gắp món trên bàn đưa lên miệng.
 
+### Vườn chùa
+
+- Cây đa lớn với rễ phụ buông, lá rơi lác đác; tường chùa có cổng tròn "Vườn thiền", lối đá, đèn đá, bụi hoa.
+- Hồ cá koi (7 con) có lá súng, hoa sen. Không đi xuống hồ được; chạm vào hồ thì đi tới bờ.
+- Cho cá ăn: đi tới bờ hồ gần nhất, rắc mồi, đàn cá bơi tới đớp mồi; người khác cũng thấy.
+- Quét lá: sân chia 8 khu, mỗi khu cứ khoảng 40 giây rụng thêm 1 lá (tối đa 6). Bấm Quét lá thì đi tới khu gần nhất còn lá và quét sạch khu đó cho mọi người. Ô "Lá đã quét" trên bảng thông tin đếm tổng số lá cả chùa đã quét.
+- Ngồi thiền: 4 bồ đoàn dưới gốc đa. Chạm vào bồ đoàn (hoặc nút Thiền) để ngồi kiết già, nhắm mắt, có vầng sáng. Mỗi phút hiện số phút đã thiền; tổng phút thiền lưu theo tài khoản.
+- Bàn đá 4 ghế đá có sẵn ấm trà và chén. Bấm Uống trà (chưa ngồi thì tự đi tới ghế đá trống). Từ 2 người cùng bàn uống trà trong 5 giây thì hiện chữ "Mời trà".
+- Lá rụng dùng mục `stats` có sẵn (lưu thời điểm quét gần nhất của từng khu: lf0..lf7), không cần sửa quy tắc Firebase.
+
 ## Chat
 
 - Máy tính: bấm Enter để mở ô chat, gõ rồi Enter để gửi, Esc để đóng. Điện thoại: bấm nút Chat ở góc trên phải.
