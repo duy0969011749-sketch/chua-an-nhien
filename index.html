@@ -235,8 +235,10 @@
   .tbtn{min-height:40px;padding:6px 14px;border-radius:999px;font-size:.88rem;font-weight:700;color:#fff;background:var(--panel);border:1px solid var(--panel-line)}
   .tbtn:hover{background:rgba(70,22,16,.85)}
   #hudB{left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center;gap:10px}
-  #hudChat{left:12px;bottom:calc(max(14px,env(safe-area-inset-bottom)) + 104px);width:min(340px,calc(100vw - 24px));display:flex;flex-direction:column;gap:6px}
-  #hudChat[hidden],.chatbar[hidden],.chatlog:empty{display:none}
+  #hudChat{z-index:11;left:12px;bottom:calc(max(14px,env(safe-area-inset-bottom)) + 104px);width:min(340px,calc(100vw - 24px));display:flex;flex-direction:column;gap:6px}
+  #hudChat[hidden],.chatbar[hidden],.chatlog:empty,#hudChat.collapsed .chatlog{display:none}
+  .chattog{align-self:flex-start;min-height:30px;padding:3px 12px;font-size:.78rem}
+  .chattog b{display:inline-block;min-width:18px;margin-left:4px;padding:0 5px;border-radius:999px;background:#d63e31;color:#fff;font-size:.72rem;line-height:18px;text-align:center}
   .chatlog{max-height:190px;overflow-y:auto;padding:8px 12px;font-size:.86rem;line-height:1.35;color:#fff;overscroll-behavior:contain}
   .chatlog p{margin:0 0 3px;overflow-wrap:anywhere}
   .chatlog b{color:var(--gold)}
@@ -251,7 +253,7 @@
   .chatbar input{flex:1;min-width:0}
   .chatbar .btn{min-height:42px;padding:0 16px;font-size:.92rem}
   .hint{font-size:.85rem;color:#fff;padding:6px 14px;border-radius:999px;transition:opacity .4s}
-  .hint.hide{opacity:0}
+  .hint.hide{opacity:0;pointer-events:none}
   .acts{display:flex;gap:10px;padding:0 10px;flex-wrap:nowrap;max-width:100vw;overflow-x:auto;scrollbar-width:none}
   .act{flex:none;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;padding:0;color:#fff}
   .act .disc{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.92rem;font-weight:800;color:#fff7dc;letter-spacing:.01em;
@@ -545,6 +547,7 @@
 
 <!-- Chat -->
 <div class="hud" id="hudChat" hidden>
+  <button class="tbtn chattog" id="chatTog" type="button" aria-controls="chatLog" aria-expanded="true">Ẩn chat</button>
   <div class="pill chatlog" id="chatLog" aria-live="polite"></div>
   <form class="chatbar" id="chatForm" hidden novalidate>
     <input type="text" id="chatIn" maxlength="120" placeholder="Nhập tin nhắn, Enter để gửi" autocomplete="off" enterkeyhint="send" aria-label="Tin nhắn">
@@ -1612,9 +1615,26 @@ function addChatLine(m, cls){
   while (log.children.length > 30) log.firstChild.remove();
   if (atBottom || m.uid === meId || cls) log.scrollTop = log.scrollHeight;
 }
+/* Ẩn/hiện khung tin nhắn (bong bóng trên đầu vẫn hiện). Điện thoại mặc định ẩn, nhớ lựa chọn cho lần sau. */
+let chatHidden = ls.get("chua_chat_hidden", null);
+if (chatHidden === null) chatHidden = matchMedia("(max-width:520px)").matches;
+let chatUnread = 0;
+function renderChatTog(){
+  $("hudChat").classList.toggle("collapsed", chatHidden);
+  $("chatTog").setAttribute("aria-expanded", String(!chatHidden));
+  $("chatTog").innerHTML = chatHidden ? `Hiện chat${chatUnread ? `<b>${chatUnread > 99 ? "99+" : chatUnread}</b>` : ""}` : "Ẩn chat";
+  if (!chatHidden) { const log = $("chatLog"); log.scrollTop = log.scrollHeight; }
+}
+$("chatTog").addEventListener("click", () => {
+  chatHidden = !chatHidden; ls.set("chua_chat_hidden", chatHidden);
+  if (!chatHidden) chatUnread = 0;
+  renderChatTog();
+});
+renderChatTog();
 function onChatMsg(m, live){
   if (!m || typeof m.text !== "string" || !m.text) return;
   addChatLine(m); hideHintNow();
+  if (live && chatHidden && m.uid !== meId) { chatUnread++; renderChatTog(); }
   if (live) { const p = players.get(m.uid); if (p) say(p, cleanText(m.text), Math.min(9000, 3000 + m.text.length * 60)); }
 }
 const hideHintNow = () => { hintHidden = true; $("hint").classList.add("hide"); };

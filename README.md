@@ -28,6 +28,7 @@ Hành động: Lạy, Thắp hương, Gõ mõ, Thỉnh chuông, Xin xăm, Xin 8 
 
 - Máy tính: bấm Enter để mở ô chat, gõ rồi Enter để gửi, Esc để đóng. Điện thoại: bấm nút Chat ở góc trên phải.
 - Tin nhắn hiện thành bong bóng trên đầu nhân vật và lưu ở khung chat góc dưới trái. Người mới vào thấy 30 tin gần nhất.
+- Nút "Ẩn chat" / "Hiện chat" ở góc khung chat để ẩn danh sách tin nhắn (bong bóng trên đầu vẫn hiện). Khi ẩn, nút hiện số tin mới chưa đọc. Điện thoại mặc định ẩn; lựa chọn được nhớ cho lần sau.
 - Mỗi tin tối đa 120 ký tự. Mỗi người phải cách khoảng 2 giây mới gửi tin tiếp (quy tắc Firebase cũng chặn).
 - Từ ngữ thô tục trong danh sách `BAD_WORDS` (trong `index.html`) được thay bằng dấu *. Có thể thêm từ vào danh sách này.
 
