@@ -27,7 +27,8 @@ Hành động: Lạy, Thắp hương, Gõ mõ, Thỉnh chuông, Xin xăm, Xin 8 
 ## Ví tiền (đồng)
 
 - Người mới được tặng sẵn 10 đồng. Ví hiện ở bảng thông tin góc trên trái, lưu theo tài khoản.
-- Kiếm tiền: mỗi phút ngồi thiền trên bồ đoàn ở Vườn chùa được 1 đồng.
+- Kiếm tiền: mỗi phút ngồi thiền trên bồ đoàn ở Vườn chùa được 1 đồng. Giây lẻ được cộng dồn qua các lần ngồi.
+- Sen nở: thiền đủ 30 phút (nghỉ giữa chừng dưới 30 phút vẫn tính tiếp) thì mỗi khi ngồi thiền sẽ có bông sen dưới chỗ ngồi và vầng sáng lớn hơn, mọi người đều thấy. Không thiền quá 30 phút thì tính lại từ đầu.
 - Tiêu tiền (0,5 đồng mỗi lần): thắp hương, gửi lời nguyện, cho cá ăn, gọi 1 món ở quán. Không đủ tiền thì hành động bị chặn.
 - Miễn phí: lạy, gõ mõ, thỉnh chuông, xin xăm, xin 8 số, uống trà, quét lá, nâng ly, gắp món.
 - Xin xăm và xin 8 số: mỗi tài khoản 1 lần mỗi ngày, qua 0 giờ (giờ Việt Nam) là ngày mới. Bấm lại trong ngày thì xem lại quẻ xăm / 8 số đã xin. Kết quả lưu theo tài khoản (users/{uid}/daily).

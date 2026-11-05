@@ -63,6 +63,15 @@
   @keyframes pellet{0%,80%{opacity:1}100%{opacity:0}}
   .pl.medit::before{content:"";position:absolute;left:50%;top:30px;width:130px;height:130px;margin-left:-65px;border-radius:50%;background:radial-gradient(circle,rgba(255,236,160,.75),rgba(255,236,160,0) 68%);animation:aura 3.4s ease-in-out infinite;z-index:-1}
   @keyframes aura{50%{transform:scale(1.15);opacity:.7}}
+  /* thiền đủ 30 phút: vầng sáng lớn hơn, ánh vàng hồng, và bông sen dưới chỗ ngồi */
+  .pl.medit.lotus::before{top:-14px;width:230px;height:230px;margin-left:-115px;background:radial-gradient(circle,rgba(255,240,190,.85),rgba(255,205,215,.45) 42%,rgba(255,236,160,0) 70%)}
+  .pl .lotusB,.pl .lotusF{position:absolute;left:50%;width:120px;margin-left:-60px;pointer-events:none;transform-origin:50% 90%;animation:lotusIn .9s ease-out both}
+  .pl .lotusB{top:36px;z-index:0}
+  .pl .lotusF{top:70px;z-index:2}
+  .pl .lotusB svg,.pl .lotusF svg{display:block;width:100%;height:auto}
+  .pl:not(.lotus) .lotusB,.pl:not(.lotus) .lotusF{display:none}
+  .pl.lotus .av{z-index:1}
+  @keyframes lotusIn{from{transform:scale(.3);opacity:0}}
   .pl .av.medit .side,.pl .av.medit .pray{display:none!important}
   .av.medit .lg{display:none}
   .av .pq{transform-origin:43px 53px;animation:pqSweep .55s ease-in-out 4 alternate}
@@ -1151,6 +1160,19 @@ const ls = {
   set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
 };
 
+/* Bông sen dưới chỗ ngồi khi thiền đủ 30 phút: lớp cánh sau (sau người) và lớp cánh trước (ôm hai bên lòng) */
+const LOTUS_SVG = (() => {
+  const petal = (x, y, a, len, wid, fill) => `<path transform="translate(${x} ${y}) rotate(${a})" d="M0 0 Q${wid} ${-len * .45} 0 ${-len} Q${-wid} ${-len * .45} 0 0Z" fill="${fill}" stroke="#c2607a" stroke-width=".8"/>`;
+  const grad = id => `<defs><linearGradient id="${id}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ef9fb3"/><stop offset="1" stop-color="#fff2f5"/></linearGradient></defs>`;
+  let back = `<svg viewBox="0 0 120 62" aria-hidden="true">${grad("lotB")}<ellipse cx="60" cy="57" rx="42" ry="5" fill="#5f9a4a" stroke="#3c6a2e" stroke-width=".9"/>`;
+  [-78, -56, -34, -12, 12, 34, 56, 78].forEach(a => back += petal(60, 56, a, a % 3 ? 44 : 48, 11, "url(#lotB)"));
+  back += `</svg>`;
+  let front = `<svg viewBox="0 0 120 30" aria-hidden="true">${grad("lotF")}`;
+  [-70, -46, 46, 70].forEach(a => front += petal(60, 28, a, 22, 8, "url(#lotF)"));
+  front += `</svg>`;
+  return `<div class="lotusB">${back}</div><div class="lotusF">${front}</div>`;
+})();
+
 /* ---------------- Nhân vật ---------------- */
 const HAIRS = {
   nam: [["ngan", "Tóc ngắn"], ["dinh", "Đầu đinh"], ["lech", "Rẽ ngôi"], ["troc", "Đầu trọc"], ["xoan", "Tóc xoăn"]],
@@ -2112,8 +2134,11 @@ function tick(now){
     if (medit && p.pose !== "thien") { p.pose = "thien"; p.poseUntil = Infinity; p.poseSeq = (p.poseSeq || 0) + 1; if (p.id === meId) say(p, `Ngồi thiền (tổng ${Math.floor(thienMs / 60000)} phút)`, 2500); }
     else if (!medit && p.pose === "thien") p.pose = null;
     // dùng thời gian thật; khoảng nghỉ > 2 giây (ẩn tab, khoá máy) không tính
-    if (p.id === meId) tickThien(Math.min(2000, rawMs), medit);
+    if (p.id === meId) { tickThien(Math.min(2000, rawMs), medit); tickStreak(Math.min(2000, rawMs), medit); }
     p.el.classList.toggle("medit", medit);
+    const lotusOn = medit && !!p.d.lotus;
+    if (lotusOn && !p.el.querySelector(".lotusB")) p.el.insertAdjacentHTML("afterbegin", LOTUS_SVG);
+    p.el.classList.toggle("lotus", lotusOn);
     if (p.act) {
       if (moving) stopAct(p);
       else if (now > p.actUntil) {
@@ -2493,6 +2518,27 @@ function tickKoi(now, dt){
 
 /* Thiền: ngồi trên bồ đoàn là tự vào thế thiền, đếm phút */
 let thienMs = 0, thienPending = 0, thienSession = 0;
+// chuỗi thiền cho bông sen: cộng dồn phút thiền, nghỉ quá 30 phút không thiền thì về 0
+const LOTUS_MS = 30 * 60000, LOTUS_GAP = 30 * 60000;
+let streak = null, streakSaved = 0;
+function streakKey(){ return "chua_thien_streak_" + meId; }
+function saveStreak(force){ const n = Date.now(); if (force || n - streakSaved > 5000) { streakSaved = n; ls.set(streakKey(), streak); } }
+function tickStreak(dtMs, seated){
+  if (!meId || !me) return;
+  const now = Date.now();
+  if (!streak) {
+    const v = ls.get(streakKey(), null);
+    streak = v && typeof v.ms === "number" && typeof v.last === "number" ? v : { ms: 0, last: 0 };
+    if (now - streak.last > LOTUS_GAP) streak.ms = 0;
+    const on = streak.ms >= LOTUS_MS;
+    if (!!me.lotus !== on) setMe({ lotus: on });
+  }
+  if (seated) {
+    if (now - streak.last > LOTUS_GAP) streak.ms = 0;
+    streak.ms += dtMs; streak.last = now; saveStreak();
+    if (!me.lotus && streak.ms >= LOTUS_MS) { setMe({ lotus: true }); saveStreak(true); say(players.get(meId), "Thiền liên tục 30 phút, sen nở dưới chỗ ngồi", 4000); }
+  } else if (me.lotus && now - streak.last > LOTUS_GAP) { streak.ms = 0; saveStreak(true); setMe({ lotus: false }); }
+}
 // 1 đồng cho mỗi phút thiền, tính theo tổng thời gian đã lưu nên giây lẻ được cộng dồn qua các lần ngồi
 function tickThien(dtMs, seated){
   if (!seated) { if (thienSession) { thienSession = 0; flushThien(); } return; }
