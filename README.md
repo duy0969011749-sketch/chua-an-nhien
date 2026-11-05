@@ -24,6 +24,17 @@ Hành động: Lạy, Thắp hương, Gõ mõ, Thỉnh chuông, Xin xăm, Xin 8 
 
 Điều khiển: chạm hoặc bấm vào sàn để đi, phím mũi tên hoặc W A S D trên máy tính. Bấm vào chuông, mõ, bát hương trong cảnh cũng thực hiện hành động.
 
+## Ví tiền (đồng)
+
+- Người mới được tặng sẵn 10 đồng. Ví hiện ở bảng thông tin góc trên trái, lưu theo tài khoản.
+- Kiếm tiền: mỗi phút ngồi thiền trên bồ đoàn ở Vườn chùa được 1 đồng.
+- Tiêu tiền (0,5 đồng mỗi lần): lạy, thắp hương, thỉnh chuông, xin xăm, xin 8 số, gửi lời nguyện, gõ mõ (tính theo lượt ngồi gõ, gõ bao nhiêu tiếng liên tục cũng chỉ tính 1 lần), cho cá ăn, gọi 1 món ở quán. Uống trà, quét lá, nâng ly, gắp món miễn phí. Không đủ tiền thì hành động bị chặn.
+- Tặng tiền: chạm vào nhân vật người khác, hoặc bấm nút "Ví ... · Tặng" để chọn từ danh sách người đang online; nhập số tiền (bội số 0,5, tối đa 1000 đồng mỗi lần). Người nhận thấy thông báo; nếu đang offline thì nhận khi đăng nhập lại.
+- Ví lưu dưới dạng `coin2` (= số đồng x 2) để luôn là số nguyên.
+- Mức chống gian lận cơ bản: quy tắc Firebase chặn sửa ví người khác, chặn ví âm, chặn tặng số âm hoặc quá lớn, chặn tự tặng mình. Người rành kỹ thuật vẫn có thể tự sửa ví của chính mình; muốn chặn tuyệt đối cần Cloud Functions (gói Blaze).
+
+**Cập nhật quy tắc:** chức năng tặng tiền cần bộ quy tắc mới (có mục `coin2` và `gifts`). Dán lại toàn bộ khối quy tắc ở Bước 1 vào Realtime Database > Rules rồi bấm Publish.
+
 ## Map
 
 - Nút "Đổi map" ở góc trên phải: chọn Chùa An Nhiên hoặc Quán nhậu Zô Zô. Bảng chọn map ghi số người đang ở mỗi map.
@@ -88,7 +99,17 @@ const FIREBASE_CONFIG = {
         ".read": "auth != null && auth.uid === $uid",
         ".write": "auth != null && auth.uid === $uid",
         "profile": { ".validate": "newData.child('name').isString() && newData.child('name').val().length <= 16" },
-        "onlineMs": { ".validate": "newData.isNumber() && newData.val() >= 0" }
+        "onlineMs": { ".validate": "newData.isNumber() && newData.val() >= 0" },
+        "coin2": { ".validate": "newData.isNumber() && newData.val() >= 0" }
+      }
+    },
+    "gifts": {
+      "$to": {
+        ".read": "auth != null && auth.uid === $to",
+        "$id": {
+          ".write": "auth != null && ((!data.exists() && newData.child('from').val() === auth.uid) || (auth.uid === $to && !newData.exists()))",
+          ".validate": "newData.hasChildren(['from', 'name', 'amt', 'ts']) && newData.child('from').val() !== $to && newData.child('amt').isNumber() && newData.child('amt').val() >= 1 && newData.child('amt').val() <= 2000 && newData.child('name').isString() && newData.child('name').val().length <= 16 && newData.child('ts').val() === now"
+        }
       }
     },
     "rooms": {

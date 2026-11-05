@@ -322,6 +322,19 @@
   .chatlog .me b{color:#ffd9a0}
   .chatlog .sys{opacity:.8;font-style:italic}
   .chatbar{display:flex;gap:6px}
+  .coinbtn{display:inline-flex;align-items:center;gap:6px;margin-top:6px;min-height:30px;padding:2px 12px;border-radius:999px;border:1px solid #d9a53c;background:linear-gradient(#f7d77c,#d9a53c);color:#4a2a10;font-weight:800;font-size:.82rem}
+  .coinbtn[hidden]{display:none}
+  .coinbtn b{font-size:.95rem}
+  .act{position:relative}
+  .act .cost{position:absolute;right:-4px;top:-4px;min-width:26px;padding:0 5px;border-radius:999px;background:#ffe08a;border:2px solid #8f1b16;color:#6a120e;font:800 .66rem/16px "Baloo 2",sans-serif;font-style:normal;text-align:center}
+  .act .cost.free{background:#d6f5c8;border-color:#2f6b2a;color:#2f5a24}
+  .coinfx{position:absolute;z-index:3500;pointer-events:none;white-space:nowrap;transform:translateX(-50%);font:800 22px "Baloo 2",sans-serif;animation:coinUp 1.6s ease-out forwards;text-shadow:0 2px 0 rgba(0,0,0,.35)}
+  .coinfx.plus{color:#b6f58a}
+  .coinfx.minus{color:#ffd0c4}
+  @keyframes coinUp{from{transform:translate(-50%,0);opacity:0}15%{opacity:1}to{transform:translate(-50%,-70px);opacity:0}}
+  .toast{position:fixed;left:50%;top:max(14px,env(safe-area-inset-top));z-index:40;transform:translate(-50%,-140%);max-width:calc(100vw - 24px);padding:10px 18px;border-radius:999px;background:linear-gradient(#f7d77c,#d9a53c);color:#4a2a10;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.35);transition:transform .35s cubic-bezier(.2,.8,.2,1.2);pointer-events:none;text-align:center}
+  .toast.show{transform:translate(-50%,0)}
+  .pl:not(.me) .av{pointer-events:auto;cursor:pointer}
   .hcpick{display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:3px 12px 3px 4px;border:2px solid #e2cfa3;border-radius:999px;background:#fff;font-weight:700;font-size:.88rem;cursor:pointer}
   .hcpick input{width:30px;height:30px;padding:0;border:0;border-radius:50%;background:none;cursor:pointer}
   .hcpick input::-webkit-color-swatch-wrapper{padding:0}
@@ -368,7 +381,7 @@
   .preview .nm2{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(30,10,8,.62);color:#fff;font-weight:700;font-size:.8rem;padding:2px 10px;border-radius:999px;white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis}
   .field{margin-bottom:12px}
   .field > label,.field > .lab{display:block;font-weight:700;font-size:.92rem;margin-bottom:4px}
-  input[type=email],input[type=password],input[type=text],textarea{width:100%;font:500 1rem "Baloo 2",sans-serif;color:var(--ink);background:#fff;border:2px solid #e2cfa3;border-radius:12px;padding:8px 12px}
+  input[type=number],input[type=email],input[type=password],input[type=text],textarea{width:100%;font:500 1rem "Baloo 2",sans-serif;color:var(--ink);background:#fff;border:2px solid #e2cfa3;border-radius:12px;padding:8px 12px}
   input[type=email]:focus,input[type=password]:focus,input[type=text]:focus,textarea:focus{outline:none;border-color:var(--gold-deep)}
   textarea{min-height:90px;resize:vertical}
   .chips{display:flex;flex-wrap:wrap;gap:6px}
@@ -817,6 +830,7 @@
   <div class="pill info">
     <h1 id="mapTitle">Chùa An Nhiên</h1>
     <div class="room"><span class="dot"></span><span id="roomName">Chánh điện</span> · <b id="count">1</b>/50 người</div>
+    <button class="coinbtn" id="btnWallet" type="button" hidden>Ví: <b id="coinVal">0</b> đồng · Tặng</button>
     <div class="stats"><span>Hương <b id="sIncense">0</b></span><span>Mõ <b id="sMo">0</b></span><span>Chuông <b id="sBell">0</b></span><span>Lời nguyện <b id="sPrayer">0</b></span><span>Lá đã quét <b id="sLeaf">0</b></span></div>
     <div class="mode" id="modeNotice"></div>
   </div>
@@ -848,21 +862,38 @@
   <div class="acts" id="actsQuan" role="toolbar" aria-label="Hành động ở quán" hidden>
     <button class="act" data-do="zo" type="button"><span class="disc">Zô</span><span class="lbl">Nâng ly</span></button>
     <button class="act" data-do="gap" type="button"><span class="disc">Gắp</span><span class="lbl">Gắp món</span></button>
-    <button class="act" data-do="menu" type="button"><span class="disc">Menu</span><span class="lbl">Gọi món</span></button>
+    <button class="act" data-do="menu" type="button"><i class="cost">0,5đ</i><span class="disc">Menu</span><span class="lbl">Gọi món</span></button>
   </div>
   <div class="acts" id="actsVuon" role="toolbar" aria-label="Hành động ở vườn" hidden>
-    <button class="act" data-do="feed" type="button"><span class="disc">Cá</span><span class="lbl">Cho cá ăn</span></button>
+    <button class="act" data-do="feed" type="button"><i class="cost">0,5đ</i><span class="disc">Cá</span><span class="lbl">Cho cá ăn</span></button>
     <button class="act" data-do="quet" type="button"><span class="disc">Quét</span><span class="lbl">Quét lá</span></button>
-    <button class="act" data-do="thien" type="button"><span class="disc">Thiền</span><span class="lbl">Ngồi thiền</span></button>
-    <button class="act" data-do="tra" type="button"><span class="disc">Trà</span><span class="lbl">Uống trà</span></button>
+    <button class="act" data-do="thien" type="button"><i class="cost free">+1đ</i><span class="disc">Thiền</span><span class="lbl">Ngồi thiền</span></button>
+    <button class="act" data-do="tra" type="button"><i class="cost free">Free</i><span class="disc">Trà</span><span class="lbl">Uống trà</span></button>
   </div>
   <div class="acts" id="actsChua" role="toolbar" aria-label="Hành động">
-    <button class="act" data-do="bow" type="button"><span class="disc">Lạy</span><span class="lbl">Lễ Phật</span></button>
-    <button class="act" data-do="incense" type="button"><span class="disc">Hương</span><span class="lbl">Thắp hương</span></button>
-    <button class="act" data-do="mo" type="button"><span class="disc">Mõ</span><span class="lbl">Gõ mõ</span></button>
-    <button class="act" data-do="bell" type="button"><span class="disc">Chuông</span><span class="lbl">Thỉnh chuông</span></button>
-    <button class="act" data-do="xam" type="button"><span class="disc">Xăm</span><span class="lbl">Xin xăm</span></button>
-    <button class="act" data-do="so" type="button"><span class="disc">Số</span><span class="lbl">Xin 8 số</span></button>
+    <button class="act" data-do="bow" type="button"><i class="cost">0,5đ</i><span class="disc">Lạy</span><span class="lbl">Lễ Phật</span></button>
+    <button class="act" data-do="incense" type="button"><i class="cost">0,5đ</i><span class="disc">Hương</span><span class="lbl">Thắp hương</span></button>
+    <button class="act" data-do="mo" type="button"><i class="cost">0,5đ</i><span class="disc">Mõ</span><span class="lbl">Gõ mõ</span></button>
+    <button class="act" data-do="bell" type="button"><i class="cost">0,5đ</i><span class="disc">Chuông</span><span class="lbl">Thỉnh chuông</span></button>
+    <button class="act" data-do="xam" type="button"><i class="cost">0,5đ</i><span class="disc">Xăm</span><span class="lbl">Xin xăm</span></button>
+    <button class="act" data-do="so" type="button"><i class="cost">0,5đ</i><span class="disc">Số</span><span class="lbl">Xin 8 số</span></button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- Tặng tiền -->
+<div class="modal" id="mGift" role="dialog" aria-modal="true" aria-labelledby="mGiftT">
+  <div class="sheet">
+    <div class="sheet-head"><h2 id="mGiftT">Tặng tiền</h2><button class="x" data-close type="button">Đóng</button></div>
+    <div class="sheet-body">
+      <p class="muted" id="giftBal" style="margin:0 0 12px"></p>
+      <div class="field"><span class="lab">Người nhận</span><div class="chips" id="giftTo"></div></div>
+      <div class="field"><label for="giftAmt">Số tiền (đồng)</label><input type="number" id="giftAmt" min="0.5" step="0.5" inputmode="decimal" placeholder="Ví dụ: 5">
+        <div class="chips" id="giftQuick" style="margin-top:8px"><button type="button" class="chip" data-amt="1">1 đồng</button><button type="button" class="chip" data-amt="5">5 đồng</button><button type="button" class="chip" data-amt="10">10 đồng</button></div></div>
+      <div class="err" id="giftMsg" role="alert"></div>
+      <button class="btn wide" id="btnGiftSend" type="button">Tặng</button>
+    </div>
   </div>
 </div>
 
@@ -1394,7 +1425,7 @@ async function makeFirebase(cfg){
     },
     async loadUser(){
       const s = await D.get(D.ref(db, `users/${uid}`)); const v = s.val() || {};
-      return { profile: v.profile || null, onlineMs: Number(v.onlineMs) || 0, thienMs: Number(v.thienMs) || 0 };
+      return { profile: v.profile || null, onlineMs: Number(v.onlineMs) || 0, thienMs: Number(v.thienMs) || 0, coin2: typeof v.coin2 === "number" ? v.coin2 : null };
     },
     saveProfile(prof){ return D.set(D.ref(db, `users/${uid}/profile`), prof); },
     addOnline(ms){ return D.update(D.ref(db, `users/${uid}`), { onlineMs: D.increment(Math.round(ms)) }); },
@@ -1430,6 +1461,25 @@ async function makeFirebase(cfg){
     },
     bump(f, n = 1){ return D.update(statsRef, { [f]: D.increment(n) }); },
     markStat(f){ return D.update(statsRef, { [f]: D.serverTimestamp() }); },
+    // Ví lưu theo đơn vị nửa đồng (coin2 = số đồng x 2) để luôn là số nguyên
+    addCoin(n){ return D.update(D.ref(db, `users/${uid}`), { coin2: D.increment(n) }); },
+    setCoin(n){ return D.set(D.ref(db, `users/${uid}/coin2`), n); },
+    async sendGift(to, amt, name){
+      const r = await D.runTransaction(D.ref(db, `users/${uid}/coin2`), cur => (Number(cur) || 0) >= amt ? (Number(cur) || 0) - amt : undefined);
+      if (!r.committed) return { ok: false, bal: Number(r.snapshot.val()) || 0 };
+      try { await D.push(D.ref(db, `gifts/${to}`), { from: uid, name, amt, ts: D.serverTimestamp() }); }
+      catch (e) { await D.update(D.ref(db, `users/${uid}`), { coin2: D.increment(amt) }).catch(() => {}); throw e; }
+      return { ok: true, bal: Number(r.snapshot.val()) || 0 };
+    },
+    onGifts(cb){ D.onChildAdded(D.ref(db, `gifts/${uid}`), s => cb(s.key, s.val())); },
+    async claimGift(key){
+      // xoá quà bằng giao dịch: chỉ một tab nhận được, không cộng trùng
+      const ref = D.ref(db, `gifts/${uid}/${key}`); let amt = 0;
+      const r = await D.runTransaction(ref, cur => { if (!cur) return undefined; amt = Number(cur.amt) || 0; return null; });
+      if (!r.committed || !amt) return 0;
+      await D.update(D.ref(db, `users/${uid}`), { coin2: D.increment(amt) });
+      return amt;
+    },
     addThien(ms){ return D.update(D.ref(db, `users/${uid}`), { thienMs: D.increment(Math.round(ms)) }); },
     // Tin nhắn và mốc gửi gần nhất ghi cùng lúc, quy tắc Firebase dùng mốc này để chặn gửi dồn
     async sendChat(m){
@@ -1451,7 +1501,7 @@ async function makeFirebase(cfg){
 function makeLocal(){
   const bc = "BroadcastChannel" in window ? new BroadcastChannel("chua-an-nhien") : null;
   const peers = {};
-  let me = null, playersCb = () => {}, statsCb = () => {}, prayersCb = () => {}, chatCb = () => {};
+  let me = null, playersCb = () => {}, statsCb = () => {}, prayersCb = () => {}, chatCb = () => {}, giftCb = null;
   const send = m => { try { bc && bc.postMessage(m); } catch {} };
   const emit = () => { const all = {}; for (const k in peers) all[k] = peers[k]; if (me) all[me.id] = me; playersCb(all); };
   if (bc) bc.onmessage = ({ data: m }) => {
@@ -1461,6 +1511,7 @@ function makeLocal(){
     else if (m.type === "stats") statsCb(ls.get("chua_stats", {}));
     else if (m.type === "prayers") prayersCb(ls.get("chua_prayers", []));
     else if (m.type === "chat") chatCb(m.m, true);
+    else if (m.type === "gift" && giftCb && uid && m.to === uid) { const box = ls.get("chua_gifts_" + uid, {}); for (const k in box) giftCb(k, box[k]); }
   };
   setInterval(() => {
     const now = Date.now(); let ch = false;
@@ -1492,7 +1543,24 @@ function makeLocal(){
       async signOut(){ await this.leave(); sess.set(null); },
       leave: async () => { if (me) send({ type: "bye", id: me.id }); me = null; }
     },
-    async loadUser(){ const v = ls.get("chua_user_" + uid, {}); return { profile: v.profile || null, onlineMs: Number(v.onlineMs) || 0, thienMs: Number(v.thienMs) || 0 }; },
+    async loadUser(){ const v = ls.get("chua_user_" + uid, {}); return { profile: v.profile || null, onlineMs: Number(v.onlineMs) || 0, thienMs: Number(v.thienMs) || 0, coin2: typeof v.coin2 === "number" ? v.coin2 : null }; },
+    async addCoin(n){ const v = ls.get("chua_user_" + uid, {}); v.coin2 = (Number(v.coin2) || 0) + n; ls.set("chua_user_" + uid, v); },
+    async setCoin(n){ const v = ls.get("chua_user_" + uid, {}); v.coin2 = n; ls.set("chua_user_" + uid, v); },
+    async sendGift(to, amt, name){
+      const v = ls.get("chua_user_" + uid, {}), bal = Number(v.coin2) || 0;
+      if (bal < amt) return { ok: false, bal };
+      v.coin2 = bal - amt; ls.set("chua_user_" + uid, v);
+      const box = ls.get("chua_gifts_" + to, {}); box["g" + Date.now() + Math.random().toString(36).slice(2, 6)] = { from: uid, name, amt, ts: Date.now() };
+      ls.set("chua_gifts_" + to, box); send({ type: "gift", to });
+      return { ok: true, bal: v.coin2 };
+    },
+    onGifts(cb){ giftCb = cb; const box = ls.get("chua_gifts_" + uid, {}); for (const k in box) cb(k, box[k]); },
+    async claimGift(key){
+      const box = ls.get("chua_gifts_" + uid, {}), g = box[key]; if (!g) return 0;
+      delete box[key]; ls.set("chua_gifts_" + uid, box);
+      const v = ls.get("chua_user_" + uid, {}); v.coin2 = (Number(v.coin2) || 0) + g.amt; ls.set("chua_user_" + uid, v);
+      return g.amt;
+    },
     async addThien(ms){ const v = ls.get("chua_user_" + uid, {}); v.thienMs = (Number(v.thienMs) || 0) + Math.round(ms); ls.set("chua_user_" + uid, v); },
     async markStat(f){ const s = ls.get("chua_stats", {}); s[f] = Math.max(Date.now(), (s[f] || 0) + 1); ls.set("chua_stats", s); statsCb(s); send({ type: "stats" }); },
     async saveProfile(prof){ const v = ls.get("chua_user_" + uid, {}); v.profile = prof; ls.set("chua_user_" + uid, v); },
@@ -1656,7 +1724,7 @@ const profKey = d => `${d.g}|${d.hair}|${d.hc}|${d.color}|${d.outfit}|${d.acc}`;
 
 function createPlayer(d){
   const el = document.createElement("div");
-  el.className = "pl" + (d.id === meId ? " me" : "");
+  el.className = "pl" + (d.id === meId ? " me" : ""); el.dataset.id = d.id;
   el.innerHTML = `<div class="bub"></div><div class="nm"></div><div class="av" style="--bd:-${(Math.random() * 4.8).toFixed(2)}s"></div>`;
   layer.appendChild(el);
   const p = { id: d.id, d, el, x: d.x ?? 640, y: d.y ?? 640, tx: d.tx ?? d.x ?? 640, ty: d.ty ?? d.y ?? 640, view: "", flip: false, pk: "", lastAct: d.actTs || 0, bubT: 0 };
@@ -2010,7 +2078,7 @@ function openMenu(t, ev){
   if (t == null || t < 0) t = S ? S.t : -1;
   menuTable = t;
   $("mMenuT").textContent = t >= 0 ? `Thực đơn - Bàn ${t + 1}` : "Thực đơn";
-  $("menuNote").textContent = S && S.t === t ? "Chọn món, món sẽ được dọn lên bàn của bạn (giữ 10 phút)." : "Ngồi vào một ghế của bàn này để gọi món.";
+  $("menuNote").textContent = (S && S.t === t ? "Chọn món, món sẽ được dọn lên bàn của bạn (giữ 10 phút)." : "Ngồi vào một ghế của bàn này để gọi món.") + ` Mỗi món 0,5 đồng · Ví: ${fmtCoin(coin2)} đồng.`;
   $("menuMsg").textContent = "";
   const sh = $("mMenu").querySelector(".sheet");
   if (ev) { sh.style.setProperty("--dx", (ev.clientX - innerWidth / 2) + "px"); sh.style.setProperty("--dy", (ev.clientY - innerHeight / 2) + "px"); }
@@ -2021,6 +2089,7 @@ $("dishGrid").addEventListener("click", e => {
   const b = e.target.closest("[data-dish]"); if (!b || !me) return;
   const S = seatOf(players.get(meId));
   if (!S || S.t !== menuTable) { $("menuMsg").textContent = "Hãy ngồi vào một ghế của bàn này rồi gọi món."; return; }
+  if (!spend(1)) { $("menuMsg").textContent = `Mỗi món 0,5 đồng, ví còn ${fmtCoin(coin2)} đồng.`; return; }
   const now = Date.now(), d = b.dataset.dish;
   const list = arr(me.orders).filter(o => o && now - o.ts < ORDER_MS);
   list.push({ t: S.t, d, ts: now });
@@ -2159,7 +2228,7 @@ function tickThien(dtMs, seated){
   if (!seated) { thienSession = 0; thienShownMin = 0; return; }
   thienSession += dtMs; thienMs += dtMs; thienPending += dtMs;
   const m = Math.floor(thienSession / 60000);
-  if (m > thienShownMin) { thienShownMin = m; say(players.get(meId), `Đã thiền ${m} phút (tổng ${Math.floor(thienMs / 60000)} phút)`, 3500); }
+  if (m > thienShownMin) { thienShownMin = m; earn(2); say(players.get(meId), `Đã thiền ${m} phút, +1 đồng (tổng ${Math.floor(thienMs / 60000)} phút)`, 3500); }
 }
 setInterval(() => { if (thienPending > 1000 && net.addThien) { const ms = thienPending; thienPending = 0; net.addThien(ms).catch(() => { thienPending += ms; }); } }, 60000);
 function freeSeat(kind){
@@ -2183,6 +2252,91 @@ function checkTea(p){
 
 /* Chọn map */
 let lastPlayers = {};
+
+/* ================= Ví tiền (đơn vị nửa đồng: coin2) ================= */
+let coin2 = 0;
+const COIN_START = 20;          // 10 đồng tặng sẵn cho người mới
+const fmtCoin = u => (u % 2 ? `${(u - 1) / 2},5` : `${u / 2}`);
+const parseCoin = t => { const v = parseFloat(String(t).replace(",", ".")); return isFinite(v) ? Math.round(v * 2) : NaN; };
+function renderCoin(){ $("coinVal").textContent = fmtCoin(coin2); }
+function coinFx(units){
+  const src = me; if (!src) return;
+  const el = document.createElement("div");
+  el.className = "coinfx " + (units > 0 ? "plus" : "minus");
+  el.textContent = `${units > 0 ? "+" : "-"}${fmtCoin(Math.abs(units))} đồng`;
+  el.style.left = src.x + "px"; el.style.top = (src.y - 150) + "px";
+  layer.appendChild(el); setTimeout(() => el.remove(), 1600);
+}
+let toastT = 0;
+function toast(msg, ms = 3500){ const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), ms); }
+function spend(units){
+  if (!me) return false;
+  if (coin2 < units) {
+    say(players.get(meId), `Không đủ tiền (cần ${fmtCoin(units)} đồng). Ngồi thiền để có thêm.`, 3000);
+    toast(`Ví còn ${fmtCoin(coin2)} đồng, không đủ ${fmtCoin(units)} đồng. Mỗi phút thiền được 1 đồng.`);
+    return false;
+  }
+  coin2 -= units; renderCoin(); coinFx(-units);
+  net.addCoin(-units).catch(() => {});
+  return true;
+}
+function earn(units){ coin2 += units; renderCoin(); coinFx(units); net.addCoin(units).catch(() => {}); }
+
+/* Tặng tiền */
+let giftToId = "";
+function onlineOthers(){
+  const list = [];
+  for (const id in lastPlayers) { const d = lastPlayers[id]; if (id !== meId && d && d.name) list.push({ id, name: d.name, map: MAPS[d.map] ? d.map : "chua" }); }
+  return list.sort((a, b) => a.name.localeCompare(b.name, "vi"));
+}
+function renderGiftTo(){
+  const list = onlineOthers();
+  if (giftToId && !list.some(x => x.id === giftToId)) giftToId = "";
+  $("giftTo").innerHTML = list.length
+    ? list.map(x => `<button type="button" class="chip" data-to="${esc(x.id)}" aria-pressed="${x.id === giftToId}">${esc(x.name)} <span class="muted" style="font-weight:600">· ${esc(MAPS[x.map].room)}</span></button>`).join("")
+    : `<span class="muted">Chưa có ai khác đang online.</span>`;
+}
+function openGift(toId){
+  if (!me) return;
+  giftToId = toId || "";
+  $("giftBal").textContent = `Ví của bạn: ${fmtCoin(coin2)} đồng. Mỗi phút ngồi thiền ở Vườn chùa được 1 đồng.`;
+  $("giftMsg").textContent = ""; $("giftMsg").className = "err"; $("giftAmt").value = "";
+  renderGiftTo(); openModal("mGift");
+}
+$("btnWallet").addEventListener("click", () => openGift(""));
+$("giftTo").addEventListener("click", e => { const b = e.target.closest("[data-to]"); if (b) { giftToId = b.dataset.to; renderGiftTo(); } });
+$("giftQuick").addEventListener("click", e => { const b = e.target.closest("[data-amt]"); if (b) $("giftAmt").value = b.dataset.amt; });
+$("btnGiftSend").addEventListener("click", async () => {
+  const m = $("giftMsg"), units = parseCoin($("giftAmt").value);
+  m.className = "err";
+  if (!giftToId) { m.textContent = "Chọn người nhận."; return; }
+  if (!(units >= 1)) { m.textContent = "Số tiền tối thiểu 0,5 đồng."; $("giftAmt").focus(); return; }
+  if (units > 2000) { m.textContent = "Mỗi lần tặng tối đa 1000 đồng."; return; }
+  if (units > coin2) { m.textContent = `Ví chỉ còn ${fmtCoin(coin2)} đồng.`; return; }
+  const to = onlineOthers().find(x => x.id === giftToId), btn = $("btnGiftSend");
+  btn.disabled = true; btn.textContent = "Đang tặng...";
+  try {
+    const r = await net.sendGift(giftToId, units, me.name);
+    if (!r.ok) { coin2 = r.bal; renderCoin(); m.textContent = `Ví chỉ còn ${fmtCoin(coin2)} đồng.`; }
+    else {
+      coin2 = r.bal; renderCoin(); coinFx(-units); closeModal("mGift");
+      toast(`Đã tặng ${to ? to.name : "bạn"} ${fmtCoin(units)} đồng`);
+      say(players.get(meId), `Tặng ${to ? to.name : "bạn"} ${fmtCoin(units)} đồng`, 2500);
+    }
+  } catch (err) {
+    m.textContent = /permission/i.test(String(err && (err.code || err.message))) ? "Chưa tặng được: cần dán bộ quy tắc Firebase mới (mục gifts trong README)." : "Chưa tặng được, vui lòng thử lại.";
+  }
+  btn.disabled = false; btn.textContent = "Tặng";
+});
+async function onGift(key, g){
+  if (!g || !(g.amt > 0)) return;
+  let amt = 0;
+  try { amt = await net.claimGift(key); } catch {}
+  if (!amt) return;
+  coin2 += amt; renderCoin(); coinFx(amt);
+  toast(`${g.name || "Một người bạn"} tặng bạn ${fmtCoin(amt)} đồng`, 5000);
+}
+
 function mapCounts(){
   const c = { chua: 0, quan: 0, vuon: 0 };
   for (const id in lastPlayers) { const d = lastPlayers[id]; if (d && d.name) c[MAPS[d.map] ? d.map : "chua"]++; }
@@ -2225,6 +2379,7 @@ function switchMap(k, silent){
 }
 
 /* ---------------- Hành động ---------------- */
+const CHUA_PAID = new Set(["bow", "incense", "mo", "bell", "xam", "so"]);
 let moLast = 0;
 function doAct(act){
   if (!me) return;
@@ -2247,7 +2402,7 @@ function doAct(act){
   }
   if (act === "feed") {
     const e2 = pondEdge(me.x, me.y);
-    const go = () => { playAct(players.get(meId), "feed", false); net.update({ act, actTs: Date.now(), x: Math.round(me.x), y: Math.round(me.y), tx: Math.round(me.tx), ty: Math.round(me.ty) }); };
+    const go = () => { if (!spend(1)) return; playAct(players.get(meId), "feed", false); net.update({ act, actTs: Date.now(), x: Math.round(me.x), y: Math.round(me.y), tx: Math.round(me.tx), ty: Math.round(me.ty) }); };
     if (Math.hypot(me.x - e2.x, me.y - e2.y) > 30) { setTarget(e2.x, e2.y); pending = go; } else go();
     return;
   }
@@ -2275,6 +2430,8 @@ function doAct(act){
   const spot = SPOTS[act];
   const run = () => {
     const p = players.get(meId);
+    const newMo = act === "mo" && !(p.act === "mo" && !p.actOut);
+    if ((act !== "mo" || newMo) && CHUA_PAID.has(act) && !spend(1)) return;
     if (act === "xam") { openModal("mXam"); }
     if (act === "so") { openModal("mSo"); }
     if (act === "mo") {
@@ -2303,6 +2460,8 @@ view.addEventListener("pointerdown", e => {
   hideHint();
   const hit = e.target.closest && e.target.closest("[data-act]");
   if (hit && !hit.classList.contains("av")) { doAct(hit.dataset.act); return; }
+  const plEl = e.target.closest && e.target.closest(".pl");
+  if (plEl && plEl.dataset.id && plEl.dataset.id !== meId) { openGift(plEl.dataset.id); return; }
   const seatEl = e.target.closest && e.target.closest("[data-seat]");
   if (seatEl) { sitAt(seatEl.dataset.seat); return; }
   const menuEl = e.target.closest && e.target.closest("[data-menu]");
@@ -2405,7 +2564,8 @@ $("btnEnter").addEventListener("click", async () => {
   me = { ...start };
   createPlayer(me);
   net.onPlayers(syncPlayers);
-  $("hudChat").hidden = false; $("btnChat").hidden = false; $("btnMap").hidden = false;
+  $("hudChat").hidden = false; $("btnChat").hidden = false; $("btnMap").hidden = false; $("btnWallet").hidden = false;
+  net.onGifts(onGift);
   net.onChat(onChatMsg);
   onSent = start.on; startOnlineClock();
   $("closeChar").hidden = false; $("mCharT").textContent = "Đổi nhân vật"; $("btnEnter").textContent = "Lưu";
@@ -2532,6 +2692,9 @@ async function afterLogin(u){
   let data = { profile: null, onlineMs: 0 };
   try { data = await net.loadUser(); } catch {}
   onlineMs = data.onlineMs; thienMs = data.thienMs || 0;
+  if (typeof data.coin2 === "number") coin2 = Math.max(0, Math.round(data.coin2));
+  else { coin2 = COIN_START; net.setCoin(COIN_START).catch(() => {}); }
+  renderCoin();
   if (data.profile) {
     Object.assign(draft, data.profile);
     $("mCharT").textContent = "Nhân vật của bạn";
@@ -2554,9 +2717,11 @@ $("prayerForm").addEventListener("submit", async e => {
   const wish = $("pWish").value.trim(), msg = $("prayMsg");
   if (!me) return;
   if (!wish) { msg.textContent = "Vui lòng viết điều bạn mong cầu."; $("pWish").focus(); return; }
+  if (coin2 < 1) { msg.textContent = `Gửi lời nguyện cần 0,5 đồng, ví còn ${fmtCoin(coin2)} đồng.`; return; }
   const btn = $("btnPray"); btn.disabled = true; btn.textContent = "Đang gửi...";
   try {
     await net.addPrayer(me.name, wish.slice(0, 200));
+    spend(1);
     $("pWish").value = ""; $("wishCount").textContent = "0/200"; msg.textContent = "";
     playAct(players.get(meId), "pray", false); net.update({ act: "pray", actTs: Date.now() });
   } catch { msg.textContent = "Chưa gửi được, vui lòng thử lại."; }
