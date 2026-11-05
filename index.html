@@ -159,24 +159,15 @@
   .av .pray{display:none}
   .pl:not(.walk) .av.v-front .pray,.preview .av.v-front .pray{display:inline}
   .pl:not(.walk) .av.v-front .side,.preview .av.v-front .side{display:none}
-  /* đi bộ: một chu kỳ 2 bước. Chân l1 nhấc ở 75%, l2 ở 25%; tay ngược bên đưa ra trước cùng lúc */
-  .pl.walk .av{--wc:.9s;animation:wBody var(--wc) ease-in-out infinite;transform-origin:50% 95%}
-  .pl.walk .l1{animation:wLeg var(--wc) ease-in-out infinite}
-  .pl.walk .l2{animation:wLeg var(--wc) ease-in-out infinite;animation-delay:calc(var(--wc) / -2)}
-  .pl.walk .armL{animation:wArmL var(--wc) ease-in-out infinite}
-  .pl.walk .armR{animation:wArmR var(--wc) ease-in-out infinite;animation-delay:calc(var(--wc) / -2)}
-  .pl.walk .head{animation:wHead var(--wc) ease-in-out infinite;transform-origin:32px 54px}
-  @keyframes wBody{0%,50%,100%{transform:none}25%{transform:translate(-.5px,-2px) rotate(-1.2deg)}75%{transform:translate(.5px,-2px) rotate(1.2deg)}}
-  @keyframes wLeg{0%,50%,100%{transform:none}60%{transform:translateY(-1.6px) scaleY(.94)}75%{transform:translateY(-3.2px) scaleY(.86)}90%{transform:translateY(-1px) scaleY(.97)}}
-  /* tay thẳng vung trước sau. Nhìn trước: ra trước thì khép vào trước thân, ra sau thì lệch ra ngoài; cả hai ngắn lại theo phối cảnh */
-  @keyframes wArmL{0%,50%,100%{transform:none}25%{transform:rotate(-6deg) scaleY(.9)}75%{transform:rotate(5deg) scaleY(.94)}}
-  @keyframes wArmR{0%,50%,100%{transform:none}25%{transform:rotate(6deg) scaleY(.9)}75%{transform:rotate(-5deg) scaleY(.94)}}
-  @keyframes wHead{0%,50%,100%{transform:none}25%{transform:translateY(.5px) rotate(1deg)}75%{transform:translateY(.5px) rotate(-1deg)}}
-  /* nhìn sau lưng: tay ra trước đi vào chiều sâu nên ngắn hơn và khép sát hông; tay ra sau hướng về người xem, lệch ra ngoài */
-  .pl.walk .av:not(.v-front) .armL{animation-name:wArmLB}
-  .pl.walk .av:not(.v-front) .armR{animation-name:wArmRB}
-  @keyframes wArmLB{0%,50%,100%{transform:none}25%{transform:rotate(-3deg) scaleY(.86)}75%{transform:rotate(6deg) scaleY(.95)}}
-  @keyframes wArmRB{0%,50%,100%{transform:none}25%{transform:rotate(3deg) scaleY(.86)}75%{transform:rotate(-6deg) scaleY(.95)}}
+  /* đi bộ do animAvatar điều khiển theo từng khung hình */
+  .pl.walk .head{animation:none}
+  .av{position:relative}
+  .av .bw{transform-origin:32px 88px}
+  .av .hw{transform-origin:32px 54px}
+  .av .hsw{transform-origin:32px 14px}
+  .av .robe{transform-origin:32px 52px}
+  .av svg.av-old{position:absolute;left:0;top:0;pointer-events:none;animation:avOut .2s ease-out forwards}
+  @keyframes avOut{to{opacity:0}}
   .av .k-legs{transform-origin:32px 89px}
   .av .k-tor{transform-origin:32px 50px}
   .av .k-hd{transform-origin:32px 32px}
@@ -186,7 +177,9 @@
   .av .p-fall{transform-origin:49px 48px}
   .av .k-af,.av .k-ad,.av .k-ar,.av .prop,.av .k-seat,.av .k-soles{opacity:0}
   .av.acting .side{display:none}
-  .av[data-act=bell] .p-mal,.av[data-act=mo] .p-dui{opacity:1}
+  .av[data-act=mo] .p-dui{opacity:1}
+  .av .k-bl{opacity:0}
+  .av .k-bl,.av .p-log{transform-origin:32px 40px}
   .av[data-act=incense] .p-inc,.av[data-act=xam] .p-tube{opacity:1}
 
   /* Lạy: chắp tay, đưa lên trán, quỳ, úp tay rạp đầu, đứng dậy; 3 lạy */
@@ -227,13 +220,14 @@
   .av[data-act=bell] .k-tor{animation:blTor 4.2s ease-in-out both}
   .av[data-act=bell] .k-hd{animation:blHd 4.2s ease-in-out both}
   .av[data-act=bell] .k-arms{animation:blArm 4.2s ease-in-out both}
-  .av[data-act=bell] .k-aj .R{animation:blJR 4.2s ease-in-out both}
-  .av[data-act=bell] .k-ar{animation:blR 4.2s ease-in-out both}
+  .av[data-act=bell] .k-aj{animation:blJR 4.2s ease-in-out both}
+  .av[data-act=bell] .k-bl,.av[data-act=bell] .p-log{animation:blPush 4.2s ease-in-out both}
   @keyframes blTor{0%,16%,76%,92%,100%{transform:none}8%,84%{transform:translateY(3px) scaleY(.94)}}
   @keyframes blHd{0%,16%,76%,92%,100%{transform:none}8%,84%{transform:translateY(7px) scale(.97)}}
   @keyframes blArm{0%,16%,76%,92%,100%{transform:none}8%,84%{transform:translateY(5px)}}
   @keyframes blJR{0%,16%,72%,100%{opacity:1}21%,67%{opacity:0}}
-  @keyframes blR{0%,16%{opacity:0;transform:rotate(10deg)}21%{opacity:1;transform:none}33%{opacity:1;transform:rotate(26deg)}40%{opacity:1;transform:translateY(-4px) rotate(-9deg)}47%{opacity:1;transform:rotate(4deg)}54%,64%{opacity:1;transform:none}70%,100%{opacity:0;transform:none}}
+  /* kéo vồ về phía người (to ra, thấp xuống) rồi đẩy mạnh vào chuông lúc 40% (khớp tiếng chuông 1,68 giây) */
+  @keyframes blPush{0%,16%{opacity:0;transform:none}21%{opacity:1;transform:none}33%{opacity:1;transform:translateY(3px) scale(1.06)}40%{opacity:1;transform:translateY(-4px) scale(.9)}47%{opacity:1;transform:translateY(-1px) scale(.97)}54%,64%{opacity:1;transform:none}70%,100%{opacity:0;transform:none}}
 
   /* Gõ mõ: quỳ xuống, tay phải cầm dùi; mỗi lần gõ dùi đập xuống; hết gõ thì đứng dậy */
   .av[data-act=mo] .k-legs{animation:knLeg .6s ease-in-out forwards}
@@ -1354,39 +1348,50 @@ const hatSVG = front => `<path d="M4 25.5 L32 1.5 L60 25.5 Q32 33 4 25.5Z" fill=
   + `<path d="M4 25.5 Q32 33 60 25.5" stroke="#8a6a2f" stroke-width=".8" fill="none" opacity=".6"/>`
   + (front ? `<path d="M14.5 34 Q19 49.5 32 50.5 Q45 49.5 49.5 34" stroke="#c9503f" stroke-width=".7" fill="none" opacity=".75"/>` : "");
 
-/* Tay và đạo cụ khi hành lễ (nhìn từ phía sau). Vẽ tay trái, tay phải lật đối xứng. */
+/* Tay và đạo cụ khi hành lễ (nhìn từ sau lưng). Tay vẽ bằng nét dày liền từ vai nên không bị rời khớp.
+   Vẽ tay trái, tay phải lật đối xứng. */
 function actArms(SL, sleeve, sleeveR, light){
-  const skin = `fill="url(#sk)" ${OL}`, sl = `fill="${sleeve}" ${OL}`, slR = `fill="${sleeveR}" ${OL}`;
-  const thun = SL === "short", fill = thun ? skin : sl;
-  const cap = thun ? `<path d="M21.5 52.5 Q15 54.5 15.2 61 L21.5 61.5 Q21.2 57.5 24.5 56.5 Z" ${sl}/>` : "";
-  const cuff = (x, y) => thun ? "" : `<circle cx="${x}" cy="${y}" r="1.7" fill="${light}" opacity=".7"/>`;
+  const W = SL === "wide" ? 8.4 : 6.2, thun = SL === "short";
+  const pathOf = pts => "M" + pts.map(q => q.join(" ")).join(" L");
+  // một cánh tay: viền ngoài, thân tay (màu tay áo hoặc da), tay áo ngắn ở vai nếu là áo cộc
+  const limb = (pts, col) => {
+    const d = pathOf(pts), cap = pathOf([pts[0], [pts[0][0] + (pts[1][0] - pts[0][0]) * .3, pts[0][1] + (pts[1][1] - pts[0][1]) * .3]]);
+    let s = `<path d="${d}" stroke="#4a2e22" stroke-opacity=".55" stroke-width="${W + 2}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+    s += `<path d="${d}" stroke="${thun ? "#f1c4a5" : col}" stroke-width="${W}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+    if (thun) s += `<path d="${cap}" stroke="${col}" stroke-width="${W + .6}" fill="none" stroke-linecap="butt"/>`;
+    return s;
+  };
+  const handAt = (x, y, r = 3) => `<circle cx="${x}" cy="${y}" r="${r}" fill="url(#sk)" ${OL}/>`;
+  const cuff = (x, y) => thun ? "" : `<circle cx="${x}" cy="${y}" r="1.6" fill="${light}" opacity=".7"/>`;
   const both = g => `<g class="L">${g}</g><g class="R" transform="translate(64 0) scale(-1 1)">${g}</g>`;
-  // chắp tay trước ngực: khuỷu tay chìa hai bên, bàn tay khuất phía trước
-  const J = `<path d="M21.5 53 Q13 59 15 68 Q19 71.5 25 67 Q22.5 62 25.5 57.5 Z" ${fill}/>` + cap;
-  // chắp tay đưa lên trán: cánh tay nâng ngang vai, cẳng tay khuất sau đầu
-  const F = `<path d="M21.5 54 Q12 54 10.5 45 Q11 40.5 15.5 41.5 Q17 48 25 50.5 Z" ${fill}/><path d="M10 45 Q9.5 36 14 29 L17.5 31 Q14.5 37 15.2 43.5 Z" ${fill}/>` + cuff(15.6, 30.5) + cap;
-  // úp hai bàn tay xuống sàn khi lạy
-  const D = `<path d="M21.5 53 Q11 60 9.5 72 Q12 76 16 73.5 Q16.5 64 25 57.5 Z" ${fill}/><ellipse cx="12.5" cy="75.5" rx="3.6" ry="2.4" ${skin}/>` + cap;
-  // tay phải giơ lên cầm dùi
-  const rf = thun ? skin : slR;
-  const R = `<path d="M42.5 53 Q52 50 53.5 41 Q51.5 37.5 48 39 Q47 46 40 50.5 Z" ${rf}/><path d="M53.3 41.5 Q55 33 52.5 26 L49 27 Q50.5 33 48.5 40 Z" ${rf}/>`
-    + (thun ? `<path d="M42.5 52.5 Q49 54.5 48.8 61 L42.5 61.5 Q42.8 57.5 39.5 56.5 Z" ${slR}/>` : "")
-    + `<circle cx="51" cy="25.5" r="3.1" ${skin}/>`;
-  const mallet = `<g class="prop p-mal"><path d="M51 27 L49 6" stroke="#6e4426" stroke-width="2.6" stroke-linecap="round"/><rect x="44.5" y="-1" width="9" height="10" rx="3.5" fill="#a8703e" ${OL}/><path d="M45 3 H53" stroke="#7a4a28" stroke-width=".8"/></g>`;
-  const dui = `<g class="prop p-dui"><path d="M51 27 L50 15" stroke="#6e4426" stroke-width="2.2" stroke-linecap="round"/><circle cx="50" cy="13" r="3.4" fill="#9a3a2a" ${OL}/></g>`;
+  // chắp tay trước ngực: khuỷu hơi chìa ra, cẳng tay vòng ra trước nên khuất sau lưng
+  const J = limb([[23.5, 56], [16, 62.5], [20.2, 67.5]], sleeve);
+  // chắp tay ngang trán: khuỷu thấp, sát người; cẳng tay đi lên khuất sau đầu
+  const F = limb([[23.5, 56], [13, 60.5], [15.6, 47]], sleeve) + cuff(15.8, 48.6);
+  // úp hai bàn tay xuống sàn khi lạy rạp
+  const D = limb([[22.5, 56], [13.5, 65.5], [10.5, 73.5]], sleeve) + `<ellipse cx="11" cy="75.6" rx="3.6" ry="2.3" fill="url(#sk)" ${OL}/>`;
+  // gõ mõ: tay phải giơ dùi vừa tầm vai
+  const R = limb([[40.5, 56], [49.5, 52], [51, 42]], sleeveR) + handAt(51, 40.6, 3.1);
+  const dui = `<g class="prop p-dui"><path d="M51 41 L49.6 30" stroke="#6e4426" stroke-width="2.2" stroke-linecap="round"/><circle cx="49.4" cy="28.4" r="3.4" fill="#9a3a2a" ${OL}/></g>`;
+  // thỉnh chuông: hai tay nắm vồ gỗ treo ngang (vồ vẽ ở bellLog, sau đầu)
+  const B = limb([[23.5, 56], [12, 51.5], [7.5, 41.5]], sleeve) + handAt(7.4, 40.2, 3.1);
   // ba nén hương cầm trong tay chắp, ló trên đỉnh đầu
   let inc = `<g class="prop p-inc">`;
-  [[27, -5], [32, -7.5], [37, -5]].forEach(([x, y]) => {
-    inc += `<path d="M32 14 L${x} ${y}" stroke="#6e4632" stroke-width="1.5" stroke-linecap="round"/><circle class="tip" cx="${x}" cy="${y}" r="1.6" fill="#ff8a3d"/>`;
+  [[27, -6], [32, -8.5], [37, -6]].forEach(([x, y]) => {
+    inc += `<path d="M32 12 L${x} ${y}" stroke="#6e4632" stroke-width="1.5" stroke-linecap="round"/><circle class="tip" cx="${x}" cy="${y}" r="1.6" fill="#ff8a3d"/>`;
   });
-  inc += `<path d="M32 -10 q-2 -3 0 -6 q2 -3 0 -6 M27 -8 q-2 -2.5 0 -5" stroke="rgba(240,235,225,.7)" stroke-width="1.2" fill="none" stroke-linecap="round"/></g>`;
+  inc += `<path d="M32 -11 q-2 -3 0 -6 q2 -3 0 -6 M27 -9 q-2 -2.5 0 -5" stroke="rgba(240,235,225,.7)" stroke-width="1.2" fill="none" stroke-linecap="round"/></g>`;
   // ống xăm cầm trước ngực, nghiêng ló bên vai phải
   let tube = `<g class="prop p-tube"><g class="tb"><g transform="rotate(14 47 58)"><rect x="42.5" y="38" width="9" height="20" rx="2" fill="#b5652f" ${OL}/><path d="M42.5 43 H51.5 M42.5 53 H51.5" stroke="#7a3e1c" stroke-width="1"/>`;
   [44.5, 46.5, 48.5, 50].forEach((x, i) => { const t = 32 - (i % 2) * 2; tube += `<path d="M${x} 38 V${t}" stroke="#d9b36a" stroke-width="1.3"/><path d="M${x} ${t + 1.5} V${t}" stroke="#c8312f" stroke-width="1.5"/>`; });
   tube += `</g></g></g>`;
   return `<g class="k-arms"><g class="k-aj">${both(J)}</g><g class="k-af">${both(F)}</g><g class="k-ad">${both(D)}</g>`
-    + `<g class="k-ar"><g class="k-arw">${R}${mallet}${dui}</g></g>${inc}${tube}</g>`;
+    + `<g class="k-ar"><g class="k-arw">${R}${dui}</g></g><g class="k-bl">${both(B)}</g>${inc}${tube}</g>`;
 }
+/* vồ gỗ treo ngang để thỉnh chuông: nằm phía trước người nên vẽ sau đầu (đầu che phần giữa) */
+const bellLog = `<g class="prop p-log"><path d="M8 38 L5 -16 M56 38 L59 -16" stroke="#8a6a3a" stroke-width="1.1"/>`
+  + `<rect x="1" y="36" width="62" height="7.5" rx="3.7" fill="#9a6a3c" ${OL}/><path d="M3 38.6 H61" stroke="#c09060" stroke-width="1" opacity=".6"/>`
+  + `<ellipse cx="62.4" cy="39.75" rx="1.6" ry="3.6" fill="#c9965a" ${OL}/><path d="M14 36.4 v6.8 M50 36.4 v6.8" stroke="#6e4426" stroke-width="1.2" opacity=".6"/></g>`;
 
 let avSeq = 0;
 function avatarSVG(d, view, act, opt){
@@ -1404,7 +1409,7 @@ function avatarSVG(d, view, act, opt){
     <linearGradient id="rb${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${light}"/><stop offset=".5" stop-color="${c}"/><stop offset="1" stop-color="${dark}"/></linearGradient>
     <linearGradient id="sl${k}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${dark}"/><stop offset="1" stop-color="${c}"/></linearGradient>
     <linearGradient id="sr${k}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${c}"/><stop offset="1" stop-color="${dark}"/></linearGradient><clipPath id="tl${k}"><rect x="-20" y="49" width="104" height="60"/></clipPath><clipPath id="hc${k}"><rect x="-20" y="-30" width="104" height="79.5"/></clipPath></defs>`;
-  s += `<ellipse cx="32" cy="92" rx="17" ry="4" fill="rgba(0,0,0,.28)"/>`;
+  s += `<ellipse cx="32" cy="92" rx="17" ry="4" fill="rgba(0,0,0,.28)"/><g class="bw">`;
 
   // chân
   const L = LEGS[o], lh = 89 - L.top, shoeOL = o === "thun" ? ` ${OL}` : "";
@@ -1420,17 +1425,18 @@ function avatarSVG(d, view, act, opt){
     // hai gan bàn chân lộ ra phía sau khi quỳ
     soles = `<g class="k-soles"><ellipse cx="25" cy="89.5" rx="4.6" ry="2.7" fill="${L.shoe}" ${OL}/><ellipse cx="39" cy="89.5" rx="4.6" ry="2.7" fill="${L.shoe}" ${OL}/><path d="M22.5 89.5 h5 M36.5 89.5 h5" stroke="#fff" stroke-opacity=".25" stroke-width="1"/></g>`;
     // khi hành lễ: vẽ đầu trước thân để lúc lạy rạp đầu khuất sau lưng
-    s += `<!--HEAD-->`;
+    s += bellLog + `<!--HEAD-->`;
     s += `<g class="k-tor">`;
   }
 
   // tóc dài phía sau thân
   const muni = acc.has("muni"), flower = ["hong", "hue", "lav"].find(f => acc.has(f));
-  if (front && !muni) s += hairBehind(d.hair);
+  if (front && !muni) s += `<g class="hsw">${hairBehind(d.hair)}</g>`;
 
   // nhìn sau lưng: tay nằm sau thân (chỗ đánh dấu được thay bằng tay ở dưới)
   if (!front) s += "<!--ARMS-->";
-  // thân áo
+  // thân áo (nhóm "robe" để vạt áo đung đưa khi đi)
+  s += `<g class="robe">`;
   if (o === "trang") {
     s += `<path d="M20 52 Q32 46 44 52 L49 86 Q32 91 15 86 Z" fill="${robe}" ${OL}/>`;
     s += `<path d="M24 66 Q23 76 21.5 86 M40 66 Q41 76 42.5 86" stroke="${dark}" stroke-width="1" opacity=".45" fill="none"/>`;
@@ -1480,6 +1486,7 @@ function avatarSVG(d, view, act, opt){
     if (front) s += `<path d="M27 50.5 Q32 55 37 50.5" fill="none" stroke="${dark}" stroke-width="1.5"/><g transform="translate(32 64)"><circle r="4.6" fill="${light}" opacity=".9"/><path d="M0 -3 Q2.4 0 0 2.6 Q-2.4 0 0 -3Z M-3 .6 Q-1 -.2 0 2.6 Q-2.6 2.4 -3 .6Z M3 .6 Q1 -.2 0 2.6 Q2.6 2.4 3 .6Z" fill="${dark}" opacity=".75"/></g>`;
   }
   if (!front) s += `<path d="M26 50 Q32 53.5 38 50" stroke="${SL === "wide" ? "#f6f1e6" : light}" stroke-width="2.2" fill="none"/>`;
+  s += `</g>`;
   if (front && acc.has("trang")) s += beadsSVG();
   if (act) {
     if (!muni) s += hairTail(d, k);
@@ -1528,14 +1535,14 @@ function avatarSVG(d, view, act, opt){
   // cổ & đầu
   let body = "";
   if (act) { body = s; s = `<g class="k-hd">`; }
-  s += `<rect x="28.5" y="46" width="7" height="8" rx="2" fill="#f1c4a5"/><g class="head">`;
+  s += (act ? "" : `<g class="hw">`) + `<rect x="28.5" y="46" width="7" height="8" rx="2" fill="#f1c4a5"/><g class="head">`;
   s += `<ellipse cx="11.4" cy="39" rx="2.8" ry="3.6" fill="url(#sk)" ${OL}/><ellipse cx="52.6" cy="39" rx="2.8" ry="3.6" fill="url(#sk)" ${OL}/>`;
   s += `<ellipse cx="32" cy="34.5" rx="21.5" ry="20" fill="url(#sk)" ${OL}/>`;
   // mũ ni vẽ theo đầu cũ (tròn r19), phóng theo đầu mới
   const muniT = c => `<g transform="translate(32 34.5) scale(1.13 1.05) translate(-32 -32)">${c}</g>`;
   if (!front) {
     // khi hành lễ, phần tóc dưới gáy đã vẽ theo thân (hairTail)
-    s += muni ? muniT(muniSVG(false)) : act ? `<g clip-path="url(#hc${k})">${hairBack(d)}</g>` : hairBack(d);
+    s += muni ? muniT(muniSVG(false)) : act ? `<g clip-path="url(#hc${k})">${hairBack(d)}</g>` : `<g class="hsw">${hairBack(d)}</g>`;
   } else {
     s += `<g class="eyes">`;
     for (const x of [24.3, 39.7]) {
@@ -1554,13 +1561,71 @@ function avatarSVG(d, view, act, opt){
   }
   if (acc.has("hoa")) s += flowerSVG(17, 23);
   if (acc.has("non") && !muni) s += `<g transform="translate(32 0) scale(1.12 1.06) translate(-32 -3.5)">${hatSVG(front)}</g>`;
-  let out = act ? body.replace("<!--HEAD-->", s + `</g></g>`) + `<path class="prop p-fall" d="M49 44 V52" stroke="#d9b36a" stroke-width="1.6" stroke-linecap="round"/></svg>` : s + `</g>` + (front ? poseG : "") + `</svg>`;
+  let out = act ? body.replace("<!--HEAD-->", s + `</g></g>`) + `<path class="prop p-fall" d="M49 44 V52" stroke="#d9b36a" stroke-width="1.6" stroke-linecap="round"/></svg>` : s + `</g></g>` + (front ? poseG : "") + `</svg>`;
+  out = out.replace(/<\/svg>$/, "</g></svg>");
   if (isHex(d.hc)) {
     const hc = d.hc, hg = `<linearGradient id="hr${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(hc, .22)}"/><stop offset="1" stop-color="${shade(hc, -.38)}"/></linearGradient>`
       + `<linearGradient id="hrB${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(hc, .35)}"/><stop offset="1" stop-color="${shade(hc, -.12)}"/></linearGradient>`;
     out = out.replace("</defs>", hg + "</defs>").split("url(#hr)").join(`url(#hr${k})`).split("url(#hrB)").join(`url(#hrB${k})`);
   }
   return out;
+}
+
+/* ---- Chuyển động theo từng khung hình (thay cho khung cố định) ----
+   Nhịp bước tính theo quãng đường đi được nên chân không trượt; w là mức "đang đi" (0..1)
+   chuyển mượt khi bắt đầu và khi dừng; tóc và vạt áo theo một lò xo nên đung đưa trễ theo người. */
+const STRIDE = 117; // quãng đường cho 2 bước (điểm ảnh)
+const TAU = Math.PI * 2;
+function animAvatar(p, av, dt, moving, step, vx){
+  const A = p.anim || (p.anim = { ph: 0, w: 0, sx: 0, sv: 0, svg: null, els: null });
+  if (moving) A.ph = (A.ph + step / STRIDE) % 1;
+  A.w += ((moving ? 1 : 0) - A.w) * Math.min(1, dt * 9);
+  if (A.w < .002) A.w = 0;
+  const svg = av.firstElementChild;
+  if (svg !== A.svg) {
+    A.svg = svg;
+    const q = c => svg ? svg.querySelector(c) : null, qa = c => svg ? [...svg.querySelectorAll(c)] : [];
+    A.els = { bw: q(".bw"), hw: q(".hw"), aL: q(".side .armL"), aR: q(".side .armR"), l1: q(".lg.l1"), l2: q(".lg.l2"), hsw: qa(".hsw"), robe: q(".robe") };
+  }
+  const E = A.els; if (!E) return;
+  const w = A.w, s = Math.sin(A.ph * TAU), front = av.classList.contains("v-front");
+  const free = !p.act && !(p.pose && p.pose !== "") && !av.classList.contains("sit");
+  const set = (el, tr) => { if (el) el.style.transform = tr; };
+  if (!free || w === 0) {
+    for (const el of [E.bw, E.hw, E.aL, E.aR, E.l1, E.l2]) set(el, "");
+  } else {
+    const bob = Math.abs(s) * w;
+    set(E.bw, `translate(${(-.5 * s * w).toFixed(2)}px,${(-2 * bob).toFixed(2)}px) rotate(${(-1.2 * s * w).toFixed(2)}deg)`);
+    set(E.hw, `translateY(${(.5 * bob).toFixed(2)}px) rotate(${(1 * s * w).toFixed(2)}deg)`);
+    const lift = x => `translateY(${(-3.2 * x).toFixed(2)}px) scaleY(${(1 - .14 * x).toFixed(3)})`;
+    set(E.l1, lift(Math.max(0, -s) * w)); set(E.l2, lift(Math.max(0, s) * w));
+    // tay thẳng vung trước sau, ngược bên với chân đang nhấc
+    const arm = (u, sign) => {
+      const fwd = Math.max(0, u), back = Math.max(0, -u);
+      const rot = front ? -6 * fwd + 5 * back : -3 * fwd + 6 * back;
+      const sc = 1 - (front ? .1 * fwd + .06 * back : .14 * fwd + .05 * back);
+      return `rotate(${(sign * rot).toFixed(2)}deg) scaleY(${sc.toFixed(3)})`;
+    };
+    set(E.aL, arm(s * w, 1)); set(E.aR, arm(-s * w, -1));
+  }
+  // lò xo cho tóc và vạt áo: lệch ngược hướng đi, cộng nhịp lắc người
+  const lvx = p.flip ? -vx : vx;
+  const target = free ? (-lvx * 4.5 + 2 * s) * w : 0;
+  A.sv += ((target - A.sx) * 70 - A.sv * 9) * dt;
+  A.sx += A.sv * dt;
+  if (Math.abs(A.sx) < .01 && Math.abs(A.sv) < .01) { A.sx = 0; A.sv = 0; }
+  const sk = A.sx.toFixed(2);
+  for (const el of E.hsw) el.style.transform = A.sx ? `skewX(${sk}deg)` : "";
+  if (E.robe) E.robe.style.transform = A.sx && free ? `skewX(${(A.sx * .5).toFixed(2)}deg)` : "";
+}
+/* đổi hình (đứng sang đi, quay lưng, bắt đầu hành lễ...) thì hình cũ mờ dần trên hình mới thay vì nhảy */
+function swapAvatar(av, html){
+  const old = av.firstElementChild;
+  av.innerHTML = html;
+  if (old && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    old.classList.add("av-old"); av.appendChild(old);
+    setTimeout(() => old.remove(), 220);
+  }
 }
 
 /* ---------------- Lớp kết nối ---------------- */
@@ -2027,9 +2092,9 @@ function tick(now){
   for (const p of players.values()) {
     const src = p.id === meId ? me : p;
     const dx = src.tx - src.x, dy = src.ty - src.y, dist = Math.hypot(dx, dy);
-    let moving = false;
+    let moving = false, stepDist = 0;
     if (dist > 1.5) {
-      const st = Math.min(dist, SPEED * dt);
+      const st = Math.min(dist, SPEED * dt); stepDist = st;
       const nx = src.x + dx / dist * st, ny = src.y + dy / dist * st;
       if (p.id === meId && curMap === "vuon" && inPond(nx, ny) && !inPond(src.x, src.y)) {
         // không đi xuống hồ: dừng ở bờ
@@ -2069,7 +2134,7 @@ function tick(now){
     const dl = drinkLeft(p.d.drink);
     const key = v + (p.pose && !p.act ? "|" + p.pose + p.poseSeq : "") + (dl ? `|d${p.d.drink.d}${p.d.drink.top}${Math.ceil(dl / 60000)}` : "");
     if (key !== p.view) {
-      p.view = key; av.innerHTML = avatarSVG(p.d, v, p.act, p.pose && !p.act ? { pose: p.pose, food: p.pose === "gap" ? foodFor(p) : p.pose === "hut" ? p.d.drink : "" } : null);
+      p.view = key; swapAvatar(av, avatarSVG(p.d, v, p.act, p.pose && !p.act ? { pose: p.pose, food: p.pose === "gap" ? foodFor(p) : p.pose === "hut" ? p.d.drink : "" } : null));
       av.classList.toggle("v-front", v === "front"); av.classList.toggle("acting", !!p.act);
       av.classList.toggle("posing", !!(p.pose && !p.act));
       av.classList.toggle("medit", p.pose === "thien" && !p.act);
@@ -2077,7 +2142,9 @@ function tick(now){
     }
     av.classList.toggle("sit", !!S);
     av.classList.toggle("flip", p.flip);
-    p.el.classList.toggle("walk", moving);
+    animAvatar(p, av, dt, moving, stepDist, dist > 1.5 ? dx / dist : 0);
+    // giữ dáng đi thêm một chút khi vừa dừng để tay chân về chỗ mượt, rồi mới chắp tay
+    p.el.classList.toggle("walk", moving || p.anim.w > .12);
     const s = 1.12 + (src.y - WALK.y0) / (WALK.y1 - WALK.y0) * .4;
     p.el.style.transform = `translate(${src.x.toFixed(1)}px,${src.y.toFixed(1)}px) scale(${s.toFixed(3)})`;
     p.el.style.zIndex = Math.round(src.y);
