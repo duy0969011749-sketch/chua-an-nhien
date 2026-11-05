@@ -59,6 +59,14 @@ Hành động: Lạy, Thắp hương, Gõ mõ, Thỉnh chuông, Xin xăm, Xin 8 
 - Bàn đá 4 ghế đá có sẵn ấm trà và chén. Bấm Uống trà (chưa ngồi thì tự đi tới ghế đá trống). Từ 2 người cùng bàn uống trà trong 5 giây thì hiện chữ "Mời trà".
 - Lá rụng dùng mục `stats` có sẵn (lưu thời điểm quét gần nhất của từng khu: lf0..lf7), không cần sửa quy tắc Firebase.
 
+### Trà Sữa Mây
+
+- Quán trà sữa có cửa sổ lớn, bảng neon, bảng menu, quầy order có nhân viên, 3 bàn tròn (4 ghế mỗi bàn) và quầy bar cửa sổ 4 ghế cao. Chạm vào ghế để ngồi.
+- Gọi trà sữa: bấm nút Gọi, chạm vào quầy hoặc bảng menu. Nhân vật tự đi tới quầy, menu phóng to: chọn 1 trong 6 món (trân châu, matcha latte, khoai môn, ô long sữa, dâu, socola sữa) và topping (không, trân châu đen, thạch dừa, kem cheese). Mỗi ly 0,5 đồng.
+- Ly trà sữa cầm trên tay 10 phút, vơi dần theo thời gian, đổi map vẫn mang theo. Gọi ly mới sẽ thay ly cũ.
+- Nút Hút: đưa ly lên miệng hút. Khi đang cầm ly, nút Hút xuất hiện ở mọi map.
+- Chạm vào người khác (mở hộp tặng tiền) sẽ thấy họ đang uống món gì và còn mấy phút.
+
 ## Chat
 
 - Máy tính: bấm Enter để mở ô chat, gõ rồi Enter để gửi, Esc để đóng. Điện thoại: bấm nút Chat ở góc trên phải.

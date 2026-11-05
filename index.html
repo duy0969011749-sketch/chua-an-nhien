@@ -32,6 +32,25 @@
   #stage.map-vuon #scene{display:none}
   #stage.map-vuon #sceneVuon{display:block}
   #stage:not(.map-vuon) .vobj{display:none}
+  #sceneTra{display:none}
+  #stage.map-trasua #scene{display:none}
+  #stage.map-trasua #sceneTra{display:block}
+  #stage:not(.map-trasua) .tobj{display:none}
+  .tcounter{position:absolute;width:330px;height:96px;margin:-96px 0 0 -165px;pointer-events:auto;cursor:pointer}
+  .tcounter svg,.tbar svg,.ttable svg{display:block;overflow:visible}
+  .tbar{position:absolute;width:390px;height:70px;margin:-60px 0 0 -195px;pointer-events:none}
+  .ttable{position:absolute;width:120px;height:70px;margin:-62px 0 0 -60px;pointer-events:none}
+  .npc{position:absolute;left:0;top:0;width:64px;height:96px;margin:-94px 0 0 -32px;transform-origin:50% 97%;pointer-events:none}
+  .npc .av{width:64px;height:96px}
+  .hutbtn[hidden]{display:none}
+  #mTea.open .menubook{animation:menuZoom .38s cubic-bezier(.2,.8,.2,1.08)}
+  .av .ph{transform-origin:43px 53px;animation:phSip 2.4s ease-in-out both}
+  @keyframes phSip{0%{opacity:0;transform:translateY(10px)}14%{opacity:1;transform:none}40%{transform:translateY(-1px)}55%{transform:none}70%{transform:translateY(-1px)}86%{opacity:1;transform:none}100%{opacity:0;transform:translateY(10px)}}
+  .drinkgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .drink{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 6px;border-radius:14px;border:2px solid #e2cfa3;background:#fffdf6;font-weight:700;font-size:.88rem;color:var(--ink);text-align:center}
+  .drink[aria-pressed="true"]{border-color:var(--red-deep);background:#fff3df;box-shadow:0 0 0 2px rgba(161,29,22,.15)}
+  .drink svg{width:44px;height:64px}
+  @media (max-width:520px){ .drinkgrid{grid-template-columns:repeat(2,1fr)} }
   .vtable{position:absolute;width:190px;height:70px;margin:-56px 0 0 -95px;pointer-events:none}
   .vtable svg{display:block;overflow:visible}
   .fleaf{transform-box:fill-box;animation:fleaf 12s linear infinite;opacity:0}
@@ -821,6 +840,66 @@
   <g class="fleaves"><path class="fleaf" style="animation-delay:0s" d="M200 230 q4 3 0 9 q-4 -6 0 -9Z" fill="#e3b23c"/><path class="fleaf" style="animation-delay:2.5s" d="M420 240 q4 3 0 9 q-4 -6 0 -9Z" fill="#c9822e"/><path class="fleaf" style="animation-delay:5s" d="M310 250 q4 3 0 9 q-4 -6 0 -9Z" fill="#9bbf4a"/><path class="fleaf" style="animation-delay:7.5s" d="M520 220 q4 3 0 9 q-4 -6 0 -9Z" fill="#e3b23c"/><path class="fleaf" style="animation-delay:9.5s" d="M140 240 q4 3 0 9 q-4 -6 0 -9Z" fill="#c9822e"/></g>
   <g id="leafLayer"></g>
 </svg>
+<svg id="sceneTra" viewBox="0 0 1280 720" width="1280" height="720" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="tWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fde9ef"/><stop offset="1" stop-color="#f7d2de"/></linearGradient>
+    <linearGradient id="tFloor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9b88a"/><stop offset="1" stop-color="#ecd3ad"/></linearGradient>
+    <linearGradient id="tSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fd3f0"/><stop offset="1" stop-color="#e6f5fb"/></linearGradient>
+    <radialGradient id="tGlow"><stop offset="0" stop-color="#fff6c8" stop-opacity=".9"/><stop offset="1" stop-color="#fff6c8" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1280" height="470" fill="url(#tWall)"/>
+  <g fill="#fbdbe5" opacity=".7"><circle cx="30" cy="30" r="5"/><circle cx="30" cy="90" r="5"/><circle cx="30" cy="150" r="5"/><circle cx="30" cy="210" r="5"/><circle cx="30" cy="270" r="5"/><circle cx="30" cy="330" r="5"/><circle cx="30" cy="390" r="5"/><circle cx="90" cy="30" r="5"/><circle cx="90" cy="90" r="5"/><circle cx="90" cy="150" r="5"/><circle cx="90" cy="210" r="5"/><circle cx="90" cy="270" r="5"/><circle cx="90" cy="330" r="5"/><circle cx="90" cy="390" r="5"/><circle cx="150" cy="30" r="5"/><circle cx="150" cy="90" r="5"/><circle cx="150" cy="150" r="5"/><circle cx="150" cy="210" r="5"/><circle cx="150" cy="270" r="5"/><circle cx="150" cy="330" r="5"/><circle cx="150" cy="390" r="5"/><circle cx="210" cy="30" r="5"/><circle cx="210" cy="90" r="5"/><circle cx="210" cy="150" r="5"/><circle cx="210" cy="210" r="5"/><circle cx="210" cy="270" r="5"/><circle cx="210" cy="330" r="5"/><circle cx="210" cy="390" r="5"/><circle cx="270" cy="30" r="5"/><circle cx="270" cy="90" r="5"/><circle cx="270" cy="150" r="5"/><circle cx="270" cy="210" r="5"/><circle cx="270" cy="270" r="5"/><circle cx="270" cy="330" r="5"/><circle cx="270" cy="390" r="5"/><circle cx="330" cy="30" r="5"/><circle cx="330" cy="90" r="5"/><circle cx="330" cy="150" r="5"/><circle cx="330" cy="210" r="5"/><circle cx="330" cy="270" r="5"/><circle cx="330" cy="330" r="5"/><circle cx="330" cy="390" r="5"/><circle cx="390" cy="30" r="5"/><circle cx="390" cy="90" r="5"/><circle cx="390" cy="150" r="5"/><circle cx="390" cy="210" r="5"/><circle cx="390" cy="270" r="5"/><circle cx="390" cy="330" r="5"/><circle cx="390" cy="390" r="5"/><circle cx="450" cy="30" r="5"/><circle cx="450" cy="90" r="5"/><circle cx="450" cy="150" r="5"/><circle cx="450" cy="210" r="5"/><circle cx="450" cy="270" r="5"/><circle cx="450" cy="330" r="5"/><circle cx="450" cy="390" r="5"/><circle cx="510" cy="30" r="5"/><circle cx="510" cy="90" r="5"/><circle cx="510" cy="150" r="5"/><circle cx="510" cy="210" r="5"/><circle cx="510" cy="270" r="5"/><circle cx="510" cy="330" r="5"/><circle cx="510" cy="390" r="5"/><circle cx="570" cy="30" r="5"/><circle cx="570" cy="90" r="5"/><circle cx="570" cy="150" r="5"/><circle cx="570" cy="210" r="5"/><circle cx="570" cy="270" r="5"/><circle cx="570" cy="330" r="5"/><circle cx="570" cy="390" r="5"/><circle cx="630" cy="30" r="5"/><circle cx="630" cy="90" r="5"/><circle cx="630" cy="150" r="5"/><circle cx="630" cy="210" r="5"/><circle cx="630" cy="270" r="5"/><circle cx="630" cy="330" r="5"/><circle cx="630" cy="390" r="5"/><circle cx="690" cy="30" r="5"/><circle cx="690" cy="90" r="5"/><circle cx="690" cy="150" r="5"/><circle cx="690" cy="210" r="5"/><circle cx="690" cy="270" r="5"/><circle cx="690" cy="330" r="5"/><circle cx="690" cy="390" r="5"/><circle cx="750" cy="30" r="5"/><circle cx="750" cy="90" r="5"/><circle cx="750" cy="150" r="5"/><circle cx="750" cy="210" r="5"/><circle cx="750" cy="270" r="5"/><circle cx="750" cy="330" r="5"/><circle cx="750" cy="390" r="5"/><circle cx="810" cy="30" r="5"/><circle cx="810" cy="90" r="5"/><circle cx="810" cy="150" r="5"/><circle cx="810" cy="210" r="5"/><circle cx="810" cy="270" r="5"/><circle cx="810" cy="330" r="5"/><circle cx="810" cy="390" r="5"/><circle cx="870" cy="30" r="5"/><circle cx="870" cy="90" r="5"/><circle cx="870" cy="150" r="5"/><circle cx="870" cy="210" r="5"/><circle cx="870" cy="270" r="5"/><circle cx="870" cy="330" r="5"/><circle cx="870" cy="390" r="5"/><circle cx="930" cy="30" r="5"/><circle cx="930" cy="90" r="5"/><circle cx="930" cy="150" r="5"/><circle cx="930" cy="210" r="5"/><circle cx="930" cy="270" r="5"/><circle cx="930" cy="330" r="5"/><circle cx="930" cy="390" r="5"/><circle cx="990" cy="30" r="5"/><circle cx="990" cy="90" r="5"/><circle cx="990" cy="150" r="5"/><circle cx="990" cy="210" r="5"/><circle cx="990" cy="270" r="5"/><circle cx="990" cy="330" r="5"/><circle cx="990" cy="390" r="5"/><circle cx="1050" cy="30" r="5"/><circle cx="1050" cy="90" r="5"/><circle cx="1050" cy="150" r="5"/><circle cx="1050" cy="210" r="5"/><circle cx="1050" cy="270" r="5"/><circle cx="1050" cy="330" r="5"/><circle cx="1050" cy="390" r="5"/><circle cx="1110" cy="30" r="5"/><circle cx="1110" cy="90" r="5"/><circle cx="1110" cy="150" r="5"/><circle cx="1110" cy="210" r="5"/><circle cx="1110" cy="270" r="5"/><circle cx="1110" cy="330" r="5"/><circle cx="1110" cy="390" r="5"/><circle cx="1170" cy="30" r="5"/><circle cx="1170" cy="90" r="5"/><circle cx="1170" cy="150" r="5"/><circle cx="1170" cy="210" r="5"/><circle cx="1170" cy="270" r="5"/><circle cx="1170" cy="330" r="5"/><circle cx="1170" cy="390" r="5"/><circle cx="1230" cy="30" r="5"/><circle cx="1230" cy="90" r="5"/><circle cx="1230" cy="150" r="5"/><circle cx="1230" cy="210" r="5"/><circle cx="1230" cy="270" r="5"/><circle cx="1230" cy="330" r="5"/><circle cx="1230" cy="390" r="5"/></g>
+  <rect y="392" width="1280" height="78" fill="#bfe6d6"/><path d="M20 392 V470 M48 392 V470 M76 392 V470 M104 392 V470 M132 392 V470 M160 392 V470 M188 392 V470 M216 392 V470 M244 392 V470 M272 392 V470 M300 392 V470 M328 392 V470 M356 392 V470 M384 392 V470 M412 392 V470 M440 392 V470 M468 392 V470 M496 392 V470 M524 392 V470 M552 392 V470 M580 392 V470 M608 392 V470 M636 392 V470 M664 392 V470 M692 392 V470 M720 392 V470 M748 392 V470 M776 392 V470 M804 392 V470 M832 392 V470 M860 392 V470 M888 392 V470 M916 392 V470 M944 392 V470 M972 392 V470 M1000 392 V470 M1028 392 V470 M1056 392 V470 M1084 392 V470 M1112 392 V470 M1140 392 V470 M1168 392 V470 M1196 392 V470 M1224 392 V470 M1252 392 V470" stroke="#9fd0bc" stroke-width="3"/><rect y="388" width="1280" height="6" fill="#8fc4ad"/>
+  <rect y="470" width="1280" height="250" fill="url(#tFloor)"/>
+  <path d="M0 496 H1280 M0 526 H1280 M0 560 H1280 M0 598 H1280 M0 640 H1280 M0 686 H1280" stroke="#c49b68" stroke-width="2" opacity=".6"/>
+  <path d="M487 470 V496 M1213 470 V496 M1114 470 V496 M267 470 V496 M757 470 V496 M1236 496 V526 M970 496 V526 M1189 496 V526 M134 496 V526 M1240 496 V526 M26 526 V560 M960 526 V560 M531 526 V560 M1128 526 V560 M479 526 V560 M392 560 V598 M963 560 V598 M1107 560 V598 M1125 560 V598 M975 560 V598 M813 598 V640 M308 598 V640 M474 598 V640 M310 598 V640 M1071 598 V640 M798 640 V686 M31 640 V686 M131 640 V686 M326 640 V686 M1210 640 V686 M87 686 V720 M616 686 V720 M63 686 V720 M551 686 V720 M968 686 V720" stroke="#c49b68" stroke-width="2" opacity=".6"/>
+  <rect y="466" width="1280" height="6" fill="#b88d5a"/>
+  <rect x="40" y="120" width="420" height="262" rx="10" fill="url(#tSky)" stroke="#fff" stroke-width="12"/>
+  <circle cx="380" cy="180" r="26" fill="#fff3b0"/><ellipse cx="140" cy="175" rx="46" ry="16" fill="#fff" opacity=".9"/><ellipse cx="175" cy="166" rx="30" ry="14" fill="#fff" opacity=".9"/>
+  <path d="M46 300 Q90 250 140 290 Q190 240 240 290 Q300 236 360 292 Q410 260 454 290 V376 H46Z" fill="#8fc46a"/>
+  <rect x="96" y="250" width="40" height="126" fill="#d9c3a8"/><rect x="300" y="230" width="56" height="146" fill="#e9b8a0"/><rect x="104" y="262" width="10" height="12" fill="#9fd3f0"/><rect x="118" y="262" width="10" height="12" fill="#9fd3f0"/><rect x="312" y="246" width="12" height="14" fill="#9fd3f0"/><rect x="332" y="246" width="12" height="14" fill="#9fd3f0"/>
+  <path d="M250 120 V382 M40 250 H460" stroke="#fff" stroke-width="8"/>
+  <path d="M66 372 L70 390 H90 L94 372Z" fill="#f2a6b8" stroke="#c45a7c" stroke-width="1.5"/><g fill="#5f9a4a"><ellipse cx="74" cy="362" rx="5" ry="11" transform="rotate(-20 74 362)"/><ellipse cx="86" cy="360" rx="5" ry="12" transform="rotate(20 86 360)"/><ellipse cx="80" cy="356" rx="5" ry="13"/></g>
+  <path d="M186 372 L190 390 H210 L214 372Z" fill="#f2a6b8" stroke="#c45a7c" stroke-width="1.5"/><g fill="#5f9a4a"><ellipse cx="194" cy="362" rx="5" ry="11" transform="rotate(-20 194 362)"/><ellipse cx="206" cy="360" rx="5" ry="12" transform="rotate(20 206 360)"/><ellipse cx="200" cy="356" rx="5" ry="13"/></g>
+  <path d="M316 372 L320 390 H340 L344 372Z" fill="#f2a6b8" stroke="#c45a7c" stroke-width="1.5"/><g fill="#5f9a4a"><ellipse cx="324" cy="362" rx="5" ry="11" transform="rotate(-20 324 362)"/><ellipse cx="336" cy="360" rx="5" ry="12" transform="rotate(20 336 360)"/><ellipse cx="330" cy="356" rx="5" ry="13"/></g>
+  <path d="M406 372 L410 390 H430 L434 372Z" fill="#f2a6b8" stroke="#c45a7c" stroke-width="1.5"/><g fill="#5f9a4a"><ellipse cx="414" cy="362" rx="5" ry="11" transform="rotate(-20 414 362)"/><ellipse cx="426" cy="360" rx="5" ry="12" transform="rotate(20 426 360)"/><ellipse cx="420" cy="356" rx="5" ry="13"/></g>
+  <rect x="500" y="58" width="360" height="86" rx="20" fill="#3a2a3e" stroke="#ff8fb8" stroke-width="4"/>
+  <text x="680" y="116" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="44" fill="none" stroke="#ff6fa8" stroke-width="7" opacity=".35">TRÀ SỮA MÂY</text>
+  <text x="680" y="116" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="44" fill="#ffe1ee" stroke="#ff6fa8" stroke-width="1.5">TRÀ SỮA MÂY</text>
+  <path d="M528 134 Q680 150 832 134" stroke="#7fe0d0" stroke-width="3" fill="none"/>
+  <path d="M560 0 V196" stroke="#6e5a4a" stroke-width="2"/><ellipse cx="560" cy="230" rx="60" ry="40" fill="url(#tGlow)"/><circle cx="560" cy="212" r="16" fill="#fff3c4" stroke="#e9c77a" stroke-width="3"/><rect x="553" y="192" width="14" height="8" fill="#6e5a4a"/>
+  <path d="M700 0 V196" stroke="#6e5a4a" stroke-width="2"/><ellipse cx="700" cy="230" rx="60" ry="40" fill="url(#tGlow)"/><circle cx="700" cy="212" r="16" fill="#fff3c4" stroke="#e9c77a" stroke-width="3"/><rect x="693" y="192" width="14" height="8" fill="#6e5a4a"/>
+  <path d="M840 0 V196" stroke="#6e5a4a" stroke-width="2"/><ellipse cx="840" cy="230" rx="60" ry="40" fill="url(#tGlow)"/><circle cx="840" cy="212" r="16" fill="#fff3c4" stroke="#e9c77a" stroke-width="3"/><rect x="833" y="192" width="14" height="8" fill="#6e5a4a"/>
+  <rect x="540" y="300" width="300" height="10" rx="3" fill="#b88d5a"/><rect x="540" y="230" width="300" height="10" rx="3" fill="#b88d5a"/>
+  <path d="M553 274 L555 299 H565 L567 274Z" fill="#c9a27a" stroke="#fff" stroke-width="1.5"/><path d="M552 274 Q560 264 568 274Z" fill="#fff" opacity=".85"/>
+  <path d="M577 274 L579 299 H589 L591 274Z" fill="#9cc46a" stroke="#fff" stroke-width="1.5"/><path d="M576 274 Q584 264 592 274Z" fill="#fff" opacity=".85"/>
+  <path d="M601 274 L603 299 H613 L615 274Z" fill="#b79ad6" stroke="#fff" stroke-width="1.5"/><path d="M600 274 Q608 264 616 274Z" fill="#fff" opacity=".85"/>
+  <path d="M625 274 L627 299 H637 L639 274Z" fill="#b8865a" stroke="#fff" stroke-width="1.5"/><path d="M624 274 Q632 264 640 274Z" fill="#fff" opacity=".85"/>
+  <path d="M649 274 L651 299 H661 L663 274Z" fill="#f2a6b8" stroke="#fff" stroke-width="1.5"/><path d="M648 274 Q656 264 664 274Z" fill="#fff" opacity=".85"/>
+  <path d="M673 274 L675 299 H685 L687 274Z" fill="#7a4a32" stroke="#fff" stroke-width="1.5"/><path d="M672 274 Q680 264 688 274Z" fill="#fff" opacity=".85"/>
+  <path d="M697 274 L699 299 H709 L711 274Z" fill="#c9a27a" stroke="#fff" stroke-width="1.5"/><path d="M696 274 Q704 264 712 274Z" fill="#fff" opacity=".85"/>
+  <path d="M721 274 L723 299 H733 L735 274Z" fill="#9cc46a" stroke="#fff" stroke-width="1.5"/><path d="M720 274 Q728 264 736 274Z" fill="#fff" opacity=".85"/>
+  <path d="M745 274 L747 299 H757 L759 274Z" fill="#b79ad6" stroke="#fff" stroke-width="1.5"/><path d="M744 274 Q752 264 760 274Z" fill="#fff" opacity=".85"/>
+  <path d="M769 274 L771 299 H781 L783 274Z" fill="#b8865a" stroke="#fff" stroke-width="1.5"/><path d="M768 274 Q776 264 784 274Z" fill="#fff" opacity=".85"/>
+  <path d="M793 274 L795 299 H805 L807 274Z" fill="#f2a6b8" stroke="#fff" stroke-width="1.5"/><path d="M792 274 Q800 264 808 274Z" fill="#fff" opacity=".85"/>
+  <g fill="#e2cfa3"><rect x="560" y="206" width="22" height="24" rx="4" stroke="#b88d5a" stroke-width="1.5"/><rect x="596" y="206" width="22" height="24" rx="4" stroke="#b88d5a" stroke-width="1.5"/><rect x="632" y="206" width="22" height="24" rx="4" stroke="#b88d5a" stroke-width="1.5"/><rect x="668" y="206" width="22" height="24" rx="4" stroke="#b88d5a" stroke-width="1.5"/><rect x="704" y="206" width="22" height="24" rx="4" stroke="#b88d5a" stroke-width="1.5"/><rect x="740" y="206" width="22" height="24" rx="4" stroke="#b88d5a" stroke-width="1.5"/><rect x="776" y="206" width="22" height="24" rx="4" stroke="#b88d5a" stroke-width="1.5"/><rect x="812" y="206" width="22" height="24" rx="4" stroke="#b88d5a" stroke-width="1.5"/></g>
+  <g data-act="order"><rect x="900" y="140" width="340" height="226" rx="12" fill="#3a2a3e" stroke="#c49b68" stroke-width="8"/>
+  <text x="1070" y="176" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="24" fill="#ffe1ee">MENU</text>
+  <path d="M920 206 L922 232 H934 L936 206Z" fill="#c9a27a" stroke="#fff" stroke-width="1.2"/><path d="M919 206 Q928 197 937 206Z" fill="#fff" opacity=".85"/><path d="M930 200 L932 192" stroke="#ff6fa8" stroke-width="2"/>
+  <text x="944" y="224" font-family="'Baloo 2',sans-serif" font-weight="700" font-size="13.5" fill="#fff">Trà sữa trân châu</text>
+  <path d="M1082 206 L1084 232 H1096 L1098 206Z" fill="#9cc46a" stroke="#fff" stroke-width="1.2"/><path d="M1081 206 Q1090 197 1099 206Z" fill="#fff" opacity=".85"/><path d="M1092 200 L1094 192" stroke="#ff6fa8" stroke-width="2"/>
+  <text x="1106" y="224" font-family="'Baloo 2',sans-serif" font-weight="700" font-size="13.5" fill="#fff">Matcha latte</text>
+  <path d="M920 258 L922 284 H934 L936 258Z" fill="#b79ad6" stroke="#fff" stroke-width="1.2"/><path d="M919 258 Q928 249 937 258Z" fill="#fff" opacity=".85"/><path d="M930 252 L932 244" stroke="#ff6fa8" stroke-width="2"/>
+  <text x="944" y="276" font-family="'Baloo 2',sans-serif" font-weight="700" font-size="13.5" fill="#fff">Trà sữa khoai môn</text>
+  <path d="M1082 258 L1084 284 H1096 L1098 258Z" fill="#b8865a" stroke="#fff" stroke-width="1.2"/><path d="M1081 258 Q1090 249 1099 258Z" fill="#fff" opacity=".85"/><path d="M1092 252 L1094 244" stroke="#ff6fa8" stroke-width="2"/>
+  <text x="1106" y="276" font-family="'Baloo 2',sans-serif" font-weight="700" font-size="13.5" fill="#fff">Ô long sữa</text>
+  <path d="M920 310 L922 336 H934 L936 310Z" fill="#f2a6b8" stroke="#fff" stroke-width="1.2"/><path d="M919 310 Q928 301 937 310Z" fill="#fff" opacity=".85"/><path d="M930 304 L932 296" stroke="#ff6fa8" stroke-width="2"/>
+  <text x="944" y="328" font-family="'Baloo 2',sans-serif" font-weight="700" font-size="13.5" fill="#fff">Trà sữa dâu</text>
+  <path d="M1082 310 L1084 336 H1096 L1098 310Z" fill="#7a4a32" stroke="#fff" stroke-width="1.2"/><path d="M1081 310 Q1090 301 1099 310Z" fill="#fff" opacity=".85"/><path d="M1092 304 L1094 296" stroke="#ff6fa8" stroke-width="2"/>
+  <text x="1106" y="328" font-family="'Baloo 2',sans-serif" font-weight="700" font-size="13.5" fill="#fff">Socola sữa</text>
+  </g>
+  <path d="M462 470 L468 428 H508 L514 470Z" fill="#fff" stroke="#c49b68" stroke-width="2"/><g fill="#4f8a3c" stroke="#2f5a24" stroke-width="1.2"><ellipse cx="470" cy="410" rx="13" ry="20" transform="rotate(-40 470 410)"/><ellipse cx="506" cy="406" rx="13" ry="20" transform="rotate(40 506 406)"/><ellipse cx="488" cy="392" rx="13" ry="20" transform="rotate(0 488 392)"/><ellipse cx="478" cy="380" rx="13" ry="20" transform="rotate(-20 478 380)"/><ellipse cx="500" cy="378" rx="13" ry="20" transform="rotate(25 500 378)"/></g>
+</svg>
     <div id="players"></div>
   </div>
 </div>
@@ -863,12 +942,18 @@
     <button class="act" data-do="zo" type="button"><span class="disc">Zô</span><span class="lbl">Nâng ly</span></button>
     <button class="act" data-do="gap" type="button"><span class="disc">Gắp</span><span class="lbl">Gắp món</span></button>
     <button class="act" data-do="menu" type="button"><i class="cost">0,5đ</i><span class="disc">Menu</span><span class="lbl">Gọi món</span></button>
+    <button class="act hutbtn" data-do="hut" type="button" hidden><i class="cost free">Free</i><span class="disc">Hút</span><span class="lbl">Hút trà sữa</span></button>
+  </div>
+  <div class="acts" id="actsTra" role="toolbar" aria-label="Hành động ở quán trà sữa" hidden>
+    <button class="act" data-do="order" type="button"><i class="cost">0,5đ</i><span class="disc">Gọi</span><span class="lbl">Gọi trà sữa</span></button>
+    <button class="act" data-do="hut" type="button"><i class="cost free">Free</i><span class="disc">Hút</span><span class="lbl">Hút trà sữa</span></button>
   </div>
   <div class="acts" id="actsVuon" role="toolbar" aria-label="Hành động ở vườn" hidden>
     <button class="act" data-do="feed" type="button"><i class="cost">0,5đ</i><span class="disc">Cá</span><span class="lbl">Cho cá ăn</span></button>
     <button class="act" data-do="quet" type="button"><span class="disc">Quét</span><span class="lbl">Quét lá</span></button>
     <button class="act" data-do="thien" type="button"><i class="cost free">+1đ</i><span class="disc">Thiền</span><span class="lbl">Ngồi thiền</span></button>
     <button class="act" data-do="tra" type="button"><i class="cost free">Free</i><span class="disc">Trà</span><span class="lbl">Uống trà</span></button>
+    <button class="act hutbtn" data-do="hut" type="button" hidden><i class="cost free">Free</i><span class="disc">Hút</span><span class="lbl">Hút trà sữa</span></button>
   </div>
   <div class="acts" id="actsChua" role="toolbar" aria-label="Hành động">
     <button class="act" data-do="bow" type="button"><i class="cost free">Free</i><span class="disc">Lạy</span><span class="lbl">Lễ Phật</span></button>
@@ -877,6 +962,7 @@
     <button class="act" data-do="bell" type="button"><i class="cost free">Free</i><span class="disc">Chuông</span><span class="lbl">Thỉnh chuông</span></button>
     <button class="act" data-do="xam" type="button"><i class="cost free">1/ngày</i><span class="disc">Xăm</span><span class="lbl">Xin xăm</span></button>
     <button class="act" data-do="so" type="button"><i class="cost free">1/ngày</i><span class="disc">Số</span><span class="lbl">Xin 8 số</span></button>
+    <button class="act hutbtn" data-do="hut" type="button" hidden><i class="cost free">Free</i><span class="disc">Hút</span><span class="lbl">Hút trà sữa</span></button>
   </div>
 </div>
 
@@ -888,11 +974,26 @@
     <div class="sheet-head"><h2 id="mGiftT">Tặng tiền</h2><button class="x" data-close type="button">Đóng</button></div>
     <div class="sheet-body">
       <p class="muted" id="giftBal" style="margin:0 0 12px"></p>
+      <p id="giftInfo" style="margin:-4px 0 12px;font-weight:700" hidden></p>
       <div class="field"><span class="lab">Người nhận</span><div class="chips" id="giftTo"></div></div>
       <div class="field"><label for="giftAmt">Số tiền (đồng)</label><input type="number" id="giftAmt" min="0.5" step="0.5" inputmode="decimal" placeholder="Ví dụ: 5">
         <div class="chips" id="giftQuick" style="margin-top:8px"><button type="button" class="chip" data-amt="1">1 đồng</button><button type="button" class="chip" data-amt="5">5 đồng</button><button type="button" class="chip" data-amt="10">10 đồng</button></div></div>
       <div class="err" id="giftMsg" role="alert"></div>
       <button class="btn wide" id="btnGiftSend" type="button">Tặng</button>
+    </div>
+  </div>
+</div>
+
+<!-- Menu trà sữa -->
+<div class="modal" id="mTea" role="dialog" aria-modal="true" aria-labelledby="mTeaT">
+  <div class="sheet menubook">
+    <div class="sheet-head"><h2 id="mTeaT">Menu Trà Sữa Mây</h2><button class="x" data-close type="button">Đóng</button></div>
+    <div class="sheet-body">
+      <p class="muted" id="teaNote" style="margin:0 0 12px"></p>
+      <div class="drinkgrid" id="drinkGrid"></div>
+      <div class="field" style="margin-top:14px"><span class="lab">Topping</span><div class="chips" id="topGrid"></div></div>
+      <div class="err" id="teaMsg" role="status"></div>
+      <button class="btn wide" id="btnTeaOrder" type="button">Gọi món · 0,5 đồng</button>
     </div>
   </div>
 </div>
@@ -1349,8 +1450,10 @@ function avatarSVG(d, view, act, opt){
     aL = `<path d="M21.5 53 Q15.3 58 15.3 72 L20.7 72.5 Q20.6 63 24 58 Z" fill="${sleeve}" ${OL}/>` + hand(18, 74.6);
     aR = `<path d="M42.5 53 Q48.7 58 48.7 72 L43.3 72.5 Q43.4 63 40 58 Z" fill="${sleeveR}" ${OL}/>` + hand(46, 74.6);
   }
-  const poseG = opt && opt.pose ? poseSVG(opt.pose, front, SL, sleeveR, opt.pose === "thien" ? (PANTS.has(o) ? L.c : robe) : (opt.food || "#d9823b")) : "";
-  if (flower) aR += handFlower(flower, SL === "wide" ? 45.5 : 46, SL === "wide" ? 76.5 : 74.5, 18);
+  const poseG = opt && opt.pose ? poseSVG(opt.pose, front, SL, sleeveR, opt.pose === "thien" ? (PANTS.has(o) ? L.c : robe) : opt.pose === "hut" ? opt.food : (opt.food || "#d9823b")) : "";
+  const dr = d.drink && drinkLeft(d.drink) ? d.drink : null;
+  if (dr) aR += bobaCup(dr, SL === "wide" ? 45.5 : 46, SL === "wide" ? 79 : 77, 1, 0);
+  else if (flower) aR += handFlower(flower, SL === "wide" ? 45.5 : 46, SL === "wide" ? 76.5 : 74.5, 18);
   // nhìn trước: tay cầm ly/đũa vẽ sau đầu (đưa đũa lên miệng không bị đầu che)
   s += `<g class="side"><g class="armL">${aL}</g><g class="armR">${aR}</g></g>` + (front ? "" : poseG);
 
@@ -1360,7 +1463,7 @@ function avatarSVG(d, view, act, opt){
     if (SL === "wide") p = `<path d="M21 53 Q9 62 22 75 L30.5 68.5 Q23 62 25.5 57 Z" fill="${sleeve}" ${OL}/><path d="M43 53 Q55 62 42 75 L33.5 68.5 Q41 62 38.5 57 Z" fill="${sleeveR}" ${OL}/>`;
     else if (SL === "short") p = `<path d="M16.4 60 Q17 68.5 27.5 70.5 L30.5 67 Q22.5 64.5 21 61 Z M47.6 60 Q47 68.5 36.5 70.5 L33.5 67 Q41.5 64.5 43 61 Z" fill="url(#sk)" ${OL}/><path d="M21 52.5 Q15.5 55 15.6 61.5 L21.2 62 Q21 58 24 56.5 Z" fill="${sleeve}" ${OL}/><path d="M43 52.5 Q48.5 55 48.4 61.5 L42.8 62 Q43 58 40 56.5 Z" fill="${sleeveR}" ${OL}/>`;
     else p = `<path d="M21.5 53 Q14 63 25.5 71.5 L30.5 67.5 Q24 62.5 25 57.5 Z" fill="${sleeve}" ${OL}/><path d="M42.5 53 Q50 63 38.5 71.5 L33.5 67.5 Q40 62.5 39 57.5 Z" fill="${sleeveR}" ${OL}/>`;
-    s += `<g class="pray">${p}${flower ? handFlower(flower, 32.5, 66, 26) : ""}<ellipse cx="32" cy="65.5" rx="3.8" ry="5.6" fill="url(#sk)" ${OL}/><path d="M32 60.5 V69.5" stroke="#d9a688" stroke-width=".8"/></g>`;
+    s += `<g class="pray">${p}${!dr && flower ? handFlower(flower, 32.5, 66, 26) : ""}<ellipse cx="32" cy="65.5" rx="3.8" ry="5.6" fill="url(#sk)" ${OL}/><path d="M32 60.5 V69.5" stroke="#d9a688" stroke-width=".8"/>${dr ? bobaCup(dr, 32, 70, 1) : ""}</g>`;
   }
 
   // cổ & đầu
@@ -1664,6 +1767,8 @@ const MAPS = {
 };
 MAPS.vuon = { name: "Vườn chùa", room: "Vườn thiền", desc: "Cây đa, hồ cá koi, quét lá, ngồi thiền, bàn đá uống trà", walk: { x0: 60, x1: 1220, y0: 440, y1: 708 },
   spawn: () => { const x = 690 + Math.round(Math.random() * 60 - 30); return { x, y: 708, tx: x, ty: 690 }; } };
+MAPS.trasua = { name: "Trà Sữa Mây", room: "Quán trà sữa", desc: "Gọi trà sữa + topping, cầm ly 10 phút, ngồi bàn hoặc quầy bar", walk: { x0: 60, x1: 1220, y0: 486, y1: 708 },
+  spawn: () => { const x = 640 + Math.round(Math.random() * 80 - 40); return { x, y: 708, tx: x, ty: 690 }; } };
 let curMap = "chua", WALK = MAPS.chua.walk;
 var statsCache; // var: được gán sớm từ net.onStats trước khi tới đoạn khai báo này
 const SPOTS = { incense: { x: 640, y: 530 }, bell: { x: 250, y: 528 }, mo: { x: 1056, y: 528 }, bow: null };
@@ -1788,6 +1893,7 @@ function playAct(p, act, remote){
     case "gap": startPose(p, "gap"); break;
     case "feed": startPose(p, "feed"); say(p, "Cá ơi, ăn đi nào", 1800); { const src = p.id === meId ? me : p; later(p, 500, () => feedFish(src.x, src.y)); } break;
     case "quet": startPose(p, "quet"); say(p, "Quét lá sân chùa", 1800); break;
+    case "hut": startPose(p, "hut"); break;
     case "tra": startPose(p, "tra"); say(p, "Mời trà", 1500); p.teaAt = performance.now(); checkTea(p); break;
     case "pray": startAct(p, "pray"); say(p, "Vừa gửi một lời nguyện", 3000); break;
   }
@@ -1890,9 +1996,10 @@ function tick(now){
     }
     if (S) v = S.face;
     if (p.act) v = "act:" + p.act;
-    const key = v + (p.pose && !p.act ? "|" + p.pose + p.poseSeq : "");
+    const dl = drinkLeft(p.d.drink);
+    const key = v + (p.pose && !p.act ? "|" + p.pose + p.poseSeq : "") + (dl ? `|d${p.d.drink.d}${p.d.drink.top}${Math.ceil(dl / 60000)}` : "");
     if (key !== p.view) {
-      p.view = key; av.innerHTML = avatarSVG(p.d, v, p.act, p.pose && !p.act ? { pose: p.pose, food: p.pose === "gap" ? foodFor(p) : "" } : null);
+      p.view = key; av.innerHTML = avatarSVG(p.d, v, p.act, p.pose && !p.act ? { pose: p.pose, food: p.pose === "gap" ? foodFor(p) : p.pose === "hut" ? p.d.drink : "" } : null);
       av.classList.toggle("v-front", v === "front"); av.classList.toggle("acting", !!p.act);
       av.classList.toggle("posing", !!(p.pose && !p.act));
       av.classList.toggle("medit", p.pose === "thien" && !p.act);
@@ -2014,7 +2121,7 @@ function sitAt(id){
 }
 
 /* Tư thế nâng ly / gắp món (tay phải) */
-const POSE_MS = { zo: 2400, gap: 2600, tra: 2600, quet: 2200, feed: 1800 };
+const POSE_MS = { zo: 2400, gap: 2600, tra: 2600, quet: 2200, feed: 1800, hut: 2400 };
 function startPose(p, pose){ p.pose = pose; p.poseUntil = performance.now() + POSE_MS[pose]; p.poseSeq = (p.poseSeq || 0) + 1; }
 function poseSVG(pose, front, SL, sleeveR, food){
   const skin = `fill="url(#sk)" ${OL}`, rf = SL === "short" ? skin : `fill="${sleeveR}" ${OL}`;
@@ -2033,6 +2140,11 @@ function poseSVG(pose, front, SL, sleeveR, food){
   }
   if (pose === "feed") {
     return `<g class="pf"><path d="M42.5 53 Q52 50 53.5 41 Q51.5 37.5 48 39 Q47 46 40 50.5 Z" ${rf}/><path d="M53.3 41.5 Q55 33 52.5 26 L49 27 Q50.5 33 48.5 40 Z" ${rf}/>${cap}<circle cx="51" cy="25.5" r="3.1" ${skin}/><g fill="#a8703e"><circle cx="54" cy="21" r="1"/><circle cx="56.5" cy="23.5" r=".9"/><circle cx="55" cy="18" r=".8"/></g></g>`;
+  }
+  if (pose === "hut") {
+    if (!food || !food.d) return "";
+    if (!front) return `<g class="pgk"><g transform="translate(64 0) scale(-1 1)"><path d="M21.5 53 Q13 59 15 68 Q19 71.5 25 67 Q22.5 62 25.5 57.5 Z" ${rf}/></g></g>`;
+    return `<g class="ph"><path d="M42.5 53 Q50 57 50 64 L45.5 66 Q45 60 40 57.5Z" ${rf}/><path d="M50 63 Q46 52 39 50 L37.5 54 Q42 55 45.5 65Z" ${rf}/>${cap}${bobaCup(food, 37, 60, 1, -12)}<circle cx="38.5" cy="53" r="3" ${skin}/></g>`;
   }
   if (pose === "tra") {
     const cup = (x, y) => `<path d="M${x - 3.6} ${y - 3} L${x - 2.6} ${y + 1} H${x + 2.6} L${x + 3.6} ${y - 3}Z" fill="#f6f1e6" stroke="#8a8478" stroke-width=".6"/><ellipse cx="${x}" cy="${y - 3}" rx="3.6" ry="1" fill="#c9a04a"/>`;
@@ -2271,6 +2383,7 @@ function checkTea(p){
 /* Chọn map */
 let lastPlayers = {};
 
+
 /* ================= Ví tiền (đơn vị nửa đồng: coin2) ================= */
 let coin2 = 0;
 const COIN_START = 20;          // 10 đồng tặng sẵn cho người mới
@@ -2317,6 +2430,9 @@ function renderGiftTo(){
 function openGift(toId){
   if (!me) return;
   giftToId = toId || "";
+  const tp = toId && players.get(toId), tdr = tp && drinkLeft(tp.d.drink) ? tp.d.drink : null;
+  $("giftInfo").hidden = !tdr;
+  if (tdr) $("giftInfo").textContent = `${tp.d.name} đang uống: ${drinkLabel(tdr)} (còn ${Math.ceil(drinkLeft(tdr) / 60000)} phút)`;
   $("giftBal").textContent = `Ví của bạn: ${fmtCoin(coin2)} đồng. Mỗi phút ngồi thiền ở Vườn chùa được 1 đồng.`;
   $("giftMsg").textContent = ""; $("giftMsg").className = "err"; $("giftAmt").value = "";
   renderGiftTo(); openModal("mGift");
@@ -2346,6 +2462,104 @@ $("btnGiftSend").addEventListener("click", async () => {
   }
   btn.disabled = false; btn.textContent = "Tặng";
 });
+
+/* ================= Quán trà sữa ================= */
+const DRINKS = [["tc", "Trà sữa trân châu", "#c9a27a"], ["matcha", "Matcha latte", "#9cc46a"], ["khoai", "Trà sữa khoai môn", "#b79ad6"], ["olong", "Ô long sữa", "#b8865a"], ["dau", "Trà sữa dâu", "#f2a6b8"], ["soco", "Socola sữa", "#7a4a32"]];
+const DRINK = Object.fromEntries(DRINKS.map(([id, name, c]) => [id, { name, c }]));
+const TOPS = [["", "Không topping"], ["tc", "Trân châu đen"], ["thach", "Thạch dừa"], ["cheese", "Kem cheese"]];
+const TOP_NAME = Object.fromEntries(TOPS);
+const DRINK_MS = 10 * 60 * 1000;
+function drinkLeft(dr){ return dr && DRINK[dr.d] ? Math.max(0, DRINK_MS - (Date.now() - (Number(dr.ts) || 0))) : 0; }
+function drinkLabel(dr){ return DRINK[dr.d].name + (dr.top && TOP_NAME[dr.top] ? " + " + TOP_NAME[dr.top].toLowerCase() : ""); }
+/* Ly trà sữa: gốc toạ độ ở đáy ly, cao ~15 đơn vị; level 0..1 là phần còn lại */
+function bobaCup(dr, x, y, sc = 1, rot = 0){
+  const c = DRINK[dr.d].c, lv = Math.max(.08, drinkLeft(dr) / DRINK_MS), top = -14, ly = top + (1 - lv) * 13;
+  let g = `<path d="M-4.6 ${top} L-3.4 0 H3.4 L4.6 ${top}Z" fill="rgba(255,255,255,.55)" stroke="rgba(90,60,40,.55)" stroke-width=".5"/>`;
+  g += `<path d="M${(-4.6 + (ly - top) / 14 * 1.2).toFixed(2)} ${ly.toFixed(2)} L-3.4 0 H3.4 L${(4.6 - (ly - top) / 14 * 1.2).toFixed(2)} ${ly.toFixed(2)}Z" fill="${c}"/>`;
+  if (dr.top === "tc") g += `<g fill="#2b1d18"><circle cx="-2" cy="-1.4" r=".9"/><circle cx="0" cy="-1.2" r=".9"/><circle cx="2" cy="-1.4" r=".9"/><circle cx="-1" cy="-2.8" r=".9"/><circle cx="1.2" cy="-2.7" r=".9"/></g>`;
+  if (dr.top === "thach") g += `<g fill="#e9f5d0" stroke="#b9d08a" stroke-width=".3"><rect x="-2.6" y="-3" width="1.8" height="1.8"/><rect x="0" y="-2.4" width="1.8" height="1.8"/><rect x="-1.2" y="-4.6" width="1.8" height="1.8"/></g>`;
+  if (dr.top === "cheese" && lv > .3) g += `<rect x="${(-4.6 + (ly - top) / 14 * 1.2).toFixed(2)}" y="${ly.toFixed(2)}" width="${(9.2 - (ly - top) / 14 * 2.4).toFixed(2)}" height="2" fill="#fff6dc"/>`;
+  g += `<path d="M-4.9 ${top} Q0 ${top - 4.5} 4.9 ${top}Z" fill="rgba(255,255,255,.8)" stroke="rgba(90,60,40,.5)" stroke-width=".5"/><path d="M1 ${top - 2} L2.6 ${top - 7}" stroke="#ff6fa8" stroke-width="1.4" stroke-linecap="round"/>`;
+  g += `<path d="M-3.6 ${top + 2} L-2.8 -1.5" stroke="#fff" stroke-width=".7" opacity=".7"/>`;
+  return `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${sc})">${g}</g>`;
+}
+function drinkIcon(id, top){ return `<svg viewBox="-8 -22 16 24" aria-hidden="true">${bobaCup({ d: id, top: top || "", ts: Date.now() }, 0, 0, 1)}</svg>`; }
+
+// quầy order, quầy bar cửa sổ, 3 bàn tròn
+const ORDER_SPOT = { x: 1040, y: 576 };
+const TTABLES = [{ x: 600, y: 572 }, { x: 840, y: 652 }, { x: 360, y: 664 }];
+[110, 190, 270, 350].forEach((x, i) => { SEATS[`b${i}`] = { id: `b${i}`, map: "trasua", t: "bar", kind: "cafe", x, y: 548, face: "back" }; });
+TTABLES.forEach((T, t) => [[-34, -30, "front"], [34, -30, "front"], [-34, 30, "back"], [34, 30, "back"]].forEach(([dx, dy, face], i) => {
+  SEATS[`m${t}${i}`] = { id: `m${t}${i}`, map: "trasua", t: "m" + t, kind: "cafe", x: T.x + dx, y: T.y + dy, face };
+}));
+const cafeStoolSVG = `<svg viewBox="0 0 40 30" aria-hidden="true"><ellipse cx="20" cy="28" rx="11" ry="2.4" fill="rgba(0,0,0,.22)"/><path d="M19 10 V27 M13 27 H27" stroke="#9aa4ad" stroke-width="2.4" stroke-linecap="round"/><ellipse cx="20" cy="9" rx="13" ry="4.6" fill="#f2a6b8" stroke="#c45a7c" stroke-width="1.2"/><ellipse cx="20" cy="8" rx="9" ry="2.2" fill="#fbd3df"/></svg>`;
+const roundTableSVG = `<svg viewBox="0 0 120 70" width="120" height="70" aria-hidden="true"><ellipse cx="60" cy="66" rx="26" ry="4" fill="rgba(0,0,0,.22)"/><path d="M57 18 V64 M44 66 H76" stroke="#7d868f" stroke-width="5" stroke-linecap="round"/>`
+  + `<ellipse cx="60" cy="16" rx="54" ry="15" fill="#d9d2c8" stroke="#8a8478" stroke-width="1.5"/><ellipse cx="60" cy="13" rx="53" ry="13" fill="#fbf7f2" stroke="#c9c2b5" stroke-width="1.2"/><path d="M24 10 Q48 4 72 6" stroke="#e9e2d6" stroke-width="2" fill="none"/>`
+  + `<ellipse cx="60" cy="13" rx="9" ry="3" fill="#bfe6d6" opacity=".8"/><path d="M57 12 L56 4 M63 12 L64 5" stroke="#4f8a3c" stroke-width="1.2"/><circle cx="56" cy="4" r="2" fill="#ff8fb8"/><circle cx="64" cy="5" r="2" fill="#ffd35a"/></svg>`;
+const barSVG = `<svg viewBox="0 0 390 70" width="390" height="70" aria-hidden="true"><ellipse cx="195" cy="66" rx="180" ry="5" fill="rgba(0,0,0,.18)"/><rect x="10" y="14" width="370" height="50" fill="#f2c9d6" stroke="#c45a7c" stroke-width="1.5"/>`
+  + `<path d="${Array.from({ length: 12 }, (_, i) => `M${40 + i * 30} 16 V62`).join(" ")}" stroke="#e6a8bd" stroke-width="2"/><rect x="0" y="4" width="390" height="12" rx="4" fill="#c49b68" stroke="#8a6a3e" stroke-width="1.5"/></svg>`;
+const counterSVG = `<svg viewBox="0 0 330 96" width="330" height="96" aria-hidden="true"><ellipse cx="165" cy="92" rx="160" ry="5" fill="rgba(0,0,0,.2)"/>`
+  + `<rect x="8" y="30" width="314" height="62" rx="4" fill="#ff9fc2" stroke="#c45a7c" stroke-width="2"/><rect x="8" y="30" width="314" height="14" fill="#ffc2d8"/>`
+  + `<text x="165" y="76" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="22" fill="#fff">ORDER TẠI ĐÂY</text>`
+  + `<rect x="0" y="20" width="330" height="12" rx="4" fill="#fbf7f2" stroke="#c9c2b5" stroke-width="1.5"/>`
+  + `<rect x="34" y="0" width="44" height="22" rx="3" fill="#5a6470" stroke="#3a4048" stroke-width="1.5"/><rect x="40" y="4" width="32" height="9" fill="#9fe0c8"/>`
+  + [0, 1, 2, 3].map(i => `<g transform="translate(${236 + i * 20} 21)">${"CUP" + i}</g>`).join("") + `</svg>`;
+function buildTra(){
+  const mk = (cls, x, y, z, html) => { const el = document.createElement("div"); el.className = "tobj " + cls; el.style.left = x + "px"; el.style.top = y + "px"; el.style.zIndex = z; el.innerHTML = html; layer.appendChild(el); return el; };
+  // nhân viên đứng sau quầy
+  const npc = mk("npc", 0, 0, 512, `<div class="bub"></div><div class="av v-front">${avatarSVG({ g: "nu", hair: "duoi", outfit: "thun", color: "#4fa39a", acc: "" }, "front")}</div>`);
+  npc.style.transform = "translate(1060px,500px) scale(1.15)"; npc.style.left = "0"; npc.style.top = "0";
+  let cups = counterSVG;
+  DRINKS.slice(0, 4).forEach(([id], i) => { cups = cups.replace("CUP" + i, bobaCup({ d: id, top: "tc", ts: Date.now() }, 0, 0, 1)); });
+  const ctr = mk("tcounter", 1060, 548, 548, cups); ctr.dataset.act = "order"; ctr.title = "Gọi trà sữa";
+  mk("tbar", 230, 520, 520, barSVG);
+  TTABLES.forEach(T => mk("ttable", T.x, T.y, T.y, roundTableSVG));
+  Object.values(SEATS).forEach(S => {
+    if (S.map !== "trasua") return;
+    const e = mk("qstool", S.x, S.y, S.y - 1, cafeStoolSVG); e.dataset.seat = S.id; e.title = "Ngồi ghế này";
+  });
+  return npc;
+}
+const npcEl = buildTra();
+function npcSay(text, ms = 2600){ const b = npcEl.querySelector(".bub"); b.textContent = text; b.classList.add("show"); clearTimeout(npcSay.t); npcSay.t = setTimeout(() => b.classList.remove("show"), ms); }
+
+/* Menu trà sữa */
+let teaPick = "tc", teaTop = "tc";
+function renderTeaMenu(){
+  $("drinkGrid").innerHTML = DRINKS.map(([id, name]) => `<button type="button" class="drink" data-drink="${id}" aria-pressed="${id === teaPick}">${drinkIcon(id, teaTop)}<span>${name}</span></button>`).join("");
+  $("topGrid").innerHTML = TOPS.map(([id, name]) => `<button type="button" class="chip" data-top="${id}" aria-pressed="${id === teaTop}">${name}</button>`).join("");
+  const cur = me && drinkLeft(me.drink) ? me.drink : null;
+  $("teaNote").textContent = `Mỗi ly 0,5 đồng · Ví: ${fmtCoin(coin2)} đồng. Ly cầm trên tay 10 phút, đi map khác vẫn mang theo.` + (cur ? ` Bạn đang cầm ${drinkLabel(cur)}, gọi ly mới sẽ thay ly cũ.` : "");
+}
+function openTeaMenu(ev){
+  const sh = $("mTea").querySelector(".sheet");
+  if (ev && ev.clientX != null) { sh.style.setProperty("--dx", (ev.clientX - innerWidth / 2) + "px"); sh.style.setProperty("--dy", (ev.clientY - innerHeight / 2) + "px"); }
+  else { sh.style.setProperty("--dx", "30vw"); sh.style.setProperty("--dy", "-10vh"); }
+  $("teaMsg").textContent = ""; renderTeaMenu(); openModal("mTea");
+  npcSay("Chào bạn, uống gì nè?", 2200);
+}
+$("drinkGrid").addEventListener("click", e => { const b = e.target.closest("[data-drink]"); if (b) { teaPick = b.dataset.drink; renderTeaMenu(); } });
+$("topGrid").addEventListener("click", e => { const b = e.target.closest("[data-top]"); if (b) { teaTop = b.dataset.top; renderTeaMenu(); } });
+$("btnTeaOrder").addEventListener("click", () => {
+  if (!me) return;
+  if (!spend(1)) { $("teaMsg").textContent = `Mỗi ly 0,5 đồng, ví còn ${fmtCoin(coin2)} đồng.`; return; }
+  const dr = { d: teaPick, top: teaTop, ts: Date.now() };
+  setMe({ drink: dr }); closeModal("mTea"); syncHutButtons();
+  npcSay(`${drinkLabel(dr)} của bạn đây!`, 3000);
+  say(players.get(meId), "Cảm ơn nha!", 1800);
+});
+function orderTea(ev){
+  if (curMap !== "trasua") return;
+  if (Math.hypot(me.x - ORDER_SPOT.x, me.y - ORDER_SPOT.y) > 40) { setTarget(ORDER_SPOT.x, ORDER_SPOT.y); pending = () => openTeaMenu(null); }
+  else openTeaMenu(ev);
+}
+function syncHutButtons(){
+  const has = !!(me && drinkLeft(me.drink));
+  document.querySelectorAll(".hutbtn").forEach(b => { b.hidden = !has; });
+  if (me && me.drink && !has) setMe({ drink: null });
+}
+setInterval(syncHutButtons, 3000);
+
 async function onGift(key, g){
   if (!g || !(g.amt > 0)) return;
   let amt = 0;
@@ -2356,7 +2570,7 @@ async function onGift(key, g){
 }
 
 function mapCounts(){
-  const c = { chua: 0, quan: 0, vuon: 0 };
+  const c = Object.fromEntries(Object.keys(MAPS).map(k => [k, 0]));
   for (const id in lastPlayers) { const d = lastPlayers[id]; if (d && d.name) c[MAPS[d.map] ? d.map : "chua"]++; }
   if (me && !lastPlayers[meId]) c[curMap]++;
   return c;
@@ -2364,6 +2578,7 @@ function mapCounts(){
 const MAP_THUMB = {
   chua: `<svg viewBox="0 0 96 64"><rect width="96" height="40" fill="#8f1b16"/><rect y="40" width="96" height="24" fill="#b06a34"/><circle cx="48" cy="26" r="13" fill="#f2b33d"/><circle cx="48" cy="20" r="6" fill="#f7d99a"/><rect x="10" y="10" width="8" height="30" fill="#d03a2c"/><rect x="78" y="10" width="8" height="30" fill="#d03a2c"/></svg>`,
   quan: `<svg viewBox="0 0 96 64"><rect width="96" height="40" fill="#e9be62"/><rect y="40" width="96" height="24" fill="#b9b1a3"/><rect x="26" y="6" width="44" height="12" rx="3" fill="#c8312f"/><rect x="14" y="40" width="68" height="6" fill="#cfd6dc"/><ellipse cx="22" cy="52" rx="6" ry="2.5" fill="#3a86cc"/><ellipse cx="48" cy="52" rx="6" ry="2.5" fill="#3a86cc"/><ellipse cx="74" cy="52" rx="6" ry="2.5" fill="#3a86cc"/><circle cx="20" cy="22" r="3" fill="#ffd35a"/><circle cx="48" cy="25" r="3" fill="#ff8a5a"/><circle cx="76" cy="22" r="3" fill="#8fd3ff"/></svg>`,
+  trasua: `<svg viewBox="0 0 96 64"><rect width="96" height="44" fill="#fbdbe5"/><rect y="44" width="96" height="20" fill="#e3c597"/><rect x="24" y="6" width="48" height="12" rx="4" fill="#3a2a3e" stroke="#ff8fb8"/><rect x="58" y="30" width="34" height="16" rx="2" fill="#f2a6b8"/><ellipse cx="22" cy="50" rx="12" ry="3.5" fill="#fff" stroke="#c49b68"/><path d="M40 30 L42 46 H50 L52 30Z" fill="#c9a27a" stroke="#fff"/><path d="M39 30 Q46 24 53 30Z" fill="#fff"/><path d="M48 26 L50 18" stroke="#ff6fa8" stroke-width="2"/></svg>`,
   vuon: `<svg viewBox="0 0 96 64"><rect width="96" height="64" fill="#86b452"/><rect width="96" height="22" fill="#e9c77a"/><circle cx="26" cy="12" r="20" fill="#3f7a32"/><rect x="22" y="22" width="9" height="20" fill="#7a5638"/><ellipse cx="68" cy="46" rx="22" ry="9" fill="#4fa3b8" stroke="#8a8478" stroke-width="2"/><ellipse cx="64" cy="46" rx="4" ry="2" fill="#f28a2e"/><ellipse cx="74" cy="44" rx="3.5" ry="1.8" fill="#fff"/><rect x="30" y="50" width="16" height="6" rx="2" fill="#a8a194"/></svg>`
 };
 function renderMapList(){
@@ -2376,6 +2591,8 @@ function applyMapUI(){
   const m = MAPS[curMap];
   $("stage").classList.toggle("map-quan", curMap === "quan");
   $("stage").classList.toggle("map-vuon", curMap === "vuon");
+  $("stage").classList.toggle("map-trasua", curMap === "trasua");
+  $("actsTra").hidden = curMap !== "trasua";
   $("actsVuon").hidden = curMap !== "vuon";
   $("mapTitle").textContent = m.name; $("roomName").textContent = m.room;
   $("actsChua").hidden = curMap !== "chua"; $("actsQuan").hidden = curMap !== "quan";
@@ -2394,6 +2611,7 @@ function switchMap(k, silent){
   syncPlayers(lastPlayers); renderTables();
   if (k !== "chua") hideHintNow();
   if (k === "vuon") renderLeaves();
+  syncHutButtons();
 }
 
 /* ---------------- Hành động ---------------- */
@@ -2404,6 +2622,12 @@ function doAct(act){
   hideHint();
   try { const a = audio(); if (a.state === "suspended") a.resume(); } catch {}
   if (act === "menu") { openMenu(-1); return; }
+  if (act === "order") { orderTea(null); return; }
+  if (act === "hut") {
+    const p = players.get(meId);
+    if (!drinkLeft(me.drink)) { say(p, curMap === "trasua" ? "Chưa có ly nào, ra quầy gọi nha" : "Chưa có trà sữa, qua quán Trà Sữa Mây gọi nha", 2200); return; }
+    playAct(p, "hut", false); net.update({ act, actTs: Date.now() }); return;
+  }
   if (act === "thien") {
     const p = players.get(meId), S = seatOf(p);
     if (S && S.kind === "cushion") { say(p, "Đang ngồi thiền", 1500); return; }
@@ -2477,7 +2701,7 @@ view.addEventListener("pointerdown", e => {
   if (!me || e.button > 0) return;
   hideHint();
   const hit = e.target.closest && e.target.closest("[data-act]");
-  if (hit && !hit.classList.contains("av")) { doAct(hit.dataset.act); return; }
+  if (hit && !hit.classList.contains("av")) { if (hit.dataset.act === "order") { if (me) orderTea(e); return; } doAct(hit.dataset.act); return; }
   const plEl = e.target.closest && e.target.closest(".pl");
   if (plEl && plEl.dataset.id && plEl.dataset.id !== meId) { openGift(plEl.dataset.id); return; }
   const seatEl = e.target.closest && e.target.closest("[data-seat]");
@@ -2583,7 +2807,7 @@ $("btnEnter").addEventListener("click", async () => {
   createPlayer(me);
   net.onPlayers(syncPlayers);
   $("hudChat").hidden = false; $("btnChat").hidden = false; $("btnMap").hidden = false; $("btnWallet").hidden = false;
-  net.onGifts(onGift);
+  net.onGifts(onGift); syncHutButtons();
   net.onChat(onChatMsg);
   onSent = start.on; startOnlineClock();
   $("closeChar").hidden = false; $("mCharT").textContent = "Đổi nhân vật"; $("btnEnter").textContent = "Lưu";
