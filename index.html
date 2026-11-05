@@ -1286,7 +1286,8 @@ function tick(now){
     p.el.style.transform = `translate(${src.x.toFixed(1)}px,${src.y.toFixed(1)}px) scale(${s.toFixed(3)})`;
     p.el.style.zIndex = Math.round(src.y);
   }
-  if (me) updateCamera(me.x, me.y, dt);
+  // chưa vào chùa vẫn phóng cảnh vừa màn hình, nhìn vào giữa chánh điện
+  if (me) updateCamera(me.x, me.y, dt); else updateCamera(640, 600, dt);
   requestAnimationFrame(tick);
 }
 
