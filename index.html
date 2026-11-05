@@ -243,6 +243,11 @@
   .chatlog .me b{color:#ffd9a0}
   .chatlog .sys{opacity:.8;font-style:italic}
   .chatbar{display:flex;gap:6px}
+  .hcpick{display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:3px 12px 3px 4px;border:2px solid #e2cfa3;border-radius:999px;background:#fff;font-weight:700;font-size:.88rem;cursor:pointer}
+  .hcpick input{width:30px;height:30px;padding:0;border:0;border-radius:50%;background:none;cursor:pointer}
+  .hcpick input::-webkit-color-swatch-wrapper{padding:0}
+  .hcpick input::-webkit-color-swatch{border:1px solid rgba(0,0,0,.25);border-radius:50%}
+  .hcpick input::-moz-color-swatch{border:1px solid rgba(0,0,0,.25);border-radius:50%}
   .chatbar input{flex:1;min-width:0}
   .chatbar .btn{min-height:42px;padding:0 16px;font-size:.92rem}
   .hint{font-size:.85rem;color:#fff;padding:6px 14px;border-radius:999px;transition:opacity .4s}
@@ -589,9 +594,10 @@
           <div class="field"><label for="fName">Tên hiển thị</label><input type="text" id="fName" maxlength="16" autocomplete="nickname"></div>
           <div class="field"><span class="lab">Giới tính</span><div class="chips" id="fGender"></div></div>
           <div class="field"><span class="lab">Kiểu tóc</span><div class="chips" id="fHair"></div></div>
+          <div class="field"><span class="lab">Màu tóc</span><div class="chips"><label class="hcpick"><input type="color" id="fHairC" value="#45302a" aria-label="Chọn màu tóc"><span id="fHairCT">Mặc định</span></label><button type="button" class="chip" id="fHairReset">Màu mặc định</button></div></div>
           <div class="field"><span class="lab">Kiểu áo</span><div class="chips" id="fOutfit"></div></div>
           <div class="field"><span class="lab">Màu áo</span><div class="chips" id="fColor"></div></div>
-          <div class="field"><span class="lab">Phụ kiện <span class="muted" style="font-weight:500">(chọn nhiều)</span></span><div class="chips" id="fAcc"></div></div>
+          <div class="field"><span class="lab">Phụ kiện <span class="muted" style="font-weight:500">(chọn nhiều; hoa cầm tay và đồ đội đầu chỉ chọn 1)</span></span><div class="chips" id="fAcc"></div></div>
         </div>
       </div>
       <div class="err" id="charErr" role="alert"></div>
@@ -784,7 +790,44 @@ const SLEEVE = { trang: "wide", casa: "wide", thun: "short", vay: "short" };
 // vạt dưới thân áo (dùng khi quỳ) và loại áo lộ quần khi ngồi quỳ
 const HEM = { trang: 86, aodai: 87, baba: 75, thun: 74, casa: 86, lam: 78, tuthan: 86, somi: 74, vay: 80 };
 const PANTS = new Set(["baba", "thun", "lam", "somi"]);
-const ACCS = [["trang", "Tràng hạt"], ["kinh", "Kính"], ["hoa", "Hoa cài"], ["non", "Nón lá"]];
+const ACCS = [["trang", "Tràng hạt"], ["kinh", "Kính"], ["hoa", "Hoa cài"], ["non", "Nón lá"], ["muni", "Mũ ni"], ["hong", "Hoa hồng"], ["hue", "Hoa huệ"], ["lav", "Hoa lavender"]];
+// các nhóm chỉ được chọn 1: hoa cầm tay, đồ đội đầu
+const ACC_GROUPS = [["hong", "hue", "lav"], ["non", "muni"]];
+const HAIR_DEFAULT = "#45302a";
+const isHex = v => /^#[0-9a-f]{6}$/i.test(String(v || ""));
+
+/* Hoa cầm tay, gốc toạ độ ở bàn tay, cành hướng lên */
+function handFlower(type, x, y, rot){
+  let g = "";
+  const leaf = (lx, ly, a) => `<ellipse cx="${lx}" cy="${ly}" rx="1.4" ry="3" transform="rotate(${a} ${lx} ${ly})" fill="#5f9a4a" stroke="#3c6a2e" stroke-width=".4"/>`;
+  if (type === "hong") {
+    g += `<path d="M0 0 L-3 -12 M0 0 L0 -14 M0 0 L3 -12" stroke="#4f8a3c" stroke-width="1.1" stroke-linecap="round"/>` + leaf(-2.6, -6, -30) + leaf(2.6, -7, 30);
+    [[-3, -12.5], [3, -12.5], [0, -15]].forEach(([fx, fy]) => {
+      g += `<circle cx="${fx}" cy="${fy}" r="3" fill="#d6334a" stroke="#8e1f2f" stroke-width=".5"/><path d="M${fx - 1.4} ${fy} q1.4 -1.6 2.6 0 q-1 1.2 -1.9 .2" stroke="#8e1f2f" stroke-width=".55" fill="none"/>`;
+    });
+  } else if (type === "hue") {
+    g += `<path d="M0 0 L0 -21" stroke="#4f8a3c" stroke-width="1.2" stroke-linecap="round"/>` + leaf(-1.8, -5, -25) + leaf(1.8, -8, 25);
+    [[-1.6, -11], [1.6, -13], [-1.6, -15], [1.6, -17], [0, -20.5]].forEach(([fx, fy], i) => {
+      g += i < 3
+        ? `<path d="M${fx} ${fy} l${fx < 0 ? -2.6 : 2.6} -1.2 l${fx < 0 ? .6 : -.6} 2.2 z" fill="#fffaf0" stroke="#b9b39a" stroke-width=".45"/>`
+        : `<ellipse cx="${fx}" cy="${fy}" rx="1.3" ry="2.2" fill="#f4f0dc" stroke="#b9b39a" stroke-width=".45"/>`;
+    });
+  } else if (type === "lav") {
+    [[-2.5, -17], [0, -19], [2.5, -17]].forEach(([ex, ey]) => {
+      g += `<path d="M0 0 L${ex} ${ey}" stroke="#6f8f5a" stroke-width=".9" stroke-linecap="round"/>`;
+      for (let t = .6; t <= 1.001; t += .1) g += `<ellipse cx="${(ex * t).toFixed(1)}" cy="${(ey * t).toFixed(1)}" rx="1.15" ry="1.5" fill="${t > .85 ? "#a58be0" : "#8a6cc9"}" stroke="#5e4596" stroke-width=".3"/>`;
+    });
+    g += `<path d="M-1.8 -2.5 h3.6" stroke="#c9a04a" stroke-width="1.2"/>`;
+  }
+  return g ? `<g transform="translate(${x} ${y}) rotate(${rot})">${g}</g>` : "";
+}
+/* Mũ ni: mũ len trùm đầu che tai, vạt buông sau gáy */
+const MUNI = "#7d6a52", MUNI_D = "#5a4b39";
+const muniSVG = front => front
+  ? `<path d="M9 56 Q7 9 32 8.5 Q57 9 55 56 Q50 57 46 54 Q49 44 48 34 Q46 22 32 21 Q18 22 16 34 Q15 44 18 54 Q14 57 9 56Z" fill="${MUNI}" stroke="${MUNI_D}" stroke-width="1.1"/>`
+    + `<path d="M18 54 Q15 44 16 34 Q18 22 32 21 Q46 22 48 34 Q49 44 46 54" stroke="#a8977c" stroke-width="3.4" fill="none"/><path d="M18.6 54 Q16.6 44 17.6 34.5 Q19.5 23.6 32 22.7 Q44.5 23.6 46.4 34.5 Q47.4 44 45.4 54" stroke="${MUNI_D}" stroke-width=".8" fill="none"/><path d="M14 30 Q12 42 13 52 M50 30 Q52 42 51 52" stroke="${MUNI_D}" stroke-width=".8" opacity=".5" fill="none"/><path d="M20 13 Q32 9.5 44 13" stroke="#fff" stroke-opacity=".18" stroke-width="2.4" fill="none" stroke-linecap="round"/>`
+  : `<path d="M10 40 Q8 9 32 8.5 Q56 9 54 40 Q55 52 50 58 Q32 62 14 58 Q9 52 10 40Z" fill="${MUNI}" stroke="${MUNI_D}" stroke-width="1.1"/>`
+    + `<path d="M32 9.5 V60" stroke="${MUNI_D}" stroke-width=".8" opacity=".6"/><path d="M13 49 Q32 55 51 49" stroke="#a8977c" stroke-width="3" fill="none"/><path d="M20 14 Q32 10 44 14" stroke="#fff" stroke-opacity=".18" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
 const LEGS = {
   trang: { top: 80, c: "#3a2c28", shoe: "#2d2420" },
   aodai: { top: 78, c: "#f3efe6", shoe: "#8f2a1f" },
@@ -887,7 +930,8 @@ function avatarSVG(d, view, act){
   }
 
   // tóc dài phía sau thân
-  if (front && HAIR_BEHIND[d.hair]) s += `<path d="${HAIR_BEHIND[d.hair]}" fill="url(#hr)" ${OL}/>`;
+  const muni = acc.has("muni"), flower = ["hong", "hue", "lav"].find(f => acc.has(f));
+  if (front && !muni && HAIR_BEHIND[d.hair]) s += `<path d="${HAIR_BEHIND[d.hair]}" fill="url(#hr)" ${OL}/>`;
 
   // thân áo
   if (o === "trang") {
@@ -936,7 +980,7 @@ function avatarSVG(d, view, act){
   if (!front) s += `<path d="M26 50 Q32 53.5 38 50" stroke="${SL === "wide" ? "#f6f1e6" : light}" stroke-width="2.2" fill="none"/>`;
   if (front && acc.has("trang")) s += beadsSVG();
   if (act) {
-    s += hairTail(d);
+    if (!muni) s += hairTail(d);
     s += `</g>` + soles + actArms(SL, sleeve, sleeveR, light);
   }
 
@@ -953,6 +997,7 @@ function avatarSVG(d, view, act){
     aL = `<path d="M21.5 53 Q15.3 58 15.3 72 L20.7 72.5 Q20.6 63 24 58 Z" fill="${sleeve}" ${OL}/>` + hand(18, 74.6);
     aR = `<path d="M42.5 53 Q48.7 58 48.7 72 L43.3 72.5 Q43.4 63 40 58 Z" fill="${sleeveR}" ${OL}/>` + hand(46, 74.6);
   }
+  if (flower) aR += handFlower(flower, SL === "wide" ? 45.5 : 46, SL === "wide" ? 76.5 : 74.5, 18);
   s += `<g class="side"><g class="armL">${aL}</g><g class="armR">${aR}</g></g>`;
 
   // tay chắp (đứng yên, quay mặt)
@@ -961,7 +1006,7 @@ function avatarSVG(d, view, act){
     if (SL === "wide") p = `<path d="M21 53 Q9 62 22 75 L30.5 68.5 Q23 62 25.5 57 Z" fill="${sleeve}" ${OL}/><path d="M43 53 Q55 62 42 75 L33.5 68.5 Q41 62 38.5 57 Z" fill="${sleeveR}" ${OL}/>`;
     else if (SL === "short") p = `<path d="M16.4 60 Q17 68.5 27.5 70.5 L30.5 67 Q22.5 64.5 21 61 Z M47.6 60 Q47 68.5 36.5 70.5 L33.5 67 Q41.5 64.5 43 61 Z" fill="url(#sk)" ${OL}/><path d="M21 52.5 Q15.5 55 15.6 61.5 L21.2 62 Q21 58 24 56.5 Z" fill="${sleeve}" ${OL}/><path d="M43 52.5 Q48.5 55 48.4 61.5 L42.8 62 Q43 58 40 56.5 Z" fill="${sleeveR}" ${OL}/>`;
     else p = `<path d="M21.5 53 Q14 63 25.5 71.5 L30.5 67.5 Q24 62.5 25 57.5 Z" fill="${sleeve}" ${OL}/><path d="M42.5 53 Q50 63 38.5 71.5 L33.5 67.5 Q40 62.5 39 57.5 Z" fill="${sleeveR}" ${OL}/>`;
-    s += `<g class="pray">${p}<ellipse cx="32" cy="65.5" rx="3.8" ry="5.6" fill="url(#sk)" ${OL}/><path d="M32 60.5 V69.5" stroke="#d9a688" stroke-width=".8"/></g>`;
+    s += `<g class="pray">${p}${flower ? handFlower(flower, 32.5, 66, 26) : ""}<ellipse cx="32" cy="65.5" rx="3.8" ry="5.6" fill="url(#sk)" ${OL}/><path d="M32 60.5 V69.5" stroke="#d9a688" stroke-width=".8"/></g>`;
   }
 
   // cổ & đầu
@@ -971,7 +1016,7 @@ function avatarSVG(d, view, act){
   s += `<ellipse cx="13.6" cy="35" rx="3" ry="4" fill="url(#sk)" ${OL}/><ellipse cx="50.4" cy="35" rx="3" ry="4" fill="url(#sk)" ${OL}/>`;
   s += `<circle cx="32" cy="32" r="19" fill="url(#sk)" ${OL}/>`;
   if (!front) {
-    s += hairBack(d) + `<path d="M20 19 Q32 12.5 44 19" stroke="#fff" stroke-opacity=".3" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+    s += muni ? muniSVG(false) : hairBack(d) + `<path d="M20 19 Q32 12.5 44 19" stroke="#fff" stroke-opacity=".3" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
   } else {
     s += `<g class="eyes"><ellipse cx="25" cy="35.5" rx="3.3" ry="4.2" fill="#2b1d18"/><ellipse cx="39" cy="35.5" rx="3.3" ry="4.2" fill="#2b1d18"/>`;
     s += `<ellipse cx="25" cy="36.6" rx="2.2" ry="2.7" fill="#7a4a30"/><ellipse cx="39" cy="36.6" rx="2.2" ry="2.7" fill="#7a4a30"/>`;
@@ -985,12 +1030,17 @@ function avatarSVG(d, view, act){
       ? `<path d="M29.6 42.6 Q32 45.2 34.4 42.6 Q32 43.6 29.6 42.6Z" fill="#d9655a" stroke="#a0503f" stroke-width=".8"/>`
       : `<path d="M29.4 42.6 Q32 45 34.6 42.6" stroke="#a0503f" stroke-width="1.3" fill="none" stroke-linecap="round"/>`;
     if (acc.has("kinh")) s += `<g fill="rgba(255,255,255,.16)" stroke="#2e2420" stroke-width="1.15"><circle cx="25" cy="35.8" r="5.3"/><circle cx="39" cy="35.8" r="5.3"/></g><path d="M30.3 35.2 Q32 34 33.7 35.2 M19.7 35 L14.5 33.5 M44.3 35 L49.5 33.5" stroke="#2e2420" stroke-width="1" fill="none"/>`;
-    s += hairFront(d);
+    s += muni ? muniSVG(true) : hairFront(d);
   }
   if (acc.has("hoa")) s += flowerSVG(17.5, 19.5);
-  if (acc.has("non")) s += hatSVG(front);
-  if (act) return body.replace("<!--HEAD-->", s + `</g></g>`) + `<path class="prop p-fall" d="M49 44 V52" stroke="#d9b36a" stroke-width="1.6" stroke-linecap="round"/></svg>`;
-  return s + `</g></svg>`;
+  if (acc.has("non") && !muni) s += hatSVG(front);
+  let out = act ? body.replace("<!--HEAD-->", s + `</g></g>`) + `<path class="prop p-fall" d="M49 44 V52" stroke="#d9b36a" stroke-width="1.6" stroke-linecap="round"/></svg>` : s + `</g></svg>`;
+  if (isHex(d.hc)) {
+    const hc = d.hc, hg = `<linearGradient id="hr${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(hc, .22)}"/><stop offset="1" stop-color="${shade(hc, -.38)}"/></linearGradient>`
+      + `<linearGradient id="hrB${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(hc, .35)}"/><stop offset="1" stop-color="${shade(hc, -.12)}"/></linearGradient>`;
+    out = out.replace("</defs>", hg + "</defs>").split("url(#hr)").join(`url(#hr${k})`).split("url(#hrB)").join(`url(#hrB${k})`);
+  }
+  return out;
 }
 
 /* ---------------- Lớp kết nối ---------------- */
@@ -1264,7 +1314,7 @@ function startOnlineClock(){
 const players = new Map();
 let me = null;
 let meId = null; // = mã tài khoản sau khi đăng nhập
-const profKey = d => `${d.g}|${d.hair}|${d.color}|${d.outfit}|${d.acc}`;
+const profKey = d => `${d.g}|${d.hair}|${d.hc}|${d.color}|${d.outfit}|${d.acc}`;
 
 function createPlayer(d){
   const el = document.createElement("div");
@@ -1476,7 +1526,7 @@ addEventListener("keydown", e => {
 });
 
 /* Tạo nhân vật */
-const draft = { name: "", g: "nam", hair: "ngan", color: COLORS[0][1], outfit: "", acc: "" };
+const draft = { name: "", g: "nam", hair: "ngan", hc: "", color: COLORS[0][1], outfit: "", acc: "" };
 let pvView = "front";
 function renderCreator(){
   $("fGender").innerHTML = [["nam", "Nam"], ["nu", "Nữ"]].map(([v, l]) => `<button type="button" class="chip" data-g="${v}" aria-pressed="${draft.g === v}">${l}</button>`).join("");
@@ -1487,6 +1537,9 @@ function renderCreator(){
   $("fOutfit").innerHTML = OUTFITS.map(([v, l]) => `<button type="button" class="chip" data-o="${v}" aria-pressed="${curO === v}">${l}</button>`).join("");
   const accSet = new Set(String(draft.acc || "").split(",").filter(Boolean));
   $("fAcc").innerHTML = ACCS.map(([v, l]) => `<button type="button" class="chip" data-a="${v}" aria-pressed="${accSet.has(v)}">${l}</button>`).join("");
+  $("fHairC").value = isHex(draft.hc) ? draft.hc : HAIR_DEFAULT;
+  $("fHairCT").textContent = isHex(draft.hc) ? "Đã nhuộm" : "Mặc định";
+  $("fHairReset").setAttribute("aria-pressed", String(!isHex(draft.hc)));
   $("pvAv").innerHTML = avatarSVG({ ...draft, outfit: curO }, pvView);
   $("pvAv").classList.toggle("v-front", pvView === "front");
   $("pvTurn").textContent = pvView === "front" ? "Xem sau lưng" : "Xem phía trước";
@@ -1500,10 +1553,13 @@ $("fColor").addEventListener("click", e => { const b = e.target.closest("[data-c
 $("fOutfit").addEventListener("click", e => { const b = e.target.closest("[data-o]"); if (b) { draft.outfit = b.dataset.o; renderCreator(); } });
 $("fAcc").addEventListener("click", e => {
   const b = e.target.closest("[data-a]"); if (!b) return;
-  const set = new Set(String(draft.acc || "").split(",").filter(Boolean));
-  set.has(b.dataset.a) ? set.delete(b.dataset.a) : set.add(b.dataset.a);
+  const set = new Set(String(draft.acc || "").split(",").filter(Boolean)), a = b.dataset.a;
+  if (set.has(a)) set.delete(a);
+  else { ACC_GROUPS.forEach(g => { if (g.includes(a)) g.forEach(x => set.delete(x)); }); set.add(a); }
   draft.acc = ACCS.map(a => a[0]).filter(a => set.has(a)).join(","); renderCreator();
 });
+$("fHairC").addEventListener("input", e => { draft.hc = e.target.value; renderCreator(); });
+$("fHairReset").addEventListener("click", () => { draft.hc = ""; renderCreator(); });
 $("pvTurn").addEventListener("click", () => { pvView = pvView === "front" ? "back" : "front"; renderCreator(); });
 renderCreator();
 
@@ -1511,7 +1567,7 @@ $("btnEnter").addEventListener("click", async () => {
   const name = draft.name.trim().replace(/\s+/g, " ").slice(0, 16);
   if (!name) { $("charErr").textContent = "Vui lòng đặt tên cho nhân vật."; $("fName").focus(); return; }
   $("charErr").textContent = "";
-  const prof = { name, g: draft.g, hair: draft.hair, color: draft.color, outfit: draft.outfit || (draft.g === "nu" ? "aodai" : "trang"), acc: draft.acc || "" };
+  const prof = { name, g: draft.g, hair: draft.hair, hc: isHex(draft.hc) ? draft.hc.toLowerCase() : "", color: draft.color, outfit: draft.outfit || (draft.g === "nu" ? "aodai" : "trang"), acc: draft.acc || "" };
   net.saveProfile(prof).catch(() => {});
   if (me) {
     Object.assign(me, prof); const p = players.get(meId); p.d = { ...p.d, ...prof }; applyProfile(p);

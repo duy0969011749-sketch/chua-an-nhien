@@ -5,7 +5,8 @@ Chánh điện 2D hoạt hình. Mỗi người tạo nhân vật (nam/nữ, tên
 - Kiểu tóc nam: tóc ngắn, đầu đinh, rẽ ngôi, đầu trọc, tóc xoăn. Kiểu tóc nữ: búi tóc, tóc dài, tóc ngắn, tết hai bên, đuôi ngựa, dài xoăn.
 - Kiểu áo: áo tràng, áo dài, áo bà ba, áo thun, cà sa, áo lam, áo tứ thân, sơ mi, váy liền.
 - Màu áo: lam, nâu, trắng, vàng, hồng, ngọc, đỏ, tím, đen.
-- Phụ kiện (chọn nhiều): tràng hạt, kính, hoa cài, nón lá.
+- Màu tóc: chọn tự do bằng bảng màu, bấm "Màu mặc định" để về màu tóc gốc.
+- Phụ kiện (chọn nhiều): tràng hạt, kính, hoa cài, nón lá, mũ ni, hoa hồng, hoa huệ, hoa lavender. Hoa cầm tay chỉ chọn 1 loại; nón lá và mũ ni chỉ chọn 1. Đứng yên thì ôm hoa trong tay chắp, đi lại thì cầm hoa một tay; khi hành lễ hoa tạm ẩn. Đội mũ ni thì tóc được che kín.
 - Nhân vật chớp mắt, thở nhẹ khi đứng, vung tay khi đi, quay vào bàn thờ và làm động tác chi tiết khi lễ.
 - Dưới tên hiện tổng số giờ online, cộng dồn qua các lần vào, lưu theo tài khoản.
 
