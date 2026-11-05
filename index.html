@@ -1409,7 +1409,22 @@ async function makeFirebase(cfg){
   const base = `rooms/${ROOM}`;
   const playersRef = D.ref(db, `${base}/players`), posRef = D.ref(db, `${base}/pos`);
   const statsRef = D.ref(db, `${base}/stats`), prRef = D.ref(db, `${base}/prayers`), chatRef = D.ref(db, `${base}/chat`);
-  let meRef = null, mePosRef = null, uid = null;
+  let meRef = null, mePosRef = null, uid = null, state = null;
+  // Điện thoại tắt màn hình / chuyển app / mất sóng: máy chủ xoá người chơi (onDisconnect).
+  // Khi có mạng lại thì tự ghi lại đầy đủ để người khác thấy lại mình.
+  let wasConnected = false;
+  D.onValue(D.ref(db, ".info/connected"), async snap => {
+    const on = snap.val() === true;
+    if (on && !wasConnected && state && meRef) {
+      try {
+        await D.onDisconnect(meRef).remove(); await D.onDisconnect(mePosRef).remove();
+        const info = {}, pos = {};
+        for (const k in state) (POS.includes(k) ? pos : info)[k] = state[k];
+        await D.set(mePosRef, pos); await D.set(meRef, info);
+      } catch (e) { console.warn("rejoin", e); }
+    }
+    wasConnected = on;
+  });
   const ready = new Promise(r => { const off = A.onAuthStateChanged(auth, u => { off(); r(u); }); });
   // Vị trí (x, y, tx, ty) để ở nhánh riêng: mỗi lần đi chỉ gửi vài chục byte thay vì cả hồ sơ
   const POS = ["x", "y", "tx", "ty"];
@@ -1421,7 +1436,7 @@ async function makeFirebase(cfg){
       async signUp(email, pw){ const c = await A.createUserWithEmailAndPassword(auth, email, pw); uid = c.user.uid; return { uid, email: c.user.email }; },
       reset(email){ return A.sendPasswordResetEmail(auth, email); },
       async signOut(){ await this.leave(); await A.signOut(auth); },
-      leave: async () => { try { if (meRef) await Promise.all([D.remove(meRef), D.remove(mePosRef)]); } catch {} }
+      leave: async () => { const r1 = meRef, r2 = mePosRef; state = null; meRef = null; try { if (r1) await Promise.all([D.remove(r1), D.remove(r2)]); } catch {} }
     },
     async loadUser(){
       const s = await D.get(D.ref(db, `users/${uid}`)); const v = s.val() || {};
@@ -1433,7 +1448,7 @@ async function makeFirebase(cfg){
       const snap = await D.get(playersRef);
       const others = snap.exists() ? Object.keys(snap.val()).filter(k => k !== me.id).length : 0;
       if (others >= MAX_PEOPLE) return { ok: false };
-      meRef = D.child(playersRef, me.id); mePosRef = D.child(posRef, me.id);
+      meRef = D.child(playersRef, me.id); mePosRef = D.child(posRef, me.id); state = { ...me };
       await D.onDisconnect(meRef).remove(); await D.onDisconnect(mePosRef).remove();
       const info = {}, pos = {};
       for (const k in me) (POS.includes(k) ? pos : info)[k] = me[k];
@@ -1442,6 +1457,7 @@ async function makeFirebase(cfg){
     },
     update(p){
       if (!meRef) return;
+      Object.assign(state, p);
       const info = {}, pos = {}; let a = 0, b = 0;
       for (const k in p) { if (POS.includes(k)) { pos[k] = p[k]; b++; } else { info[k] = p[k]; a++; } }
       if (b) D.update(mePosRef, pos).catch(() => {});
