@@ -2,7 +2,9 @@
 
 Chánh điện 2D hoạt hình. Mỗi người tạo nhân vật (nam/nữ, tên, kiểu tóc, kiểu áo, màu áo, phụ kiện), đi lại trong chùa và thấy người khác đi lại cùng lúc. Tối đa 50 người.
 
-- Kiểu áo: áo tràng, áo dài, áo bà ba, áo thun.
+- Kiểu tóc nam: tóc ngắn, đầu đinh, rẽ ngôi, đầu trọc, tóc xoăn. Kiểu tóc nữ: búi tóc, tóc dài, tóc ngắn, tết hai bên, đuôi ngựa, dài xoăn.
+- Kiểu áo: áo tràng, áo dài, áo bà ba, áo thun, cà sa, áo lam, áo tứ thân, sơ mi, váy liền.
+- Màu áo: lam, nâu, trắng, vàng, hồng, ngọc, đỏ, tím, đen.
 - Phụ kiện (chọn nhiều): tràng hạt, kính, hoa cài, nón lá.
 - Nhân vật chớp mắt, thở nhẹ khi đứng, vung tay khi đi, quay vào bàn thờ và làm động tác chi tiết khi lễ.
 - Dưới tên hiện tổng số giờ online, cộng dồn qua các lần vào, lưu theo tài khoản.
