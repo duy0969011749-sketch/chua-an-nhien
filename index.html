@@ -1479,7 +1479,15 @@ function avatarSVG(d, view, act, opt){
   // tay buông (đi lại, quay lưng)
   const hand = (x, y) => `<circle cx="${x}" cy="${y}" r="3.1" fill="url(#sk)" ${OL}/>`;
   let aL, aR;
-  if (SL === "wide") {
+  if (!front) {
+    // nhìn sau lưng: tay buông xuôi sát người, bàn tay ló dưới tay áo
+    const mir = g => `<g transform="translate(64 0) scale(-1 1)">${g}</g>`;
+    let g;
+    if (SL === "wide") g = hand(19.5, 76.6) + `<path d="M21 53 Q15 57 14.6 66 Q14.4 73.5 16.2 77 Q19.5 78.6 23.6 76 Q22.4 67 24.8 58.5Z" fill="${sleeve}" ${OL}/>`;
+    else if (SL === "short") g = `<path d="M16.6 61.5 Q16.2 67.5 17 72.5 L21 72.5 Q20.7 67 21.2 62Z" fill="url(#sk)" ${OL}/>` + hand(19, 74.2) + `<path d="M21 52.5 Q15.8 55 15.8 62.5 L21.6 63 Q21.4 58.5 24 56.5Z" fill="${sleeve}" ${OL}/>`;
+    else g = hand(19, 74.8) + `<path d="M21.5 53 Q16.4 57 16.2 65 L16.6 73.2 L21.6 73.6 Q21.4 65 24 58Z" fill="${sleeve}" ${OL}/>`;
+    aL = g; aR = mir(g);
+  } else if (SL === "wide") {
     aL = `<path d="M21 53 Q11 60 13 74 Q18 78.5 25 74.5 Q24 64 27 58 Z" fill="${sleeve}" ${OL}/>` + hand(18.5, 76.5);
     aR = `<path d="M43 53 Q53 60 51 74 Q46 78.5 39 74.5 Q40 64 37 58 Z" fill="${sleeveR}" ${OL}/>` + hand(45.5, 76.5);
   } else if (SL === "short") {
