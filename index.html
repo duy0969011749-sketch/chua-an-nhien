@@ -63,7 +63,7 @@
   @keyframes pellet{0%,80%{opacity:1}100%{opacity:0}}
   .pl.medit::before{content:"";position:absolute;left:50%;top:30px;width:130px;height:130px;margin-left:-65px;border-radius:50%;background:radial-gradient(circle,rgba(255,236,160,.75),rgba(255,236,160,0) 68%);animation:aura 3.4s ease-in-out infinite;z-index:-1}
   @keyframes aura{50%{transform:scale(1.15);opacity:.7}}
-  /* thiền đủ 30 phút: vầng sáng lớn hơn, ánh vàng hồng, và bông sen dưới chỗ ngồi */
+  /* thiền đủ 5 phút: vầng sáng lớn hơn, ánh vàng hồng, và bông sen dưới chỗ ngồi */
   .pl.medit.lotus::before{top:-14px;width:230px;height:230px;margin-left:-115px;background:radial-gradient(circle,rgba(255,240,190,.85),rgba(255,205,215,.45) 42%,rgba(255,236,160,0) 70%)}
   .pl .lotusB,.pl .lotusF{position:absolute;left:50%;width:120px;margin-left:-60px;pointer-events:none;transform-origin:50% 90%;animation:lotusIn .9s ease-out both}
   .pl .lotusB{top:36px;z-index:0}
@@ -1160,7 +1160,7 @@ const ls = {
   set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
 };
 
-/* Bông sen dưới chỗ ngồi khi thiền đủ 30 phút: lớp cánh sau (sau người) và lớp cánh trước (ôm hai bên lòng) */
+/* Bông sen dưới chỗ ngồi khi thiền đủ 5 phút: lớp cánh sau (sau người) và lớp cánh trước (ôm hai bên lòng) */
 const LOTUS_SVG = (() => {
   const petal = (x, y, a, len, wid, fill) => `<path transform="translate(${x} ${y}) rotate(${a})" d="M0 0 Q${wid} ${-len * .45} 0 ${-len} Q${-wid} ${-len * .45} 0 0Z" fill="${fill}" stroke="#c2607a" stroke-width=".8"/>`;
   const grad = id => `<defs><linearGradient id="${id}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ef9fb3"/><stop offset="1" stop-color="#fff2f5"/></linearGradient></defs>`;
@@ -2518,8 +2518,8 @@ function tickKoi(now, dt){
 
 /* Thiền: ngồi trên bồ đoàn là tự vào thế thiền, đếm phút */
 let thienMs = 0, thienPending = 0, thienSession = 0;
-// chuỗi thiền cho bông sen: cộng dồn phút thiền, nghỉ quá 30 phút không thiền thì về 0
-const LOTUS_MS = 30 * 60000, LOTUS_GAP = 30 * 60000;
+// chuỗi thiền cho bông sen: cộng dồn phút thiền, nghỉ quá 5 phút không thiền thì về 0
+const LOTUS_MS = 5 * 60000, LOTUS_GAP = 5 * 60000;
 let streak = null, streakSaved = 0;
 function streakKey(){ return "chua_thien_streak_" + meId; }
 function saveStreak(force){ const n = Date.now(); if (force || n - streakSaved > 5000) { streakSaved = n; ls.set(streakKey(), streak); } }
@@ -2536,7 +2536,7 @@ function tickStreak(dtMs, seated){
   if (seated) {
     if (now - streak.last > LOTUS_GAP) streak.ms = 0;
     streak.ms += dtMs; streak.last = now; saveStreak();
-    if (!me.lotus && streak.ms >= LOTUS_MS) { setMe({ lotus: true }); saveStreak(true); say(players.get(meId), "Thiền liên tục 30 phút, sen nở dưới chỗ ngồi", 4000); }
+    if (!me.lotus && streak.ms >= LOTUS_MS) { setMe({ lotus: true }); saveStreak(true); say(players.get(meId), "Thiền đủ 5 phút, sen nở dưới chỗ ngồi", 4000); }
   } else if (me.lotus && now - streak.last > LOTUS_GAP) { streak.ms = 0; saveStreak(true); setMe({ lotus: false }); }
 }
 // 1 đồng cho mỗi phút thiền, tính theo tổng thời gian đã lưu nên giây lẻ được cộng dồn qua các lần ngồi
