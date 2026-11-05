@@ -21,6 +21,13 @@ Hành động: Lạy, Thắp hương, Gõ mõ, Thỉnh chuông, Xin xăm, Xin 8 
 
 Điều khiển: chạm hoặc bấm vào sàn để đi, phím mũi tên hoặc W A S D trên máy tính. Bấm vào chuông, mõ, bát hương trong cảnh cũng thực hiện hành động.
 
+## Chat
+
+- Máy tính: bấm Enter để mở ô chat, gõ rồi Enter để gửi, Esc để đóng. Điện thoại: bấm nút Chat ở góc trên phải.
+- Tin nhắn hiện thành bong bóng trên đầu nhân vật và lưu ở khung chat góc dưới trái. Người mới vào thấy 30 tin gần nhất.
+- Mỗi tin tối đa 120 ký tự. Mỗi người phải cách khoảng 2 giây mới gửi tin tiếp (quy tắc Firebase cũng chặn).
+- Từ ngữ thô tục trong danh sách `BAD_WORDS` (trong `index.html`) được thay bằng dấu *. Có thể thêm từ vào danh sách này.
+
 ## Tài khoản và lưu nhân vật
 
 - Vào trang phải đăng nhập bằng email và mật khẩu (ít nhất 6 ký tự). Ai cũng tự đăng ký được. Có nút Quên mật khẩu (Firebase gửi email đặt lại).
@@ -77,6 +84,19 @@ const FIREBASE_CONFIG = {
         "stats": {
           ".read": "auth != null",
           "$k": { ".write": "auth != null", ".validate": "newData.isNumber() && (!data.exists() || newData.val() >= data.val())" }
+        },
+        "chat": {
+          ".read": "auth != null",
+          "$id": {
+            ".write": "auth != null && !data.exists()",
+            ".validate": "newData.hasChildren(['uid', 'name', 'text', 'ts']) && newData.child('uid').val() === auth.uid && newData.child('name').isString() && newData.child('name').val().length <= 16 && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 120 && newData.child('ts').val() === now && newData.parent().parent().child('chatLast').child(auth.uid).val() === now"
+          }
+        },
+        "chatLast": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid",
+            ".validate": "newData.val() === now && (!data.exists() || now - data.val() >= 1500)"
+          }
         },
         "prayers": {
           ".read": "auth != null",

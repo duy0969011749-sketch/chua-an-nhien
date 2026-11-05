@@ -213,7 +213,7 @@
   .nm .h{font-size:10.5px;font-weight:600;color:#f7d77c}
   .pl.me .nm{background:linear-gradient(#f7d77c,#d9a53c);color:#4a2a10}
   .pl.me .nm .h{color:#7a4a10}
-  .bub{position:absolute;left:50%;bottom:100%;margin-bottom:34px;transform:translateX(-50%) scale(.6);opacity:0;white-space:nowrap;font-size:13px;font-weight:600;color:var(--ink);background:var(--paper);border:2px solid var(--gold-deep);padding:4px 10px;border-radius:12px;transition:opacity .2s,transform .2s;pointer-events:none}
+  .bub{position:absolute;left:50%;bottom:100%;margin-bottom:34px;transform:translateX(-50%) scale(.6);opacity:0;white-space:normal;width:max-content;max-width:220px;text-align:center;line-height:1.25;overflow-wrap:anywhere;font-size:13px;font-weight:600;color:var(--ink);background:var(--paper);border:2px solid var(--gold-deep);padding:4px 10px;border-radius:12px;transition:opacity .2s,transform .2s;pointer-events:none}
   .bub::after{content:"";position:absolute;left:50%;top:100%;margin-left:-6px;border:6px solid transparent;border-top-color:var(--gold-deep)}
   .bub.show{opacity:1;transform:translateX(-50%) scale(1)}
   .tapmark{position:absolute;width:34px;height:14px;margin:-7px 0 0 -17px;border:3px solid rgba(255,230,160,.9);border-radius:50%;animation:tapmark .6s ease-out forwards;pointer-events:none}
@@ -235,6 +235,16 @@
   .tbtn{min-height:40px;padding:6px 14px;border-radius:999px;font-size:.88rem;font-weight:700;color:#fff;background:var(--panel);border:1px solid var(--panel-line)}
   .tbtn:hover{background:rgba(70,22,16,.85)}
   #hudB{left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center;gap:10px}
+  #hudChat{left:12px;bottom:calc(max(14px,env(safe-area-inset-bottom)) + 104px);width:min(340px,calc(100vw - 24px));display:flex;flex-direction:column;gap:6px}
+  #hudChat[hidden],.chatbar[hidden],.chatlog:empty{display:none}
+  .chatlog{max-height:190px;overflow-y:auto;padding:8px 12px;font-size:.86rem;line-height:1.35;color:#fff;overscroll-behavior:contain}
+  .chatlog p{margin:0 0 3px;overflow-wrap:anywhere}
+  .chatlog b{color:var(--gold)}
+  .chatlog .me b{color:#ffd9a0}
+  .chatlog .sys{opacity:.8;font-style:italic}
+  .chatbar{display:flex;gap:6px}
+  .chatbar input{flex:1;min-width:0}
+  .chatbar .btn{min-height:42px;padding:0 16px;font-size:.92rem}
   .hint{font-size:.85rem;color:#fff;padding:6px 14px;border-radius:999px;transition:opacity .4s}
   .hint.hide{opacity:0}
   .acts{display:flex;gap:10px;padding:0 10px;flex-wrap:nowrap;max-width:100vw;overflow-x:auto;scrollbar-width:none}
@@ -318,6 +328,8 @@
     .info h1{font-size:1rem}
     .info .room{font-size:.78rem}
     .tbtn{min-height:36px;padding:4px 12px;font-size:.78rem}
+    #hudChat{bottom:calc(max(14px,env(safe-area-inset-bottom)) + 92px)}
+    .chatlog{max-height:110px;font-size:.8rem}
   }
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -522,7 +534,17 @@
   <button class="tbtn" id="btnSound" type="button" aria-pressed="true">Âm thanh: Bật</button>
   <button class="tbtn" id="btnPrayers" type="button">Lời nguyện</button>
   <button class="tbtn" id="btnChar" type="button">Nhân vật</button>
+  <button class="tbtn" id="btnChat" type="button" hidden>Chat</button>
   <button class="tbtn" id="btnLogout" type="button" hidden>Đăng xuất</button>
+</div>
+
+<!-- Chat -->
+<div class="hud" id="hudChat" hidden>
+  <div class="pill chatlog" id="chatLog" aria-live="polite"></div>
+  <form class="chatbar" id="chatForm" hidden novalidate>
+    <input type="text" id="chatIn" maxlength="120" placeholder="Nhập tin nhắn, Enter để gửi" autocomplete="off" enterkeyhint="send" aria-label="Tin nhắn">
+    <button class="btn" type="submit">Gửi</button>
+  </form>
 </div>
 
 <!-- Thanh hành động -->
@@ -903,7 +925,7 @@ async function makeFirebase(cfg){
   auth.languageCode = "vi";
   const base = `rooms/${ROOM}`;
   const playersRef = D.ref(db, `${base}/players`), posRef = D.ref(db, `${base}/pos`);
-  const statsRef = D.ref(db, `${base}/stats`), prRef = D.ref(db, `${base}/prayers`);
+  const statsRef = D.ref(db, `${base}/stats`), prRef = D.ref(db, `${base}/prayers`), chatRef = D.ref(db, `${base}/chat`);
   let meRef = null, mePosRef = null, uid = null;
   const ready = new Promise(r => { const off = A.onAuthStateChanged(auth, u => { off(); r(u); }); });
   // Vị trí (x, y, tx, ty) để ở nhánh riêng: mỗi lần đi chỉ gửi vài chục byte thay vì cả hồ sơ
@@ -955,6 +977,17 @@ async function makeFirebase(cfg){
       on(playersRef, info); on(posRef, pos);
     },
     bump(f){ return D.update(statsRef, { [f]: D.increment(1) }); },
+    // Tin nhắn và mốc gửi gần nhất ghi cùng lúc, quy tắc Firebase dùng mốc này để chặn gửi dồn
+    async sendChat(m){
+      const id = D.push(chatRef).key;
+      await D.update(D.ref(db, base), { [`chat/${id}`]: { ...m, ts: D.serverTimestamp() }, [`chatLast/${uid}`]: D.serverTimestamp() });
+    },
+    // 30 tin gần nhất; tin cũ (lúc mới vào) chỉ hiện ở khung chat, tin mới hiện cả bong bóng
+    onChat(cb){
+      const q = D.query(chatRef, D.limitToLast(30)); let ready = false;
+      D.onChildAdded(q, s => cb(s.val(), ready));
+      D.onValue(q, () => { ready = true; }, { onlyOnce: true });
+    },
     onStats(cb){ D.onValue(statsRef, s => cb(s.val() || {})); },
     async addPrayer(name, wish){ await D.push(prRef, { name, wish, ts: D.serverTimestamp() }); await this.bump("prayers"); },
     onPrayers(cb){ D.onValue(D.query(prRef, D.limitToLast(50)), s => { const a = []; s.forEach(c => { a.push(c.val()); }); cb(a.reverse()); }); }
@@ -964,7 +997,7 @@ async function makeFirebase(cfg){
 function makeLocal(){
   const bc = "BroadcastChannel" in window ? new BroadcastChannel("chua-an-nhien") : null;
   const peers = {};
-  let me = null, playersCb = () => {}, statsCb = () => {}, prayersCb = () => {};
+  let me = null, playersCb = () => {}, statsCb = () => {}, prayersCb = () => {}, chatCb = () => {};
   const send = m => { try { bc && bc.postMessage(m); } catch {} };
   const emit = () => { const all = {}; for (const k in peers) all[k] = peers[k]; if (me) all[me.id] = me; playersCb(all); };
   if (bc) bc.onmessage = ({ data: m }) => {
@@ -973,6 +1006,7 @@ function makeLocal(){
     else if (m.type === "bye") { delete peers[m.id]; emit(); }
     else if (m.type === "stats") statsCb(ls.get("chua_stats", {}));
     else if (m.type === "prayers") prayersCb(ls.get("chua_prayers", []));
+    else if (m.type === "chat") chatCb(m.m, true);
   };
   setInterval(() => {
     const now = Date.now(); let ch = false;
@@ -1017,6 +1051,8 @@ function makeLocal(){
     onPlayers(cb){ playersCb = cb; },
     async bump(f){ const s = ls.get("chua_stats", {}); s[f] = (s[f] || 0) + 1; ls.set("chua_stats", s); statsCb(s); send({ type: "stats" }); },
     onStats(cb){ statsCb = cb; cb(ls.get("chua_stats", {})); },
+    async sendChat(m){ const msg = { ...m, ts: Date.now() }; ls.set("chua_chat", [...ls.get("chua_chat", []), msg].slice(-30)); chatCb(msg, true); send({ type: "chat", m: msg }); },
+    onChat(cb){ chatCb = cb; ls.get("chua_chat", []).forEach(m => cb(m, false)); },
     async addPrayer(name, wish){
       const list = [{ name, wish, ts: Date.now() }, ...ls.get("chua_prayers", [])].slice(0, 50);
       ls.set("chua_prayers", list); prayersCb(list); send({ type: "prayers" }); await this.bump("prayers");
@@ -1337,6 +1373,7 @@ view.addEventListener("pointerdown", e => {
 });
 addEventListener("keydown", e => {
   if (e.target.matches("input,textarea") || document.querySelector(".modal.open")) return;
+  if (e.key === "Enter" && me) { e.preventDefault(); openChat(); return; }
   const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
   if (["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","a","d","w","s"].includes(k)) { keys.add(k); e.preventDefault(); }
 });
@@ -1416,12 +1453,57 @@ $("btnEnter").addEventListener("click", async () => {
   me = { ...start };
   createPlayer(me);
   net.onPlayers(syncPlayers);
+  $("hudChat").hidden = false; $("btnChat").hidden = false;
+  net.onChat(onChatMsg);
   onSent = start.on; startOnlineClock();
   $("closeChar").hidden = false; $("mCharT").textContent = "Đổi nhân vật"; $("btnEnter").textContent = "Lưu";
   closeModal("mChar");
 });
 $("closeChar").addEventListener("click", () => closeModal("mChar"));
 $("btnChar").addEventListener("click", () => { $("fName").value = draft.name = (me ? me.name : draft.name); renderCreator(); openModal("mChar"); });
+
+/* ---------------- Chat ---------------- */
+const BAD_WORDS = ["địt", "đụ", "đéo", "đĩ", "lồn", "buồi", "cặc", "đm", "đmm", "đcm", "dcm", "dmm", "vcl", "vkl", "vãi lồn", "fuck", "shit"];
+const badRe = new RegExp("(^|[^\\p{L}])(" + BAD_WORDS.join("|") + ")(?=$|[^\\p{L}])", "giu");
+const cleanText = t => String(t).normalize("NFC").replace(badRe, (m, pre, w) => pre + "*".repeat([...w].length));
+const CHAT_HINT = "Nhập tin nhắn, Enter để gửi";
+let chatLastSend = 0;
+function addChatLine(m, cls){
+  const log = $("chatLog"), el = document.createElement("p");
+  if (cls) el.className = cls; else if (m.uid === meId) el.className = "me";
+  el.innerHTML = cls === "sys" ? esc(m.text) : `<b>${esc(m.name || "Khách")}:</b> ${esc(cleanText(m.text))}`;
+  const atBottom = log.scrollHeight - log.scrollTop - log.clientHeight < 30;
+  log.appendChild(el);
+  while (log.children.length > 30) log.firstChild.remove();
+  if (atBottom || m.uid === meId || cls) log.scrollTop = log.scrollHeight;
+}
+function onChatMsg(m, live){
+  if (!m || typeof m.text !== "string" || !m.text) return;
+  addChatLine(m); hideHintNow();
+  if (live) { const p = players.get(m.uid); if (p) say(p, cleanText(m.text), Math.min(9000, 3000 + m.text.length * 60)); }
+}
+const hideHintNow = () => { hintHidden = true; $("hint").classList.add("hide"); };
+function openChat(){ if (!me) return; keys.clear(); hideHintNow(); $("chatForm").hidden = false; $("chatIn").focus(); }
+function closeChat(){ $("chatForm").hidden = true; $("chatIn").value = ""; $("chatIn").blur(); }
+$("chatForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const inp = $("chatIn"), text = cleanText(inp.value.replace(/\s+/g, " ").trim()).slice(0, 120);
+  if (!text) { closeChat(); return; }
+  const wait = 2000 - (Date.now() - chatLastSend);
+  if (wait > 0) {
+    inp.placeholder = `Vui lòng đợi ${Math.ceil(wait / 1000)} giây rồi gửi tiếp`;
+    setTimeout(() => { inp.placeholder = CHAT_HINT; }, wait);
+    return;
+  }
+  chatLastSend = Date.now(); closeChat();
+  try { await net.sendChat({ uid: meId, name: me.name, text }); }
+  catch (err) {
+    const why = String((err && (err.code || err.message)) || err);
+    addChatLine({ text: /permission/i.test(why) ? "Tin nhắn chưa gửi được: gửi quá nhanh, hoặc quy tắc Firebase chưa có phần chat (xem README)." : "Tin nhắn chưa gửi được, vui lòng thử lại." }, "sys");
+  }
+});
+$("chatIn").addEventListener("keydown", e => { if (e.key === "Escape") { e.preventDefault(); closeChat(); } });
+$("btnChat").addEventListener("click", () => { if ($("chatForm").hidden) openChat(); else closeChat(); });
 
 /* Đăng nhập / đăng ký */
 const AUTH_ERR = {
