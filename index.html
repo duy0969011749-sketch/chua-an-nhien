@@ -2492,13 +2492,17 @@ function tickKoi(now, dt){
 }
 
 /* Thiền: ngồi trên bồ đoàn là tự vào thế thiền, đếm phút */
-let thienMs = 0, thienPending = 0, thienSession = 0, thienShownMin = 0;
+let thienMs = 0, thienPending = 0, thienSession = 0;
+// 1 đồng cho mỗi phút thiền, tính theo tổng thời gian đã lưu nên giây lẻ được cộng dồn qua các lần ngồi
 function tickThien(dtMs, seated){
-  if (!seated) { thienSession = 0; thienShownMin = 0; return; }
+  if (!seated) { if (thienSession) { thienSession = 0; flushThien(); } return; }
+  const before = Math.floor(thienMs / 60000);
   thienSession += dtMs; thienMs += dtMs; thienPending += dtMs;
-  const m = Math.floor(thienSession / 60000);
-  if (m > thienShownMin) { thienShownMin = m; earn(2); say(players.get(meId), `Đã thiền ${m} phút, +1 đồng (tổng ${Math.floor(thienMs / 60000)} phút)`, 3500); }
+  const after = Math.floor(thienMs / 60000);
+  if (after > before) { earn(2 * (after - before)); say(players.get(meId), `Thiền thêm 1 phút, +1 đồng (tổng ${after} phút)`, 3500); }
 }
+// lưu ngay khi đứng dậy để phần giây lẻ không bị mất
+function flushThien(){ if (thienPending > 0 && net.addThien) { const ms = thienPending; thienPending = 0; net.addThien(ms).catch(() => { thienPending += ms; }); } }
 setInterval(() => { if (thienPending > 1000 && net.addThien) { const ms = thienPending; thienPending = 0; net.addThien(ms).catch(() => { thienPending += ms; }); } }, 60000);
 function freeSeat(kind){
   let best = null, bd = Infinity;
