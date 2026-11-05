@@ -159,16 +159,24 @@
   .av .pray{display:none}
   .pl:not(.walk) .av.v-front .pray,.preview .av.v-front .pray{display:inline}
   .pl:not(.walk) .av.v-front .side,.preview .av.v-front .side{display:none}
-  .pl.walk .av{animation:bob .32s ease-in-out infinite alternate}
-  .pl.walk .l1{animation:step .32s ease-in-out infinite alternate}
-  .pl.walk .l2{animation:step .32s ease-in-out infinite alternate-reverse}
-  .pl.walk .armL{animation:swingA .32s ease-in-out infinite alternate}
-  .pl.walk .armR{animation:swingA .32s ease-in-out infinite alternate-reverse}
-  .pl.walk .head{animation:none}
-  @keyframes bob{to{transform:translateY(-3px)}}
-  @keyframes step{from{transform:translateY(-3px)}to{transform:translateY(0)}}
-  @keyframes swingA{from{transform:rotate(14deg)}to{transform:rotate(-14deg)}}
-  /* ---------- Hành lễ (nhìn từ phía sau) ---------- */
+  /* đi bộ: một chu kỳ 2 bước. Chân l1 nhấc ở 75%, l2 ở 25%; tay ngược bên đưa ra trước cùng lúc */
+  .pl.walk .av{--wc:.9s;animation:wBody var(--wc) ease-in-out infinite;transform-origin:50% 95%}
+  .pl.walk .l1{animation:wLeg var(--wc) ease-in-out infinite}
+  .pl.walk .l2{animation:wLeg var(--wc) ease-in-out infinite;animation-delay:calc(var(--wc) / -2)}
+  .pl.walk .armL{animation:wArmL var(--wc) ease-in-out infinite}
+  .pl.walk .armR{animation:wArmR var(--wc) ease-in-out infinite;animation-delay:calc(var(--wc) / -2)}
+  .pl.walk .head{animation:wHead var(--wc) ease-in-out infinite;transform-origin:32px 54px}
+  @keyframes wBody{0%,50%,100%{transform:none}25%{transform:translate(-.5px,-2px) rotate(-1.2deg)}75%{transform:translate(.5px,-2px) rotate(1.2deg)}}
+  @keyframes wLeg{0%,50%,100%{transform:none}60%{transform:translateY(-1.6px) scaleY(.94)}75%{transform:translateY(-3.2px) scaleY(.86)}90%{transform:translateY(-1px) scaleY(.97)}}
+  /* tay thẳng vung trước sau. Nhìn trước: ra trước thì khép vào trước thân, ra sau thì lệch ra ngoài; cả hai ngắn lại theo phối cảnh */
+  @keyframes wArmL{0%,50%,100%{transform:none}25%{transform:rotate(-6deg) scaleY(.9)}75%{transform:rotate(5deg) scaleY(.94)}}
+  @keyframes wArmR{0%,50%,100%{transform:none}25%{transform:rotate(6deg) scaleY(.9)}75%{transform:rotate(-5deg) scaleY(.94)}}
+  @keyframes wHead{0%,50%,100%{transform:none}25%{transform:translateY(.5px) rotate(1deg)}75%{transform:translateY(.5px) rotate(-1deg)}}
+  /* nhìn sau lưng: tay ra trước đi vào chiều sâu nên ngắn hơn và khép sát hông; tay ra sau hướng về người xem, lệch ra ngoài */
+  .pl.walk .av:not(.v-front) .armL{animation-name:wArmLB}
+  .pl.walk .av:not(.v-front) .armR{animation-name:wArmRB}
+  @keyframes wArmLB{0%,50%,100%{transform:none}25%{transform:rotate(-3deg) scaleY(.86)}75%{transform:rotate(6deg) scaleY(.95)}}
+  @keyframes wArmRB{0%,50%,100%{transform:none}25%{transform:rotate(3deg) scaleY(.86)}75%{transform:rotate(-6deg) scaleY(.95)}}
   .av .k-legs{transform-origin:32px 89px}
   .av .k-tor{transform-origin:32px 50px}
   .av .k-hd{transform-origin:32px 32px}
@@ -1420,6 +1428,8 @@ function avatarSVG(d, view, act, opt){
   const muni = acc.has("muni"), flower = ["hong", "hue", "lav"].find(f => acc.has(f));
   if (front && !muni) s += hairBehind(d.hair);
 
+  // nhìn sau lưng: tay nằm sau thân (chỗ đánh dấu được thay bằng tay ở dưới)
+  if (!front) s += "<!--ARMS-->";
   // thân áo
   if (o === "trang") {
     s += `<path d="M20 52 Q32 46 44 52 L49 86 Q32 91 15 86 Z" fill="${robe}" ${OL}/>`;
@@ -1478,31 +1488,33 @@ function avatarSVG(d, view, act, opt){
 
   // tay buông (đi lại, quay lưng)
   const hand = (x, y) => `<circle cx="${x}" cy="${y}" r="3.1" fill="url(#sk)" ${OL}/>`;
-  let aL, aR;
-  if (!front) {
-    // nhìn sau lưng: tay buông xuôi sát người, bàn tay ló dưới tay áo
-    const mir = g => `<g transform="translate(64 0) scale(-1 1)">${g}</g>`;
-    let g;
-    if (SL === "wide") g = hand(19.5, 76.6) + `<path d="M21 53 Q15 57 14.6 66 Q14.4 73.5 16.2 77 Q19.5 78.6 23.6 76 Q22.4 67 24.8 58.5Z" fill="${sleeve}" ${OL}/>`;
-    else if (SL === "short") g = `<path d="M16.6 61.5 Q16.2 67.5 17 72.5 L21 72.5 Q20.7 67 21.2 62Z" fill="url(#sk)" ${OL}/>` + hand(19, 74.2) + `<path d="M21 52.5 Q15.8 55 15.8 62.5 L21.6 63 Q21.4 58.5 24 56.5Z" fill="${sleeve}" ${OL}/>`;
-    else g = hand(19, 74.8) + `<path d="M21.5 53 Q16.4 57 16.2 65 L16.6 73.2 L21.6 73.6 Q21.4 65 24 58Z" fill="${sleeve}" ${OL}/>`;
-    aL = g; aR = mir(g);
-  } else if (SL === "wide") {
-    aL = `<path d="M21 53 Q11 60 13 74 Q18 78.5 25 74.5 Q24 64 27 58 Z" fill="${sleeve}" ${OL}/>` + hand(18.5, 76.5);
-    aR = `<path d="M43 53 Q53 60 51 74 Q46 78.5 39 74.5 Q40 64 37 58 Z" fill="${sleeveR}" ${OL}/>` + hand(45.5, 76.5);
+  // tay buông khi đi lại, quay lưng, cầm đồ: hai đoạn bắp tay và cẳng tay để gập ở khuỷu khi vung
+  const mir = g => `<g transform="translate(64 0) scale(-1 1)">${g}</g>`;
+  let up, fo, eo, hp;
+  if (SL === "wide") {
+    hp = [19.5, 76.6]; eo = [19, 65];
+    fo = hand(...hp) + `<path d="M15 64 Q14.4 73.5 16.2 77 Q19.5 78.6 23.6 76 Q22.6 70 23 64.5Z" fill="${sleeve}" ${OL}/>`;
+    up = `<path d="M21 53 Q15 57 14.6 65.5 Q19 67 23.3 65.8 Q23 61 24.8 58.5Z" fill="${sleeve}" ${OL}/>`;
   } else if (SL === "short") {
-    aL = `<path d="M15.8 61.5 Q15.2 68 16 72.5 L20.2 72.5 Q20 67 20.6 62 Z" fill="url(#sk)" ${OL}/><path d="M21 52.5 Q15 55 14.8 62.5 L21 63 Q21 58.5 24 56.5 Z" fill="${sleeve}" ${OL}/>` + hand(18, 74.3);
-    aR = `<path d="M48.2 61.5 Q48.8 68 48 72.5 L43.8 72.5 Q44 67 43.4 62 Z" fill="url(#sk)" ${OL}/><path d="M43 52.5 Q49 55 49.2 62.5 L43 63 Q43 58.5 40 56.5 Z" fill="${sleeveR}" ${OL}/>` + hand(46, 74.3);
+    hp = [19, 74.2]; eo = [18.9, 62.5];
+    fo = `<path d="M16.6 61.5 Q16.2 67.5 17 72.5 L21 72.5 Q20.7 67 21.2 62Z" fill="url(#sk)" ${OL}/>` + hand(...hp);
+    up = `<path d="M21 52.5 Q15.8 55 15.8 62.5 L21.6 63 Q21.4 58.5 24 56.5Z" fill="${sleeve}" ${OL}/>`;
   } else {
-    aL = `<path d="M21.5 53 Q15.3 58 15.3 72 L20.7 72.5 Q20.6 63 24 58 Z" fill="${sleeve}" ${OL}/>` + hand(18, 74.6);
-    aR = `<path d="M42.5 53 Q48.7 58 48.7 72 L43.3 72.5 Q43.4 63 40 58 Z" fill="${sleeveR}" ${OL}/>` + hand(46, 74.6);
+    hp = [19, 74.8]; eo = [18.8, 64.2];
+    fo = hand(...hp) + `<path d="M15.9 63 L16.4 73.2 L21.4 73.6 Q21.2 68 21.6 63.5Z" fill="${sleeve}" ${OL}/>`;
+    up = `<path d="M21.5 53 Q16.4 57 16 65 L21.8 65.4 Q21.6 61 24 58Z" fill="${sleeve}" ${OL}/>`;
   }
+  const aL = `<g class="foreL" style="transform-origin:${eo[0]}px ${eo[1]}px">${fo}</g>${up}`;
+  let aRf = mir(fo);
   const poseG = opt && opt.pose ? poseSVG(opt.pose, front, SL, sleeveR, opt.pose === "thien" ? (PANTS.has(o) ? L.c : robe) : opt.pose === "hut" ? opt.food : (opt.food || "#d9823b")) : "";
   const dr = d.drink && drinkLeft(d.drink) ? d.drink : null;
-  if (dr) aR += bobaCup(dr, SL === "wide" ? 45.5 : 46, SL === "wide" ? 79 : 77, 1, 0);
-  else if (flower) aR += handFlower(flower, SL === "wide" ? 45.5 : 46, SL === "wide" ? 76.5 : 74.5, 18);
+  const hx = 64 - hp[0], hy = hp[1];
+  if (dr) aRf += bobaCup(dr, hx, hy + 2.4, 1, 0);
+  else if (flower) aRf += handFlower(flower, hx, hy, 18);
+  const aR = `<g class="foreR" style="transform-origin:${64 - eo[0]}px ${eo[1]}px">${aRf}</g>${mir(up)}`;
   // nhìn trước: tay cầm ly/đũa vẽ sau đầu (đưa đũa lên miệng không bị đầu che)
-  s += `<g class="side"><g class="armL">${aL}</g><g class="armR">${aR}</g></g>` + (front ? "" : poseG);
+  if (front) s += `<g class="side"><g class="armL">${aL}</g><g class="armR">${aR}</g></g>`;
+  else s = s.replace("<!--ARMS-->", `<g class="side"><g class="armL"><g transform="translate(-2.5 0)">${aL}</g></g><g class="armR"><g transform="translate(2.5 0)">${aR}</g></g></g>`) + poseG;
 
   // tay chắp (đứng yên, quay mặt)
   if (front) {
@@ -1982,7 +1994,7 @@ function syncPlayers(obj){
 }
 
 /* ---------------- Vòng lặp ---------------- */
-const SPEED = 190;
+const SPEED = 130;
 const keys = new Set();
 let lastSend = 0, last = performance.now(), pending = null, lastDir = "", keyMoving = false;
 
