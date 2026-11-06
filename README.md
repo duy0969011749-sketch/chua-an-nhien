@@ -28,6 +28,7 @@ Hành động: Lạy, Thắp hương, Gõ mõ, Thỉnh chuông, Xin xăm, Xin 8 
 
 - Người mới được tặng sẵn 10 đồng. Ví hiện ở bảng thông tin góc trên trái, lưu theo tài khoản.
 - Kiếm tiền: mỗi phút ngồi thiền trên bồ đoàn ở Vườn chùa được 1 đồng. Giây lẻ được cộng dồn qua các lần ngồi.
+- Hóa rắn: mỗi lần chuỗi thiền đủ 5 phút có 25% biến thành rắn thay vì sen nở. Rắn giữ 30 phút tính theo giờ thật (thoát trang vẫn tính), vẫn đi lại được nhưng không lạy, thắp hương, gõ mõ, thỉnh chuông, xin xăm, xin số, thiền. Mọi người đều thấy con rắn.
 - Thiền ở chánh điện: chạm vào một trong 6 tọa cụ đỏ (hoặc nút Thiền) để ngồi thiền quay vào bàn thờ, tính tiền như ở vườn. Khi sen nở ở chánh điện có hào quang vàng tỏa tia.
 - Sen nở: thiền đủ 5 phút (nghỉ giữa chừng dưới 5 phút vẫn tính tiếp) thì mỗi khi ngồi thiền sẽ có bông sen dưới chỗ ngồi và vầng sáng lớn hơn, mọi người đều thấy. Không thiền quá 5 phút thì tính lại từ đầu.
 - Tiêu tiền (0,5 đồng mỗi lần): thắp hương, gửi lời nguyện, cho cá ăn, gọi 1 món ở quán. Không đủ tiền thì hành động bị chặn.

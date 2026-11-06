@@ -75,6 +75,17 @@
   .pl:not(.lotus) .lotusB,.pl:not(.lotus) .lotusF{display:none}
   .pl.lotus .av{z-index:1}
   @keyframes lotusIn{from{transform:scale(.3);opacity:0}}
+  /* rắn: lắc đầu khi đứng, uốn mình khi bò; nút hành lễ mờ đi khi đang là rắn */
+  .av .snk .sh{transform-origin:33px 76px;animation:snkIdle 2.6s ease-in-out infinite}
+  .av .snk .tg{transform-box:fill-box;transform-origin:50% 0;animation:snkTongue 3.2s ease-in-out infinite}
+  .pl.walk .av .snk .sb{transform-origin:32px 90px;animation:snkSlither .42s ease-in-out infinite alternate}
+  .pl.walk .av .snk .sh{animation:snkHead .42s ease-in-out infinite alternate}
+  @keyframes snkIdle{50%{transform:rotate(-4deg) translateY(-.8px)}}
+  @keyframes snkTongue{0%,82%,100%{transform:scaleY(0)}86%,94%{transform:scaleY(1)}}
+  @keyframes snkSlither{from{transform:skewX(-7deg) scaleX(1.04)}to{transform:skewX(7deg) scaleX(.97)}}
+  @keyframes snkHead{from{transform:translateX(-1.6px) rotate(3deg)}to{transform:translateX(1.6px) rotate(-3deg)}}
+  body.is-snake .act.rite{opacity:.42}
+  @media (prefers-reduced-motion:reduce){.av .snk .sh,.av .snk .tg,.pl.walk .av .snk .sb,.pl.walk .av .snk .sh{animation:none}}
   /* thiền ở chánh điện: vầng sáng vàng; đủ 5 phút thì sen nở và hào quang vàng có tia */
   .pl.medit.hall::before{background:radial-gradient(circle,rgba(255,226,120,.8),rgba(255,214,90,0) 68%)}
   .pl.medit.lotus.hall::before{background:radial-gradient(circle,rgba(255,240,160,.95),rgba(255,198,60,.5) 42%,rgba(255,190,60,0) 70%)}
@@ -971,18 +982,18 @@
   <div class="acts" id="actsVuon" role="toolbar" aria-label="Hành động ở vườn" hidden>
     <button class="act" data-do="feed" type="button"><i class="cost">0,5đ</i><span class="disc">Cá</span><span class="lbl">Cho cá ăn</span></button>
     <button class="act" data-do="quet" type="button"><span class="disc">Quét</span><span class="lbl">Quét lá</span></button>
-    <button class="act" data-do="thien" type="button"><i class="cost free">+1đ</i><span class="disc">Thiền</span><span class="lbl">Ngồi thiền</span></button>
+    <button class="act rite" data-do="thien" type="button"><i class="cost free">+1đ</i><span class="disc">Thiền</span><span class="lbl">Ngồi thiền</span></button>
     <button class="act" data-do="tra" type="button"><i class="cost free">Free</i><span class="disc">Trà</span><span class="lbl">Uống trà</span></button>
     <button class="act hutbtn" data-do="hut" type="button" hidden><i class="cost free">Free</i><span class="disc">Hút</span><span class="lbl">Hút trà sữa</span></button>
   </div>
   <div class="acts" id="actsChua" role="toolbar" aria-label="Hành động">
-    <button class="act" data-do="bow" type="button"><i class="cost free">Free</i><span class="disc">Lạy</span><span class="lbl">Lễ Phật</span></button>
-    <button class="act" data-do="incense" type="button"><i class="cost">0,5đ</i><span class="disc">Hương</span><span class="lbl">Thắp hương</span></button>
-    <button class="act" data-do="mo" type="button"><i class="cost free">Free</i><span class="disc">Mõ</span><span class="lbl">Gõ mõ</span></button>
-    <button class="act" data-do="bell" type="button"><i class="cost free">Free</i><span class="disc">Chuông</span><span class="lbl">Thỉnh chuông</span></button>
-    <button class="act" data-do="thien" type="button"><i class="cost free">+1đ</i><span class="disc">Thiền</span><span class="lbl">Ngồi thiền</span></button>
-    <button class="act" data-do="xam" type="button"><i class="cost free">1/ngày</i><span class="disc">Xăm</span><span class="lbl">Xin xăm</span></button>
-    <button class="act" data-do="so" type="button"><i class="cost free">1/ngày</i><span class="disc">Số</span><span class="lbl">Xin 8 số</span></button>
+    <button class="act rite" data-do="bow" type="button"><i class="cost free">Free</i><span class="disc">Lạy</span><span class="lbl">Lễ Phật</span></button>
+    <button class="act rite" data-do="incense" type="button"><i class="cost">0,5đ</i><span class="disc">Hương</span><span class="lbl">Thắp hương</span></button>
+    <button class="act rite" data-do="mo" type="button"><i class="cost free">Free</i><span class="disc">Mõ</span><span class="lbl">Gõ mõ</span></button>
+    <button class="act rite" data-do="bell" type="button"><i class="cost free">Free</i><span class="disc">Chuông</span><span class="lbl">Thỉnh chuông</span></button>
+    <button class="act rite" data-do="thien" type="button"><i class="cost free">+1đ</i><span class="disc">Thiền</span><span class="lbl">Ngồi thiền</span></button>
+    <button class="act rite" data-do="xam" type="button"><i class="cost free">1/ngày</i><span class="disc">Xăm</span><span class="lbl">Xin xăm</span></button>
+    <button class="act rite" data-do="so" type="button"><i class="cost free">1/ngày</i><span class="disc">Số</span><span class="lbl">Xin 8 số</span></button>
     <button class="act hutbtn" data-do="hut" type="button" hidden><i class="cost free">Free</i><span class="disc">Hút</span><span class="lbl">Hút trà sữa</span></button>
   </div>
 </div>
@@ -1182,6 +1193,40 @@ const LOTUS_SVG = (() => {
   front += `</svg>`;
   return `<div class="lotusB">${back}</div><div class="lotusF">${front}</div>`;
 })();
+
+/* Hóa rắn: thiền đủ 5 phút có 25% biến thành rắn trong 30 phút (giờ thật). Trường snake = thời điểm hết hạn */
+const SNAKE_MS = 30 * 60000, SNAKE_RATE = .25;
+const isSnake = d => !!(d && Number(d.snake) > Date.now());
+let snakeSeq = 0;
+function snakeSVG(d){
+  const c = d.color || "#6f7fa0", dk = shade(c, -.32), lt = shade(c, .3), belly = "#f4e6bd", k = "sn" + (++snakeSeq).toString(36);
+  const OLs = `stroke="#3a2418" stroke-opacity=".6" stroke-width="1.1" stroke-linejoin="round"`;
+  const spot = (x, y, r) => `<path d="M${x} ${y - r} L${x + r * 1.2} ${y} L${x} ${y + r} L${x - r * 1.2} ${y}Z" fill="${dk}" opacity=".55"/>`;
+  let s = `<svg viewBox="0 0 64 96" width="64" height="96" aria-hidden="true"><defs>
+    <linearGradient id="${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${lt}"/><stop offset=".55" stop-color="${c}"/><stop offset="1" stop-color="${dk}"/></linearGradient></defs>`;
+  s += `<ellipse cx="32" cy="91.5" rx="21" ry="4" fill="rgba(0,0,0,.26)"/><g class="snk">`;
+  // thân cuộn hai vòng và đuôi
+  s += `<g class="sb">`;
+  s += `<path d="M49 86 Q57 87 59 81 Q60.5 76.5 57 75" stroke="#3a2418" stroke-opacity=".6" stroke-width="6.4" fill="none" stroke-linecap="round"/><path d="M49 86 Q57 87 59 81 Q60.5 76.5 57 75" stroke="url(#${k})" stroke-width="4.6" fill="none" stroke-linecap="round"/>`;
+  s += `<ellipse cx="32" cy="84.5" rx="20" ry="6.8" fill="url(#${k})" ${OLs}/><path d="M14 86 Q32 92.5 50 86" stroke="${belly}" stroke-width="2" fill="none" opacity=".9"/>`;
+  s += spot(19, 83, 1.8) + spot(27, 81.6, 1.8) + spot(37, 81.6, 1.8) + spot(45, 83, 1.8);
+  s += `<ellipse cx="32" cy="77.5" rx="15" ry="5.8" fill="url(#${k})" ${OLs}/><path d="M18.5 79 Q32 84.5 45.5 79" stroke="${belly}" stroke-width="1.8" fill="none" opacity=".9"/>`;
+  s += spot(24, 76.2, 1.6) + spot(32, 75.2, 1.6) + spot(40, 76.2, 1.6) + `</g>`;
+  // cổ và đầu
+  s += `<g class="sh">`;
+  const neck = "M33 76 Q24 69 27 61 Q29.5 56 32 54";
+  s += `<path d="${neck}" stroke="#3a2418" stroke-opacity=".6" stroke-width="12.6" fill="none" stroke-linecap="round"/><path d="${neck}" stroke="${c}" stroke-width="10.6" fill="none" stroke-linecap="round"/>`;
+  s += `<path d="M30.5 74 Q24.5 68 27.4 61.5" stroke="${belly}" stroke-width="4" fill="none" stroke-linecap="round" opacity=".95"/>`;
+  s += `<ellipse cx="32" cy="45" rx="17" ry="13.5" fill="url(#${k})" ${OLs}/>`;
+  s += `<path d="M21 37 Q32 31 43 37" stroke="#fff" stroke-opacity=".35" stroke-width="2.2" fill="none" stroke-linecap="round"/>` + spot(32, 35.2, 1.7);
+  s += `<g class="eyes">`;
+  for (const x of [25.2, 38.8]) s += `<ellipse cx="${x}" cy="45" rx="3.4" ry="4.3" fill="#2b1d18"/><ellipse cx="${x}" cy="46.2" rx="2.3" ry="2.7" fill="#5a7a3a"/><circle cx="${x + 1.3}" cy="43.5" r="1.4" fill="#fff"/><circle cx="${x - 1}" cy="46.9" r=".65" fill="#fff"/>`;
+  s += `</g><ellipse cx="20" cy="50.5" rx="2.9" ry="1.7" fill="#f59a9a" opacity=".6"/><ellipse cx="44" cy="50.5" rx="2.9" ry="1.7" fill="#f59a9a" opacity=".6"/>`;
+  s += `<circle cx="30" cy="50" r=".6" fill="#3a2418" opacity=".6"/><circle cx="34" cy="50" r=".6" fill="#3a2418" opacity=".6"/>`;
+  s += `<path d="M28.6 52.6 Q32 55.2 35.4 52.6" stroke="#6a2a20" stroke-width="1.1" fill="none" stroke-linecap="round"/>`;
+  s += `<path class="tg" d="M32 54.4 V58.6 M32 58.6 L30.4 60.6 M32 58.6 L33.6 60.6" stroke="#d6453c" stroke-width="1.1" fill="none" stroke-linecap="round"/>`;
+  return s + `</g></g></svg>`;
+}
 
 /* ---------------- Nhân vật ---------------- */
 const HAIRS = {
@@ -2152,8 +2197,10 @@ function tick(now){
     const av = p.el.querySelector(".av");
     if (moving && p.id === meId && me.seat) setMe({ seat: "" });
     if (p.pose && (moving || now > p.poseUntil)) p.pose = null;
+    const snake = isSnake(p.d);
+    if (snake && p.act) stopAct(p);
     const S = moving ? null : seatOf(p);
-    const medit = !!(S && S.kind === "cushion");
+    const medit = !snake && !!(S && S.kind === "cushion");
     if (medit && p.pose !== "thien") { p.pose = "thien"; p.poseUntil = Infinity; p.poseSeq = (p.poseSeq || 0) + 1; if (p.id === meId) say(p, `Ngồi thiền (tổng ${Math.floor(thienMs / 60000)} phút)`, 2500); }
     else if (!medit && p.pose === "thien") p.pose = null;
     // dùng thời gian thật; khoảng nghỉ > 2 giây (ẩn tab, khoá máy) không tính
@@ -2183,9 +2230,9 @@ function tick(now){
     if (S) v = S.face;
     if (p.act) v = "act:" + p.act;
     const dl = drinkLeft(p.d.drink);
-    const key = v + (p.pose && !p.act ? "|" + p.pose + p.poseSeq : "") + (dl ? `|d${p.d.drink.d}${p.d.drink.top}${Math.ceil(dl / 60000)}` : "");
+    const key = snake ? "snake|" + p.d.color : v + (p.pose && !p.act ? "|" + p.pose + p.poseSeq : "") + (dl ? `|d${p.d.drink.d}${p.d.drink.top}${Math.ceil(dl / 60000)}` : "");
     if (key !== p.view) {
-      p.view = key; swapAvatar(av, avatarSVG(p.d, v, p.act, p.pose && !p.act ? { pose: p.pose, food: p.pose === "gap" ? foodFor(p) : p.pose === "hut" ? p.d.drink : "" } : null));
+      p.view = key; swapAvatar(av, snake ? snakeSVG(p.d) : avatarSVG(p.d, v, p.act, p.pose && !p.act ? { pose: p.pose, food: p.pose === "gap" ? foodFor(p) : p.pose === "hut" ? p.d.drink : "" } : null));
       av.classList.toggle("v-front", v === "front"); av.classList.toggle("acting", !!p.act);
       av.classList.toggle("posing", !!(p.pose && !p.act));
       av.classList.toggle("medit", p.pose === "thien" && !p.act);
@@ -2296,6 +2343,7 @@ function setMe(f){
 }
 function sitAt(id){
   const S = SEATS[id]; if (!S || !me) return;
+  if (S.kind === "cushion" && isSnake(me)) { say(players.get(meId), `Đang là rắn, còn ${snakeLeftMin()} phút nữa mới thiền được`, 2500); return; }
   if (me.seat === id) return;
   if (seatTaken(id)) { say(players.get(meId), "Ghế này có người rồi", 1800); return; }
   if (me.seat) setMe({ seat: "" });
@@ -2559,6 +2607,7 @@ function saveStreak(force){ const n = Date.now(); if (force || n - streakSaved >
 function tickStreak(dtMs, seated){
   if (!meId || !me) return;
   const now = Date.now();
+  checkSnake(now);
   if (!streak) {
     const v = ls.get(streakKey(), null);
     streak = v && typeof v.ms === "number" && typeof v.last === "number" ? v : { ms: 0, last: 0 };
@@ -2569,9 +2618,34 @@ function tickStreak(dtMs, seated){
   if (seated) {
     if (now - streak.last > LOTUS_GAP) streak.ms = 0;
     streak.ms += dtMs; streak.last = now; saveStreak();
-    if (!me.lotus && streak.ms >= LOTUS_MS) { setMe({ lotus: true }); saveStreak(true); say(players.get(meId), "Thiền đủ 5 phút, sen nở dưới chỗ ngồi", 4000); }
+    if (!me.lotus && streak.ms >= LOTUS_MS) {
+      if (Math.random() < SNAKE_RATE) { becomeSnake(); return; }
+      setMe({ lotus: true }); saveStreak(true); say(players.get(meId), "Thiền đủ 5 phút, sen nở dưới chỗ ngồi", 4000);
+    }
   } else if (me.lotus && now - streak.last > LOTUS_GAP) { streak.ms = 0; saveStreak(true); setMe({ lotus: false }); }
 }
+// hóa rắn: đứng dậy khỏi bồ đoàn, mất sen, chuỗi thiền về 0; hết hạn lưu cả trên máy để tải lại trang vẫn giữ
+function snakeKey(){ return "chua_snake_" + meId; }
+function becomeSnake(){
+  const until = Date.now() + SNAKE_MS;
+  streak.ms = 0; saveStreak(true); ls.set(snakeKey(), until);
+  me.tx = me.x; me.ty = me.y;
+  setMe({ snake: until, lotus: false, seat: "" });
+  say(players.get(meId), "Thiền đủ 5 phút nhưng hóa rắn! 30 phút nữa mới thành người lại", 5000);
+  toast("Hóa rắn 30 phút: vẫn đi lại được nhưng chưa hành lễ, thiền được");
+}
+let snakeChecked = false;
+function checkSnake(now){
+  if (!snakeChecked) {
+    snakeChecked = true;
+    const until = Number(ls.get(snakeKey(), 0)) || 0;
+    if (until > now && Number(me.snake) !== until) setMe({ snake: until });
+  }
+  const on = isSnake(me);
+  document.body.classList.toggle("is-snake", on);
+  if (!on && me.snake) { setMe({ snake: 0 }); ls.set(snakeKey(), 0); say(players.get(meId), "Đã trở lại hình người", 3000); }
+}
+const snakeLeftMin = () => Math.max(1, Math.ceil((Number(me.snake) - Date.now()) / 60000));
 // 1 đồng cho mỗi phút thiền, tính theo tổng thời gian đã lưu nên giây lẻ được cộng dồn qua các lần ngồi
 function tickThien(dtMs, seated){
   if (!seated) { if (thienSession) { thienSession = 0; flushThien(); } return; }
@@ -2840,9 +2914,11 @@ function switchMap(k, silent){
 /* ---------------- Hành động ---------------- */
 const CHUA_PAID = new Set(["incense"]);
 let moLast = 0;
+const RITES = new Set(["bow", "incense", "mo", "bell", "xam", "so", "thien"]);
 function doAct(act){
   if (!me) return;
   hideHint();
+  if (RITES.has(act) && isSnake(me)) { say(players.get(meId), `Đang là rắn, còn ${snakeLeftMin()} phút nữa mới hành lễ được`, 2500); return; }
   try { const a = audio(); if (a.state === "suspended") a.resume(); } catch {}
   if (act === "menu") { openMenu(-1); return; }
   if (act === "order") { orderTea(null); return; }
