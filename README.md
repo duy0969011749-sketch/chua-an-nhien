@@ -35,6 +35,8 @@ Hành động: Lạy, Thắp hương, Gõ mõ, Thỉnh chuông, Xin xăm, Xin 8 
   - Đua vịt: 6 con vịt, 30 giây đặt cược, 20 giây đua, 10 giây xem kết quả. Đặt được nhiều con, trúng con về nhất nhận 5 lần tiền cược.
   - Bầu cua tôm cá: máy lắc 3 con xúc xắc. 30 giây đặt cược (đặt được nhiều ô), 8 giây lắc rồi mở bát. Mỗi con ra trúng ô đã đặt được thêm 1 lần tiền cược ô đó, kèm tiền cược được trả lại.
   - Phỉnh 1, 5, 10, 50 đồng. Bấm đường đua, bàn bầu cua hoặc nút Vịt, Cua để mở bảng cược. Tải lại trang giữa ván vẫn được trả thưởng.
+  - Xì dách: máy làm cái, bàn 5 ghế, cần ít nhất 2 người đặt cược mới chia bài (thiếu người thì trả lại tiền cược). 15 giây đặt cược, mỗi người 20 giây rút hoặc dằn (hết giờ tự rút tới 16 rồi dằn), máy rút tới 16 điểm. A tính 1 hoặc 11. Xì bàn (2 lá A), xì dách (A + 10/J/Q/K), ngũ linh (5 lá không quá 21) thắng gấp đôi; thắng thường x1; bằng điểm hoặc cùng quắc thì hòa; quá 21 là quắc. Bấm bàn Xì dách hoặc nút Xì dách để ngồi vào bàn.
+  - Mỗi phút ở map Casino bị trừ 1 phút thiền hôm nay (không xuống dưới 0, không trừ tiền).
 - Thiền ở chánh điện: chạm vào một trong 6 tọa cụ đỏ (hoặc nút Thiền) để ngồi thiền quay vào bàn thờ, tính tiền như ở vườn. Khi sen nở ở chánh điện có hào quang vàng tỏa tia.
 - Sen nở: thiền đủ 5 phút (nghỉ giữa chừng dưới 5 phút vẫn tính tiếp) thì mỗi khi ngồi thiền sẽ có bông sen dưới chỗ ngồi và vầng sáng lớn hơn, mọi người đều thấy. Không thiền quá 5 phút thì tính lại từ đầu.
 - Tiêu tiền (0,5 đồng mỗi lần): thắp hương, gửi lời nguyện, cho cá ăn, gọi 1 món ở quán. Không đủ tiền thì hành động bị chặn.
@@ -133,6 +135,7 @@ const FIREBASE_CONFIG = {
     },
     "rooms": {
       "$room": {
+        "xd": { ".read": "auth != null", ".write": "auth != null" },
         "players": {
           ".read": "auth != null",
           "$uid": {

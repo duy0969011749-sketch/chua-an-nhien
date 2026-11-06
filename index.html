@@ -67,6 +67,23 @@
   .kres{font-weight:600;min-height:2.6em;margin:10px 0 6px}
   .khist{display:flex;gap:4px;flex-wrap:wrap;align-items:center;font-size:.82rem;color:var(--muted);margin-bottom:6px}
   .khist .kh{display:inline-flex;padding:2px 4px;border-radius:8px;background:#f6ead0}
+  .xdrow{display:grid;grid-template-columns:minmax(0,1.1fr) auto;grid-template-areas:"who bet" "cards pt";gap:2px 8px;align-items:center;padding:7px 10px;border:2px solid #e2cfa3;border-radius:12px;background:#fff;margin-bottom:6px}
+  .xdrow .who{grid-area:who;font-weight:800;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .xdrow .bet{grid-area:bet;font-size:.82rem;color:var(--red-deep);font-weight:700;text-align:right}
+  .xdrow .cards{grid-area:cards;display:flex;gap:4px;flex-wrap:wrap;min-height:34px;align-items:center}
+  .xdrow .pt{grid-area:pt;font-size:.85rem;text-align:right;line-height:1.2}
+  .xdrow.dealer{background:#1f5a3a;border-color:#145a36;color:#fff8e8}
+  .xdrow.dealer .pt{color:#ffe38a;font-weight:800}
+  .xdrow.empty{background:transparent;border-style:dashed;color:var(--muted);padding:5px 10px}
+  .xdrow.empty .who{font-weight:600}
+  .xdrow.own{border-color:var(--gold-deep);background:#fff6dc}
+  .xdrow.turn{box-shadow:0 0 0 3px #d63e31}
+  .xc{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:26px;height:34px;border-radius:5px;background:#fff;border:1.5px solid #9a8a7a;font:800 .85rem/1 "Baloo 2",sans-serif}
+  .xc svg{width:11px;height:11px}
+  .xc.back{background:repeating-linear-gradient(45deg,#c8312f 0 4px,#a11d16 4px 8px);border-color:#7a1612}
+  .kchips[hidden]{display:none}
+  .xdbtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .xdbtns .btn{flex:1 1 120px}
   .qstool.hmat{width:92px;height:34px;margin:-24px 0 0 -46px;border-radius:50%}
   .qstool.hmat:hover{box-shadow:0 0 0 2px rgba(255,236,160,.75),0 0 16px rgba(255,236,160,.55)}
   .tcounter{position:absolute;width:330px;height:96px;margin:-96px 0 0 -165px;pointer-events:auto;cursor:pointer}
@@ -1019,6 +1036,19 @@
   <path d="M720 470 Q960 440 1200 470 L1196 510 Q960 540 724 510Z" fill="#6a2a14" stroke="url(#kGold)" stroke-width="3"/>
   <path d="M736 466 Q960 440 1184 466 L1180 478 Q960 506 740 478Z" fill="url(#kFelt)"/>
   <g id="kBauWorld"></g>
+  <!-- bàn xì dách: máy làm cái đứng sau bàn -->
+  <text x="640" y="462" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="20" fill="#ffe38a">XÌ DÁCH</text>
+  <g transform="translate(640 0)">
+    <rect x="-24" y="494" width="48" height="52" rx="10" fill="#b8c4d2" stroke="#5a6a7c" stroke-width="2"/>
+    <rect x="-30" y="478" width="60" height="38" rx="12" fill="#cfd8e3" stroke="#5a6a7c" stroke-width="2"/><rect x="-22" y="485" width="44" height="22" rx="7" fill="#1d2b3a"/>
+    <circle cx="-9" cy="496" r="4" fill="#6ff0ff"/><circle cx="9" cy="496" r="4" fill="#6ff0ff"/>
+  </g>
+  <ellipse cx="640" cy="606" rx="168" ry="30" fill="rgba(0,0,0,.3)"/>
+  <path d="M480 572 Q640 520 800 572 L796 600 Q640 652 484 600Z" fill="#6a2a14" stroke="url(#kGold)" stroke-width="3"/>
+  <path d="M494 570 Q640 528 786 570 L784 580 Q640 628 496 580Z" fill="url(#kFelt)"/>
+  <g fill="#fff" stroke="#9a8a7a" stroke-width="1"><rect x="622" y="548" width="16" height="22" rx="2" transform="rotate(-8 630 559)"/><rect x="640" y="548" width="16" height="22" rx="2" transform="rotate(6 648 559)"/></g>
+  <g fill="#c8312f" stroke="#fff" stroke-width="1"><rect x="536" y="566" width="14" height="19" rx="2"/><rect x="584" y="582" width="14" height="19" rx="2"/><rect x="633" y="588" width="14" height="19" rx="2"/><rect x="682" y="582" width="14" height="19" rx="2"/><rect x="730" y="566" width="14" height="19" rx="2"/></g>
+  <text id="kXdSign" x="640" y="478" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="700" font-size="13" fill="#fff" dy="-34">Chờ người chơi</text>
   <!-- máy đánh bạc trang trí -->
   <g transform="translate(70 486)"><rect width="64" height="96" rx="10" fill="#c8312f" stroke="url(#kGold)" stroke-width="3"/><rect x="9" y="14" width="46" height="30" rx="4" fill="#fff8e8"/><text x="32" y="36" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="17" fill="#c8312f">777</text><rect x="12" y="56" width="40" height="8" rx="4" fill="#ffd86b"/><path d="M64 30 h10 v-18" stroke="#ccc" stroke-width="4" fill="none"/><circle cx="74" cy="10" r="6" fill="#e63b2e"/></g>
   <g transform="translate(1146 486)"><rect width="64" height="96" rx="10" fill="#2f74c0" stroke="url(#kGold)" stroke-width="3"/><rect x="9" y="14" width="46" height="30" rx="4" fill="#fff8e8"/><text x="32" y="36" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="17" fill="#2f74c0">777</text><rect x="12" y="56" width="40" height="8" rx="4" fill="#ffd86b"/></g>
@@ -1084,6 +1114,7 @@
   <div class="acts" id="actsCasino" role="toolbar" aria-label="Hành động ở casino" hidden>
     <button class="act" data-do="duck" type="button"><span class="disc">Vịt</span><span class="lbl">Đua vịt</span></button>
     <button class="act" data-do="bau" type="button"><span class="disc">Cua</span><span class="lbl">Bầu cua</span></button>
+    <button class="act" data-do="xd" type="button"><span class="disc">Bài</span><span class="lbl">Xì dách</span></button>
     <button class="act hit" data-do="hit" type="button"><i class="cost free">Free</i><span class="disc">Đánh</span><span class="lbl">Đánh người</span></button>
     <button class="act hutbtn" data-do="hut" type="button" hidden><i class="cost free">Free</i><span class="disc">Hút</span><span class="lbl">Hút trà sữa</span></button>
   </div>
@@ -1157,6 +1188,20 @@
       <p class="kres" id="kBauRes" aria-live="polite"></p>
       <div class="khist" id="kBauHist"></div>
       <p class="muted">Máy lắc 3 con xúc xắc. Đặt được nhiều ô. Mỗi con ra trúng ô bạn đặt, bạn nhận thêm 1 lần tiền cược ô đó, kèm tiền cược được trả lại. Mỗi phút một ván chung: 30 giây đặt cược, 8 giây lắc rồi mở bát.</p>
+    </div>
+  </div>
+</div>
+<div class="modal" id="mXd" role="dialog" aria-modal="true" aria-labelledby="mXdT">
+  <div class="sheet ksheet">
+    <div class="sheet-head"><h2 id="mXdT">Xì dách</h2><button class="x" data-close type="button">Đóng</button></div>
+    <div class="sheet-body">
+      <div class="kclock"><b id="xdClock">Chờ người chơi</b><span class="kbar"><i id="xdBar"></i></span></div>
+      <div class="xdrow dealer"><span class="who">Máy làm cái</span><span class="cards" id="xdDealer"></span><span class="pt" id="xdDealerPt"></span></div>
+      <div id="xdSeats"></div>
+      <div class="kchips" id="xdChips" hidden></div>
+      <div class="xdbtns" id="xdBtns"></div>
+      <p class="kres" id="xdMsg" aria-live="polite"></p>
+      <p class="muted">Máy làm cái, 2 đến 5 người. Ván chỉ chia bài khi có ít nhất 2 người cược. Át tính 1 hoặc 11. Dưới 16 điểm là non, phải rút; quá 21 là quắc. Xì bàn (2 lá Át), xì dách (Át và 10, J, Q, K), ngũ linh (5 lá không quắc) thắng gấp đôi. Máy cái rút tới khi đủ 16 điểm. Cùng quắc thì hòa. Mỗi lượt 20 giây, hết giờ tự rút tới 16 rồi dằn.</p>
     </div>
   </div>
 </div>
@@ -1933,6 +1978,10 @@ async function makeFirebase(cfg){
     markStat(f){ return D.update(statsRef, { [f]: D.serverTimestamp() }); },
     // Ví lưu theo đơn vị nửa đồng (coin2 = số đồng x 2) để luôn là số nguyên
     addCoin(n){ return D.update(D.ref(db, `users/${uid}`), { coin2: D.increment(n) }); },
+    // bàn xì dách dùng chung
+    xdWatch(cb){ D.onValue(D.ref(db, `${base}/xd`), s => cb(s.val() || {})); },
+    async xdTx(fn){ const r = await D.runTransaction(D.ref(db, `${base}/xd`), cur => fn(cur || {})); return r.committed; },
+    xdHold(id){ D.onDisconnect(D.ref(db, `${base}/xd/seats/${id}`)).remove().catch(() => {}); },
     setCoin(n){ return D.set(D.ref(db, `users/${uid}/coin2`), n); },
     saveDaily(k, v){ return D.set(D.ref(db, `users/${uid}/daily/${k}`), v); },
     async sendGift(to, amt, name){
@@ -1976,7 +2025,7 @@ async function makeFirebase(cfg){
 function makeLocal(){
   const bc = "BroadcastChannel" in window ? new BroadcastChannel("chua-an-nhien") : null;
   const peers = {};
-  let me = null, playersCb = () => {}, statsCb = () => {}, prayersCb = () => {}, chatCb = () => {}, giftCb = null;
+  let me = null, playersCb = () => {}, statsCb = () => {}, prayersCb = () => {}, chatCb = () => {}, giftCb = null, xdCb = () => {};
   const send = m => { try { bc && bc.postMessage(m); } catch {} };
   const emit = () => { const all = {}; for (const k in peers) all[k] = peers[k]; if (me) all[me.id] = me; playersCb(all); };
   if (bc) bc.onmessage = ({ data: m }) => {
@@ -1986,6 +2035,7 @@ function makeLocal(){
     else if (m.type === "stats") statsCb(ls.get("chua_stats", {}));
     else if (m.type === "prayers") prayersCb(ls.get("chua_prayers", []));
     else if (m.type === "chat") chatCb(m.m, true);
+    else if (m.type === "xd") xdCb(ls.get("chua_xd", {}));
     else if (m.type === "gift" && giftCb && uid && m.to === uid) { const box = ls.get("chua_gifts_" + uid, {}); for (const k in box) giftCb(k, box[k]); }
   };
   setInterval(() => {
@@ -2021,6 +2071,9 @@ function makeLocal(){
     async loadUser(){ const v = ls.get("chua_user_" + uid, {}); return { profile: v.profile || null, onlineMs: Number(v.onlineMs) || 0, thienMs: Number(v.thienMs) || 0, coin2: typeof v.coin2 === "number" ? v.coin2 : null, daily: v.daily || {} }; },
     async saveDaily(k, val){ const v = ls.get("chua_user_" + uid, {}); v.daily = { ...(v.daily || {}), [k]: val }; ls.set("chua_user_" + uid, v); },
     async addCoin(n){ const v = ls.get("chua_user_" + uid, {}); v.coin2 = (Number(v.coin2) || 0) + n; ls.set("chua_user_" + uid, v); },
+    xdWatch(cb){ xdCb = cb; cb(ls.get("chua_xd", {})); },
+    async xdTx(fn){ const n = fn(JSON.parse(JSON.stringify(ls.get("chua_xd", {})))); if (n === undefined) return false; ls.set("chua_xd", n); send({ type: "xd" }); xdCb(n); return true; },
+    xdHold(id){ addEventListener("pagehide", () => { const v = ls.get("chua_xd", {}); if (v.seats && v.seats[id]) { delete v.seats[id]; ls.set("chua_xd", v); send({ type: "xd" }); } }); },
     async setCoin(n){ const v = ls.get("chua_user_" + uid, {}); v.coin2 = n; ls.set("chua_user_" + uid, v); },
     async sendGift(to, amt, name){
       const v = ls.get("chua_user_" + uid, {}), bal = Number(v.coin2) || 0;
@@ -2668,7 +2721,7 @@ function buildVuon(){
 }
 buildVuon();
 // vùng chạm đường đua vịt và bàn bầu cua trong casino
-[["duck", 56, 176, 568, 268, "Đua vịt: bấm để đặt cược"], ["bau", 740, 176, 440, 300, "Bầu cua: bấm để đặt cược"]].forEach(([a, x, y, w, h, tl]) => {
+[["duck", 56, 176, 568, 268, "Đua vịt: bấm để đặt cược"], ["bau", 740, 176, 440, 300, "Bầu cua: bấm để đặt cược"], ["xd", 480, 470, 320, 140, "Xì dách: bấm để vào bàn"]].forEach(([a, x, y, w, h, tl]) => {
   const e = document.createElement("div");
   e.className = "kobj"; e.dataset.act = a; e.title = tl;
   e.style.cssText = `left:${x}px;top:${y}px;width:${w}px;height:${h}px;z-index:1`; layer.appendChild(e);
@@ -3109,6 +3162,8 @@ function switchMap(k, silent){
   syncPlayers(lastPlayers); renderTables();
   if (k !== "chua") hideHintNow();
   if (k === "vuon") renderLeaves();
+  xdLeaveIfAway();
+  if (k === "casino") toast("Ở Casino mỗi phút trừ 1 phút thiền hôm nay");
   syncHutButtons();
 }
 
@@ -3384,6 +3439,260 @@ $("kTrackWorld").innerHTML = trackInner();
 $("kBauWorld").innerHTML = bauInner();
 requestAnimationFrame(kFrame);
 
+/* ---------------- Xì dách: máy làm cái, 2-5 người ----------------
+   Bàn chơi lưu chung trên Firebase (rooms/<phòng>/xd). Máy của người ngồi ghế đầu tiên lo chia bài, đếm giờ, máy cái rút bài;
+   mỗi người tự rút, dằn, đặt cược của mình. Mọi thay đổi đi qua giao dịch (transaction) nên không giẫm lên nhau.
+   Một ván: 15 giây đặt cược (cần ít nhất 2 người có cược), mỗi lượt 20 giây, máy cái rút tới khi đủ 16 điểm, 8 giây xem kết quả. */
+const XD_MAX = 5, XD_MIN = 2, XD_BET_MS = 15000, XD_TURN_MS = 20000, XD_DONE_MS = 8000, XD_DEALER_STAND = 16;
+const XD_SPOTS = [[528, 670], [584, 694], [640, 704], [696, 694], [752, 670]];
+let xd = {}, xdHand = 0;
+const xdSeats = x => Object.entries((x && x.seats) || {}).map(([id, s]) => ({ id, ...s, cards: arr(s.cards) })).sort((a, b) => a.at - b.at);
+const xdMine = () => xdSeats(xd).find(s => s.id === meId);
+function xdDeck(seed){
+  const r = kRng(seed), d = [...Array(52).keys()];
+  for (let i = 51; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [d[i], d[j]] = [d[j], d[i]]; }
+  return d;
+}
+const cRank = c => c % 13; // 0 = Át, 9 = 10, 10 = J, 11 = Q, 12 = K
+function xdPts(cards){
+  let t = 0, a = 0;
+  for (const c of cards) { const r = cRank(c); if (r === 0) { a++; t += 1; } else t += Math.min(10, r + 1); }
+  while (a-- > 0 && t + 10 <= 21) t += 10; // Át tính 1 hoặc 11
+  return t;
+}
+function xdKind(cards){
+  if (cards.length === 2) {
+    const r = cards.map(cRank);
+    if (r[0] === 0 && r[1] === 0) return "xiban";
+    if (r.includes(0) && r.some(x => x >= 9)) return "xidach";
+  }
+  if (xdPts(cards) > 21) return "quac";
+  if (cards.length === 5) return "ngulinh";
+  return "thuong";
+}
+const XD_RANK = { xiban: 3, xidach: 2, ngulinh: 1 };
+// tiền nhận về (đơn vị nửa đồng) và nhãn kết quả của một người so với máy cái
+function xdSettle(pc, dc, bet){
+  const pk = xdKind(pc), dk = xdKind(dc), rp = XD_RANK[pk] || 0, rd = XD_RANK[dk] || 0;
+  if (rp || rd) return rp > rd ? [bet * 3, "Thắng gấp đôi"] : rp === rd ? [bet, "Hòa"] : [0, "Thua"];
+  const pq = pk === "quac", dq = dk === "quac";
+  if (pq && dq) return [bet, "Hòa (cùng quắc)"];
+  if (pq) return [0, "Thua"];
+  if (dq) return [bet * 2, "Thắng"];
+  const pp = xdPts(pc), dp = xdPts(dc);
+  return pp > dp ? [bet * 2, "Thắng"] : pp === dp ? [bet, "Hòa"] : [0, "Thua"];
+}
+function xdLabel(cards){
+  if (!cards.length) return "";
+  const k = xdKind(cards), p = xdPts(cards);
+  return k === "xiban" ? "Xì bàn" : k === "xidach" ? "Xì dách" : k === "ngulinh" ? "Ngũ linh" : k === "quac" ? `Quắc (${p})` : p < 16 ? `${p} điểm, non` : `${p} điểm`;
+}
+const xdDraw = x => { const c = xdDeck(x.seed)[x.idx]; x.idx++; return c; };
+// chuyển lượt cho người kế tiếp còn đang chơi; hết người thì tới máy cái
+function xdAdvance(x, now){
+  const S = xdSeats(x).filter(s => s.bet > 0 && s.st === "play");
+  if (S.length) { x.turn = S[0].id; x.t = now + XD_TURN_MS; }
+  else { x.ph = "dealer"; x.turn = ""; x.t = now + 900; }
+}
+const xdFresh = s => ({ name: s.name, at: s.at, bet: 0, st: "" });
+// bước tự động của bàn (chạy trên máy người ngồi ghế đầu): trả về trạng thái mới, hoặc undefined nếu chưa tới lúc
+function xdStep(x, now){
+  x = JSON.parse(JSON.stringify(x || {}));
+  const seats = x.seats || {}, S = xdSeats(x), ph = x.ph || "wait";
+  if (ph === "wait") {
+    if (S.length < XD_MIN) return;
+    for (const s of S) seats[s.id] = xdFresh(s);
+    return { ...x, seats, ph: "bet", t: now + XD_BET_MS, hand: (x.hand || 0) + 1, dealer: [], idx: 0, turn: "" };
+  }
+  // người đang tới lượt đã rời bàn hoặc mất kết nối: chuyển lượt ngay
+  if (ph === "play" && !(seats[x.turn] && seats[x.turn].st === "play")) { xdAdvance(x, now); return x; }
+  if (now < x.t) return;
+  if (ph === "bet") {
+    const B = S.filter(s => s.bet > 0);
+    if (B.length < XD_MIN) {
+      // chưa đủ 2 người cược: trả lại tiền, chờ ván sau
+      for (const s of B) Object.assign(seats[s.id], { res: s.bet, rk: "Trả lại tiền (chưa đủ 2 người cược)" });
+      return { ...x, seats, ph: "done", t: now + 3000, turn: "" };
+    }
+    x.seed = ROOM + "|xd|" + x.hand + "|" + Math.random().toString(36).slice(2); x.idx = 0;
+    for (const s of B) seats[s.id].cards = [xdDraw(x), xdDraw(x)];
+    x.dealer = [xdDraw(x), xdDraw(x)];
+    for (const s of B) seats[s.id].st = XD_RANK[xdKind(seats[s.id].cards)] ? "stand" : "play";
+    x.seats = seats; x.ph = "play";
+    if (XD_RANK[xdKind(x.dealer)]) { x.ph = "dealer"; x.t = now; x.turn = ""; return x; } // máy cái xì bàn, xì dách: lật bài luôn
+    xdAdvance(x, now); return x;
+  }
+  if (ph === "play") {
+    const cur = seats[x.turn];
+    if (cur && cur.st === "play") {
+      // hết giờ: tự rút tới khi đủ 16 điểm rồi dằn
+      const c = arr(cur.cards);
+      while (xdPts(c) < 16 && c.length < 5) c.push(xdDraw(x));
+      cur.cards = c; cur.st = xdKind(c) === "quac" ? "quac" : "stand";
+    }
+    xdAdvance(x, now); return x;
+  }
+  if (ph === "dealer") {
+    const d = arr(x.dealer), alive = S.some(s => s.bet > 0 && s.st !== "quac" && arr(s.cards).length);
+    if (alive && !XD_RANK[xdKind(d)] && xdPts(d) < XD_DEALER_STAND && d.length < 5) { d.push(xdDraw(x)); x.dealer = d; x.t = now + 900; return x; }
+    for (const s of S) if (s.bet > 0 && arr(s.cards).length) { const [res, rk] = xdSettle(arr(s.cards), d, s.bet); Object.assign(seats[s.id], { res, rk }); }
+    return { ...x, seats, ph: "done", t: now + XD_DONE_MS, turn: "" };
+  }
+  if (ph === "done") {
+    for (const s of S) seats[s.id] = xdFresh(s);
+    if (S.length < XD_MIN) return { ...x, seats, ph: "wait", t: 0, dealer: [], turn: "" };
+    return { ...x, seats, ph: "bet", t: now + XD_BET_MS, hand: (x.hand || 0) + 1, dealer: [], idx: 0, turn: "" };
+  }
+}
+// thao tác của người chơi (chạy trong giao dịch)
+function xdAct(kind, u){
+  return net.xdTx(cur => {
+    const x = JSON.parse(JSON.stringify(cur || {})), now = kNow(), seats = x.seats || (x.seats = {}), m = seats[meId];
+    if (kind === "sit") {
+      if (m) return;
+      const used = new Set(Object.values(seats).map(s => s.at));
+      if (used.size >= XD_MAX) return;
+      let at = 0; while (used.has(at)) at++;
+      seats[meId] = { name: (me && me.name) || "Khách", at, bet: 0, st: "" };
+      if (!x.ph) x.ph = "wait";
+      return x;
+    }
+    if (!m) return;
+    if (kind === "leave") { delete seats[meId]; if (x.turn === meId) xdAdvance(x, now); return x; }
+    if (kind === "bet") { if (x.ph !== "bet" || now >= x.t) return; m.bet = (m.bet || 0) + u; return x; }
+    if (x.ph !== "play" || x.turn !== meId || m.st !== "play") return;
+    const c = arr(m.cards);
+    if (kind === "hit") {
+      if (c.length >= 5) return;
+      c.push(xdDraw(x)); m.cards = c;
+      const k = xdKind(c);
+      if (k === "quac") m.st = "quac"; else if (k === "ngulinh") m.st = "stand"; else { x.t = now + XD_TURN_MS; return x; }
+      xdAdvance(x, now); return x;
+    }
+    if (kind === "stand") { if (xdPts(c) < 16) return; m.st = "stand"; xdAdvance(x, now); return x; }
+  });
+}
+async function xdDo(kind){
+  if (!me) return;
+  if (kind === "bet") {
+    const u = kChip * 2;
+    if (!spend(u)) return;
+    let ok = false; try { ok = await xdAct("bet", u); } catch { ok = false; }
+    if (!ok) { earn(u); toast("Hết giờ đặt cược ván này"); } else say(players.get(meId), `Cược ${kChip} đồng xì dách`, 1600);
+    return;
+  }
+  if (kind === "sit" && curMap !== "casino") return;
+  let ok = false;
+  try { ok = await xdAct(kind); } catch (e) { toast("Chưa lưu được bàn xì dách. Cần cập nhật quy tắc Firebase (xem README)."); return; }
+  if (kind === "sit") { if (!ok) { toast("Bàn đã đủ 5 người"); return; } net.xdHold(meId); const s = xdMine(); if (s) setTarget(...XD_SPOTS[s.at]); }
+  if (kind === "hit" && ok) say(players.get(meId), "Rút bài", 1200);
+  if (kind === "stand" && ok) say(players.get(meId), "Dằn", 1200);
+  xdRender();
+}
+// nhận tiền thắng hoặc tiền trả lại khi ván kết thúc (mỗi ván một lần)
+function xdClaim(){
+  const s = xdMine();
+  if (!s || xd.ph !== "done" || typeof s.res !== "number") return;
+  const key = "chua_xd_paid_" + meId;
+  if (ls.get(key, 0) === xd.hand) return;
+  ls.set(key, xd.hand);
+  if (s.res > 0) earn(s.res);
+  toast(`Xì dách: ${s.rk}${s.res > 0 ? `, nhận ${fmtCoin(s.res)} đồng` : `, mất ${fmtCoin(s.bet)} đồng`}`);
+}
+// máy người ngồi ghế đầu tiên lo các bước tự động của bàn
+let xdBusy = false;
+setInterval(async () => {
+  if (!me || !net || !net.xdTx || xdBusy) return;
+  const S = xdSeats(xd); if (!S.length || S[0].id !== meId) return;
+  if (xdStep(xd, kNow()) === undefined) return;
+  xdBusy = true;
+  try { await net.xdTx(cur => xdStep(cur, kNow())); } catch {} finally { xdBusy = false; }
+}, 400);
+// rời casino thì đứng dậy khỏi bàn
+function xdLeaveIfAway(){ if (curMap !== "casino" && xdMine()) xdDo("leave"); }
+
+/* ---- Vẽ bài và bảng ---- */
+const SUITS = [
+  ["#1f1a1a", `<path d="M5 .6 L8.8 5 A2.2 2.2 0 0 1 5.6 7 L6.5 9.5 H3.5 L4.4 7 A2.2 2.2 0 0 1 1.2 5Z"/>`],
+  ["#1f1a1a", `<circle cx="5" cy="3" r="2.1"/><circle cx="2.9" cy="6" r="2.1"/><circle cx="7.1" cy="6" r="2.1"/><path d="M4.4 6 L3.6 9.6 H6.4 L5.6 6Z"/>`],
+  ["#c8312f", `<path d="M5 .5 L9 5 L5 9.5 L1 5Z"/>`],
+  ["#c8312f", `<path d="M5 9.2 L1.1 5.1 A2.25 2.25 0 0 1 5 2.3 A2.25 2.25 0 0 1 8.9 5.1Z"/>`]
+];
+const RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+function cardHTML(c, hide){
+  if (hide) return `<span class="xc back"></span>`;
+  const [col, path] = SUITS[Math.floor(c / 13)];
+  return `<span class="xc" style="color:${col}"><b>${RANKS[cRank(c)]}</b><svg viewBox="0 0 10 10" fill="${col}" aria-hidden="true">${path}</svg></span>`;
+}
+function xdPhaseTxt(now){
+  const ph = xd.ph || "wait", left = Math.max(0, Math.ceil(((xd.t || 0) - now) / 1000)), S = xdSeats(xd);
+  if (ph === "wait") return [`Chờ người chơi: ${S.length}/${XD_MAX} (cần ít nhất ${XD_MIN})`, 0];
+  if (ph === "bet") return [`Đặt cược: còn ${left} giây`, ((xd.t || 0) - now) / XD_BET_MS];
+  if (ph === "play") { const t = S.find(s => s.id === xd.turn); return [`Lượt ${t ? (t.id === meId ? "của bạn" : t.name) : ""}: ${left} giây`, ((xd.t || 0) - now) / XD_TURN_MS]; }
+  if (ph === "dealer") return ["Máy cái đang rút bài", 1];
+  return [`Ván mới sau ${left} giây`, ((xd.t || 0) - now) / XD_DONE_MS];
+}
+let xdSig = "";
+function xdRender(){
+  const now = kNow(), [txt, frac] = xdPhaseTxt(now);
+  const sign = $("kXdSign"); if (sign && sign.textContent !== txt) sign.textContent = txt;
+  if (!$("mXd").classList.contains("open")) return;
+  $("xdClock").textContent = txt;
+  $("xdBar").style.width = Math.max(0, Math.min(1, frac)) * 100 + "%";
+  const S = xdSeats(xd), mine = xdMine(), ph = xd.ph || "wait", reveal = ph === "dealer" || ph === "done";
+  const sig = JSON.stringify([xd.ph, xd.hand, xd.turn, xd.dealer, xd.seats, kChip, coin2]);
+  if (sig === xdSig) return; xdSig = sig;
+  const d = arr(xd.dealer);
+  $("xdDealer").innerHTML = d.map((c, i) => cardHTML(c, !reveal && i > 0)).join("") || `<span class="muted">Chưa chia bài</span>`;
+  $("xdDealerPt").textContent = reveal ? xdLabel(d) : "";
+  let rows = "";
+  for (let i = 0; i < XD_MAX; i++) {
+    const s = S.find(x => x.at === i);
+    if (!s) { rows += `<div class="xdrow empty"><span class="who">Ghế ${i + 1}: trống</span></div>`; continue; }
+    const own = s.id === meId, showC = own || ph === "done";
+    const lab = showC ? xdLabel(s.cards) : s.cards.length ? `${s.cards.length} lá` : "";
+    const stTxt = s.st === "quac" && !showC ? "Quắc" : s.st === "stand" && ph === "play" ? "Đã dằn" : "";
+    rows += `<div class="xdrow${own ? " own" : ""}${xd.turn === s.id ? " turn" : ""}"><span class="who">${esc(s.name)}${own ? " (bạn)" : ""}</span>`
+      + `<span class="bet">${s.bet ? `Cược ${fmtCoin(s.bet)}đ` : ph === "wait" || ph === "bet" ? "Chưa cược" : "Ngồi xem"}</span>`
+      + `<span class="cards">${s.cards.map(c => cardHTML(c, !showC)).join("")}</span>`
+      + `<span class="pt">${[lab, stTxt].filter(Boolean).join(" · ")}${ph === "done" && s.rk ? `<br><b>${s.rk}</b>` : ""}</span></div>`;
+  }
+  $("xdSeats").innerHTML = rows;
+  let btn = "";
+  if (!mine) btn = `<button class="btn" type="button" data-xd="sit" ${S.length >= XD_MAX ? "disabled" : ""}>${S.length >= XD_MAX ? "Bàn đã đủ 5 người" : "Ngồi vào bàn"}</button>`;
+  else {
+    if (ph === "bet") btn += `<button class="btn" type="button" data-xd="bet">Cược ${kChip} đồng</button>`;
+    if (ph === "play" && xd.turn === meId && mine.st === "play") {
+      btn += `<button class="btn" type="button" data-xd="hit" ${mine.cards.length >= 5 ? "disabled" : ""}>Rút bài</button>`;
+      btn += `<button class="btn alt" type="button" data-xd="stand" ${xdPts(mine.cards) < 16 ? "disabled" : ""}>Dằn</button>`;
+    }
+    btn += `<button class="btn alt" type="button" data-xd="leave">Rời bàn</button>`;
+  }
+  $("xdBtns").innerHTML = btn;
+  $("xdChips").hidden = !(mine && ph === "bet");
+  $("xdChips").innerHTML = kChipsHTML();
+  $("xdMsg").textContent = !mine ? "Ngồi vào bàn để chơi. Cần ít nhất 2 người có cược thì mới chia bài."
+    : ph === "play" && xd.turn === meId ? (xdPts(mine.cards) < 16 ? "Dưới 16 điểm (non) phải rút thêm." : "Đủ 16 điểm, có thể dằn hoặc rút tiếp.")
+    : ph === "bet" ? "Chọn mức cược rồi bấm Cược. Bấm nhiều lần để cược thêm."
+    : (ph === "play" || ph === "dealer") && mine.bet ? "Rời bàn giữa ván sẽ mất tiền đã cược." : "";
+}
+function onXd(v){ xd = v || {}; xdClaim(); xdSig = xdSig && xdSig + "~"; xdRender(); }
+setInterval(xdRender, 250);
+document.addEventListener("click", e => { const b = e.target.closest && e.target.closest("[data-xd]"); if (b && !b.disabled) xdDo(b.dataset.xd); });
+function openXd(){ xdSig = ""; openModal("mXd"); xdRender(); }
+
+/* ---- Ở casino: mỗi phút trừ 1 phút thiền hôm nay ---- */
+let casinoMs = 0;
+setInterval(() => {
+  if (!me || curMap !== "casino" || document.hidden) return;
+  casinoMs += 1000;
+  if (casinoMs < 60000) return;
+  casinoMs -= 60000;
+  const D = dayMedNow(); if (D.ms <= 0) return;
+  D.ms = Math.max(0, D.ms - 60000); syncDayMed(true);
+  say(players.get(meId), `Ở Casino: -1 phút thiền hôm nay, còn ${fmtMin(Math.floor(D.ms / 1000))}`, 2800);
+}, 1000);
+
 /* ---------------- Hành động ---------------- */
 const CHUA_PAID = new Set(["incense"]);
 let moLast = 0;
@@ -3451,6 +3760,7 @@ function doAct(act){
   hideHint();
   if (act === "hit") { startHit(); return; }
   if (act === "duck" || act === "bau") { openCasino(act); return; }
+  if (act === "xd") { openXd(); return; }
   if (RITES.has(act) && isSnake(me)) { say(players.get(meId), `Đang là rắn, còn ${snakeLeftMin()} phút nữa mới hành lễ được`, 2500); return; }
   try { const a = audio(); if (a.state === "suspended") a.resume(); } catch {}
   if (act === "menu") { openMenu(-1); return; }
@@ -3642,6 +3952,7 @@ $("btnEnter").addEventListener("click", async () => {
   $("hudChat").hidden = false; $("btnChat").hidden = false; $("btnMap").hidden = false; $("btnWallet").hidden = false;
   net.onGifts(onGift); syncHutButtons();
   net.onChat(onChatMsg);
+  if (net.xdWatch) net.xdWatch(onXd);
   onSent = start.on; startOnlineClock();
   $("closeChar").hidden = false; $("mCharT").textContent = "Đổi nhân vật"; $("btnEnter").textContent = "Lưu";
   closeModal("mChar");
