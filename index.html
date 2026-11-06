@@ -36,7 +36,37 @@
   #stage.map-trasua #scene{display:none}
   #stage.map-trasua #sceneTra{display:block}
   #stage:not(.map-trasua) .tobj{display:none}
-  #stage.map-quan .cobj,#stage.map-vuon .cobj,#stage.map-trasua .cobj{display:none}
+  #stage.map-quan .cobj,#stage.map-vuon .cobj,#stage.map-trasua .cobj,#stage.map-casino .cobj{display:none}
+  #sceneCasino{display:none}
+  #stage.map-casino #scene{display:none}
+  #stage.map-casino #sceneCasino{display:block}
+  #stage:not(.map-casino) .kobj{display:none}
+  .kobj{position:absolute;pointer-events:auto;cursor:pointer;border-radius:16px}
+  .kobj:hover{box-shadow:0 0 0 3px rgba(255,216,107,.8),0 0 22px rgba(255,216,107,.5)}
+  /* casino: vịt nhấp nhô, ô bầu cua trúng phát sáng, bảng cược */
+  .kdb{animation:kBob .5s ease-in-out infinite alternate}
+  @keyframes kBob{to{transform:translateY(-1.6px) rotate(-3deg)}}
+  [data-kbc].kwin rect{fill:#2f9a5a;stroke:#ffd86b;stroke-width:3}
+  .ksheet{width:min(560px,100%)}
+  .kclock{display:flex;align-items:center;gap:10px;font-weight:800;margin-bottom:8px;color:var(--red-deep)}
+  .kclock b{white-space:nowrap}
+  .kbar{flex:1;height:8px;border-radius:99px;background:#ead8b0;overflow:hidden}
+  .kbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#d63e31,#f2c45a);transition:width .25s linear}
+  .kview{display:block;width:100%;height:auto;border-radius:12px;background:#2a0d33;margin-bottom:10px}
+  .kchips{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+  .kchip{width:46px;height:46px;border-radius:50%;border:3px dashed rgba(255,255,255,.85);background:var(--c);color:#fff;font:800 1rem "Baloo 2",sans-serif;box-shadow:0 0 0 2px var(--c),0 3px 0 rgba(0,0,0,.3);cursor:pointer}
+  .kchip[aria-pressed=true]{transform:translateY(-3px);box-shadow:0 0 0 2px var(--c),0 0 0 5px var(--gold),0 5px 0 rgba(0,0,0,.3)}
+  .kwallet{margin-left:auto;font-weight:800;color:var(--red-deep);white-space:nowrap}
+  .kgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .kopt{position:relative;display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 4px 6px;border-radius:14px;border:2px solid #e2cfa3;background:#fff;font:700 .92rem "Baloo 2",sans-serif;color:var(--ink);cursor:pointer}
+  .kopt:not(:disabled):hover{border-color:var(--gold-deep);background:#fff6dc}
+  .kopt:disabled{cursor:default;opacity:.75}
+  .kopt.win{border-color:#2f6b2a;background:#e4f6d8;opacity:1}
+  .kopt .st{font-size:.8rem;color:var(--red-deep);min-height:1.2em}
+  .kopt .kx{position:absolute;right:6px;top:4px;font-style:normal;font-weight:800;color:#2f6b2a}
+  .kres{font-weight:600;min-height:2.6em;margin:10px 0 6px}
+  .khist{display:flex;gap:4px;flex-wrap:wrap;align-items:center;font-size:.82rem;color:var(--muted);margin-bottom:6px}
+  .khist .kh{display:inline-flex;padding:2px 4px;border-radius:8px;background:#f6ead0}
   .qstool.hmat{width:92px;height:34px;margin:-24px 0 0 -46px;border-radius:50%}
   .qstool.hmat:hover{box-shadow:0 0 0 2px rgba(255,236,160,.75),0 0 16px rgba(255,236,160,.55)}
   .tcounter{position:absolute;width:330px;height:96px;margin:-96px 0 0 -165px;pointer-events:auto;cursor:pointer}
@@ -948,6 +978,51 @@
   </g>
   <path d="M462 470 L468 428 H508 L514 470Z" fill="#fff" stroke="#c49b68" stroke-width="2"/><g fill="#4f8a3c" stroke="#2f5a24" stroke-width="1.2"><ellipse cx="470" cy="410" rx="13" ry="20" transform="rotate(-40 470 410)"/><ellipse cx="506" cy="406" rx="13" ry="20" transform="rotate(40 506 406)"/><ellipse cx="488" cy="392" rx="13" ry="20" transform="rotate(0 488 392)"/><ellipse cx="478" cy="380" rx="13" ry="20" transform="rotate(-20 478 380)"/><ellipse cx="500" cy="378" rx="13" ry="20" transform="rotate(25 500 378)"/></g>
 </svg>
+<svg id="sceneCasino" viewBox="0 0 1280 720" width="1280" height="720" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="kWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a0d33"/><stop offset="1" stop-color="#4a1640"/></linearGradient>
+    <linearGradient id="kFloor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5c1020"/><stop offset="1" stop-color="#7d1a26"/></linearGradient>
+    <linearGradient id="kWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3fa7d6"/><stop offset="1" stop-color="#2a7fb8"/></linearGradient>
+    <linearGradient id="kGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe38a"/><stop offset="1" stop-color="#c98f22"/></linearGradient>
+    <linearGradient id="kFelt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f7a4a"/><stop offset="1" stop-color="#145a36"/></linearGradient>
+    <radialGradient id="kSpot"><stop offset="0" stop-color="#ffd86b" stop-opacity=".35"/><stop offset="1" stop-color="#ffd86b" stop-opacity="0"/></radialGradient>
+    <filter id="kNeon" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <pattern id="kCarpet" width="64" height="40" patternUnits="userSpaceOnUse"><path d="M32 4 L58 20 L32 36 L6 20Z" fill="none" stroke="#a8323a" stroke-width="2"/><circle cx="32" cy="20" r="3" fill="#d9a53c"/></pattern>
+  </defs>
+  <!-- tường nhung tím, viền vàng -->
+  <rect width="1280" height="470" fill="url(#kWall)"/>
+  <g stroke="#7a3a6a" stroke-width="2" opacity=".55"><path d="M0 40 H1280 M0 440 H1280"/></g>
+  <g fill="#ffd86b"><circle cx="40" cy="20" r="3"/><circle cx="120" cy="20" r="3"/><circle cx="200" cy="20" r="3"/><circle cx="280" cy="20" r="3"/><circle cx="360" cy="20" r="3"/><circle cx="440" cy="20" r="3"/><circle cx="520" cy="20" r="3"/><circle cx="600" cy="20" r="3"/><circle cx="680" cy="20" r="3"/><circle cx="760" cy="20" r="3"/><circle cx="840" cy="20" r="3"/><circle cx="920" cy="20" r="3"/><circle cx="1000" cy="20" r="3"/><circle cx="1080" cy="20" r="3"/><circle cx="1160" cy="20" r="3"/><circle cx="1240" cy="20" r="3"/></g>
+  <!-- biển neon -->
+  <rect x="510" y="46" width="260" height="64" rx="14" fill="#1a0820" stroke="url(#kGold)" stroke-width="4"/>
+  <text x="640" y="94" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="46" fill="#fff3c4" stroke="#ff4fa3" stroke-width="2" filter="url(#kNeon)" letter-spacing="6">CASINO</text>
+  <ellipse cx="300" cy="300" rx="320" ry="190" fill="url(#kSpot)"/>
+  <ellipse cx="960" cy="330" rx="300" ry="190" fill="url(#kSpot)"/>
+
+  <!-- đường đua vịt: 6 làn nước, xuất phát x=112, đích x=588 -->
+  <text x="340" y="146" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="24" fill="#ffe38a">ĐUA VỊT</text>
+  <text id="kDuckSign" x="340" y="168" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="700" font-size="16" fill="#fff">Đặt cược</text>
+  <rect x="56" y="176" width="568" height="268" rx="16" fill="#7a4a24" stroke="url(#kGold)" stroke-width="5"/>
+  <g id="kTrackWorld"></g>
+  <rect x="300" y="444" width="80" height="26" fill="#5a3418"/>
+
+  <!-- bàn bầu cua và máy lắc -->
+  <text x="960" y="146" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="24" fill="#ffe38a">BẦU CUA TÔM CÁ</text>
+  <text id="kBauSign" x="960" y="168" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="700" font-size="16" fill="#fff">Đặt cược</text>
+
+  <!-- sàn thảm -->
+  <rect y="470" width="1280" height="250" fill="url(#kFloor)"/>
+  <rect y="470" width="1280" height="250" fill="url(#kCarpet)" opacity=".55"/>
+  <rect y="466" width="1280" height="8" fill="url(#kGold)"/>
+  <!-- bàn cược bầu cua trên sàn -->
+  <ellipse cx="960" cy="520" rx="250" ry="34" fill="rgba(0,0,0,.3)"/>
+  <path d="M720 470 Q960 440 1200 470 L1196 510 Q960 540 724 510Z" fill="#6a2a14" stroke="url(#kGold)" stroke-width="3"/>
+  <path d="M736 466 Q960 440 1184 466 L1180 478 Q960 506 740 478Z" fill="url(#kFelt)"/>
+  <g id="kBauWorld"></g>
+  <!-- máy đánh bạc trang trí -->
+  <g transform="translate(70 486)"><rect width="64" height="96" rx="10" fill="#c8312f" stroke="url(#kGold)" stroke-width="3"/><rect x="9" y="14" width="46" height="30" rx="4" fill="#fff8e8"/><text x="32" y="36" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="17" fill="#c8312f">777</text><rect x="12" y="56" width="40" height="8" rx="4" fill="#ffd86b"/><path d="M64 30 h10 v-18" stroke="#ccc" stroke-width="4" fill="none"/><circle cx="74" cy="10" r="6" fill="#e63b2e"/></g>
+  <g transform="translate(1146 486)"><rect width="64" height="96" rx="10" fill="#2f74c0" stroke="url(#kGold)" stroke-width="3"/><rect x="9" y="14" width="46" height="30" rx="4" fill="#fff8e8"/><text x="32" y="36" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="17" fill="#2f74c0">777</text><rect x="12" y="56" width="40" height="8" rx="4" fill="#ffd86b"/></g>
+</svg>
     <div id="players"></div>
   </div>
 </div>
@@ -1006,6 +1081,12 @@
     <button class="act" data-do="tra" type="button"><i class="cost free">Free</i><span class="disc">Trà</span><span class="lbl">Uống trà</span></button>
     <button class="act hutbtn" data-do="hut" type="button" hidden><i class="cost free">Free</i><span class="disc">Hút</span><span class="lbl">Hút trà sữa</span></button>
   </div>
+  <div class="acts" id="actsCasino" role="toolbar" aria-label="Hành động ở casino" hidden>
+    <button class="act" data-do="duck" type="button"><span class="disc">Vịt</span><span class="lbl">Đua vịt</span></button>
+    <button class="act" data-do="bau" type="button"><span class="disc">Cua</span><span class="lbl">Bầu cua</span></button>
+    <button class="act hit" data-do="hit" type="button"><i class="cost free">Free</i><span class="disc">Đánh</span><span class="lbl">Đánh người</span></button>
+    <button class="act hutbtn" data-do="hut" type="button" hidden><i class="cost free">Free</i><span class="disc">Hút</span><span class="lbl">Hút trà sữa</span></button>
+  </div>
   <div class="acts" id="actsChua" role="toolbar" aria-label="Hành động">
     <button class="act rite" data-do="bow" type="button"><i class="cost free">Free</i><span class="disc">Lạy</span><span class="lbl">Lễ Phật</span></button>
     <button class="act rite" data-do="incense" type="button"><i class="cost">0,5đ</i><span class="disc">Hương</span><span class="lbl">Thắp hương</span></button>
@@ -1051,6 +1132,34 @@
 </div>
 
 <!-- Chọn map -->
+<div class="modal" id="mDuck" role="dialog" aria-modal="true" aria-labelledby="mDuckT">
+  <div class="sheet ksheet">
+    <div class="sheet-head"><h2 id="mDuckT">Đua vịt</h2><button class="x" data-close type="button">Đóng</button></div>
+    <div class="sheet-body">
+      <div class="kclock"><b id="kDuckClock">Đặt cược</b><span class="kbar"><i id="kDuckBar"></i></span></div>
+      <svg class="kview" id="kTrackMini" viewBox="56 176 568 268" aria-hidden="true"></svg>
+      <div class="kchips" data-kchips></div>
+      <div class="kgrid" id="kDuckGrid"></div>
+      <p class="kres" id="kDuckRes" aria-live="polite"></p>
+      <div class="khist" id="kDuckHist"></div>
+      <p class="muted">Đặt con vịt về nhất, đặt được nhiều con. Trúng nhận 5 lần tiền cược. Mỗi phút một ván chung cho mọi người: 30 giây đặt cược, 20 giây đua, 10 giây xem kết quả.</p>
+    </div>
+  </div>
+</div>
+<div class="modal" id="mBau" role="dialog" aria-modal="true" aria-labelledby="mBauT">
+  <div class="sheet ksheet">
+    <div class="sheet-head"><h2 id="mBauT">Bầu cua tôm cá</h2><button class="x" data-close type="button">Đóng</button></div>
+    <div class="sheet-body">
+      <div class="kclock"><b id="kBauClock">Đặt cược</b><span class="kbar"><i id="kBauBar"></i></span></div>
+      <svg class="kview" id="kBauMini" viewBox="846 332 260 158" aria-hidden="true"></svg>
+      <div class="kchips" data-kchips></div>
+      <div class="kgrid" id="kBauGrid"></div>
+      <p class="kres" id="kBauRes" aria-live="polite"></p>
+      <div class="khist" id="kBauHist"></div>
+      <p class="muted">Máy lắc 3 con xúc xắc. Đặt được nhiều ô. Mỗi con ra trúng ô bạn đặt, bạn nhận thêm 1 lần tiền cược ô đó, kèm tiền cược được trả lại. Mỗi phút một ván chung: 30 giây đặt cược, 8 giây lắc rồi mở bát.</p>
+    </div>
+  </div>
+</div>
 <div class="modal" id="mMap" role="dialog" aria-modal="true" aria-labelledby="mMapT">
   <div class="sheet">
     <div class="sheet-head"><h2 id="mMapT">Chọn map</h2><button class="x" data-close type="button">Đóng</button></div>
@@ -1741,6 +1850,7 @@ function swapAvatar(av, html){
 }
 
 /* ---------------- Lớp kết nối ---------------- */
+var srvOff = 0; // lệch giữa giờ máy và giờ máy chủ, để ván casino khớp trên mọi máy
 async function makeFirebase(cfg){
   const v = "10.12.2";
   const { initializeApp } = await import(`https://www.gstatic.com/firebasejs/${v}/firebase-app.js`);
@@ -1749,6 +1859,7 @@ async function makeFirebase(cfg){
   const app = initializeApp(cfg);
   const db = D.getDatabase(app), auth = A.getAuth(app);
   auth.languageCode = "vi";
+  D.onValue(D.ref(db, ".info/serverTimeOffset"), s => { srvOff = Number(s.val()) || 0; });
   const base = `rooms/${ROOM}`;
   const playersRef = D.ref(db, `${base}/players`), posRef = D.ref(db, `${base}/pos`);
   const statsRef = D.ref(db, `${base}/stats`), prRef = D.ref(db, `${base}/prayers`), chatRef = D.ref(db, `${base}/chat`);
@@ -2014,6 +2125,8 @@ MAPS.vuon = { name: "Vườn chùa", room: "Vườn thiền", desc: "Cây đa, h
   spawn: () => { const x = 690 + Math.round(Math.random() * 60 - 30); return { x, y: 708, tx: x, ty: 690 }; } };
 MAPS.trasua = { name: "Trà Sữa Mây", room: "Quán trà sữa", desc: "Gọi trà sữa + topping, cầm ly 10 phút, ngồi bàn hoặc quầy bar", walk: { x0: 60, x1: 1220, y0: 486, y1: 708 },
   spawn: () => { const x = 640 + Math.round(Math.random() * 80 - 40); return { x, y: 708, tx: x, ty: 690 }; } };
+MAPS.casino = { name: "Casino", room: "Casino", desc: "Đua vịt, bầu cua tôm cá, mỗi phút một ván", walk: { x0: 60, x1: 1220, y0: 510, y1: 708 },
+  spawn: () => { const x = 640 + Math.round(Math.random() * 120 - 60); return { x, y: 708, tx: x, ty: 650 }; } };
 let curMap = "chua", WALK = MAPS.chua.walk;
 var statsCache; // var: được gán sớm từ net.onStats trước khi tới đoạn khai báo này
 const SPOTS = { incense: { x: 640, y: 530 }, bell: { x: 250, y: 528 }, mo: { x: 1056, y: 528 }, bow: null };
@@ -2554,6 +2667,12 @@ function buildVuon(){
   });
 }
 buildVuon();
+// vùng chạm đường đua vịt và bàn bầu cua trong casino
+[["duck", 56, 176, 568, 268, "Đua vịt: bấm để đặt cược"], ["bau", 740, 176, 440, 300, "Bầu cua: bấm để đặt cược"]].forEach(([a, x, y, w, h, tl]) => {
+  const e = document.createElement("div");
+  e.className = "kobj"; e.dataset.act = a; e.title = tl;
+  e.style.cssText = `left:${x}px;top:${y}px;width:${w}px;height:${h}px;z-index:1`; layer.appendChild(e);
+});
 // vùng chạm trên tọa cụ chánh điện (tọa cụ đã vẽ sẵn trong cảnh)
 Object.values(SEATS).forEach(S => {
   if (S.map !== "chua") return;
@@ -2952,6 +3071,7 @@ function mapCounts(){
   return c;
 }
 const MAP_THUMB = {
+  casino: `<svg viewBox="0 0 96 64"><rect width="96" height="42" fill="#2a0d33"/><rect y="42" width="96" height="22" fill="#6a1424"/><rect x="28" y="4" width="40" height="12" rx="3" fill="#1a0820" stroke="#ffd86b"/><text x="48" y="13.5" text-anchor="middle" font-size="8" font-weight="800" fill="#ff8fc8">CASINO</text><rect x="6" y="20" width="38" height="20" rx="3" fill="#3aa0d4" stroke="#ffd86b"/><circle cx="16" cy="27" r="3" fill="#f2c418"/><circle cx="24" cy="34" r="3" fill="#e53935"/><rect x="52" y="20" width="38" height="18" rx="3" fill="#1f7a4a" stroke="#ffd86b"/><rect x="58" y="24" width="8" height="8" rx="2" fill="#fff"/><rect x="68" y="24" width="8" height="8" rx="2" fill="#fff"/><rect x="78" y="24" width="8" height="8" rx="2" fill="#fff"/></svg>`,
   chua: `<svg viewBox="0 0 96 64"><rect width="96" height="40" fill="#8f1b16"/><rect y="40" width="96" height="24" fill="#b06a34"/><circle cx="48" cy="26" r="13" fill="#f2b33d"/><circle cx="48" cy="20" r="6" fill="#f7d99a"/><rect x="10" y="10" width="8" height="30" fill="#d03a2c"/><rect x="78" y="10" width="8" height="30" fill="#d03a2c"/></svg>`,
   quan: `<svg viewBox="0 0 96 64"><rect width="96" height="40" fill="#e9be62"/><rect y="40" width="96" height="24" fill="#b9b1a3"/><rect x="26" y="6" width="44" height="12" rx="3" fill="#c8312f"/><rect x="14" y="40" width="68" height="6" fill="#cfd6dc"/><ellipse cx="22" cy="52" rx="6" ry="2.5" fill="#3a86cc"/><ellipse cx="48" cy="52" rx="6" ry="2.5" fill="#3a86cc"/><ellipse cx="74" cy="52" rx="6" ry="2.5" fill="#3a86cc"/><circle cx="20" cy="22" r="3" fill="#ffd35a"/><circle cx="48" cy="25" r="3" fill="#ff8a5a"/><circle cx="76" cy="22" r="3" fill="#8fd3ff"/></svg>`,
   trasua: `<svg viewBox="0 0 96 64"><rect width="96" height="44" fill="#fbdbe5"/><rect y="44" width="96" height="20" fill="#e3c597"/><rect x="24" y="6" width="48" height="12" rx="4" fill="#3a2a3e" stroke="#ff8fb8"/><rect x="58" y="30" width="34" height="16" rx="2" fill="#f2a6b8"/><ellipse cx="22" cy="50" rx="12" ry="3.5" fill="#fff" stroke="#c49b68"/><path d="M40 30 L42 46 H50 L52 30Z" fill="#c9a27a" stroke="#fff"/><path d="M39 30 Q46 24 53 30Z" fill="#fff"/><path d="M48 26 L50 18" stroke="#ff6fa8" stroke-width="2"/></svg>`,
@@ -2968,6 +3088,8 @@ function applyMapUI(){
   $("stage").classList.toggle("map-quan", curMap === "quan");
   $("stage").classList.toggle("map-vuon", curMap === "vuon");
   $("stage").classList.toggle("map-trasua", curMap === "trasua");
+  $("stage").classList.toggle("map-casino", curMap === "casino");
+  $("actsCasino").hidden = curMap !== "casino";
   $("actsTra").hidden = curMap !== "trasua";
   $("actsVuon").hidden = curMap !== "vuon";
   $("mapTitle").textContent = m.name; $("roomName").textContent = m.room;
@@ -2989,6 +3111,278 @@ function switchMap(k, silent){
   if (k === "vuon") renderLeaves();
   syncHutButtons();
 }
+
+/* ---------------- Casino: đua vịt và bầu cua ----------------
+   Mỗi phút đồng hồ là một ván chung cho mọi người. Kết quả sinh từ số thứ tự của phút (cùng một công thức trên mọi máy),
+   nên ai trong casino cũng thấy cùng con vịt thắng, cùng 3 con xúc xắc. Giờ lấy theo máy chủ Firebase để các máy khớp nhau.
+   Đua vịt: 0-30 giây đặt cược, 30-50 giây đua, 50-60 giây xem kết quả. Trúng con về nhất nhận 5 lần tiền cược.
+   Bầu cua: 0-30 giây đặt cược, 30-38 giây máy lắc, 38 giây mở bát. Mỗi mặt trúng nhận lại tiền cược và thêm 1 lần cho mỗi con. */
+const kNow = () => Date.now() + (Number(srvOff) || 0);
+const kState = () => { const n = kNow(); return { R: Math.floor(n / 60000), s: (n % 60000) / 1000 }; };
+const K_CHIPS = [[1, "#2f74c0"], [5, "#c8312f"], [10, "#2f8a3a"], [50, "#2a2230"]];
+let kChip = 1;
+function kRng(str){
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) h = Math.imul(h ^ str.charCodeAt(i), 16777619);
+  let a = h >>> 0;
+  return () => { a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+}
+const kTime = R => { const d = new Date(R * 60000); return new Intl.DateTimeFormat("vi-VN", { timeZone: "Asia/Ho_Chi_Minh", hour: "2-digit", minute: "2-digit" }).format(d); };
+
+/* ---- Đua vịt ---- */
+const DUCKS = [["Đỏ", "#e53935"], ["Cam", "#fb8c00"], ["Vàng", "#f2c418"], ["Lá", "#43a047"], ["Biển", "#1e88e5"], ["Tím", "#8e24aa"]];
+const duckName = i => "Vịt " + DUCKS[i][0];
+const raceCache = new Map();
+function duckRace(R){
+  if (raceCache.has(R)) return raceCache.get(R);
+  const rnd = kRng(ROOM + "|duck|" + R), cum = [];
+  for (let i = 0; i < 6; i++) {
+    const base = .85 + rnd() * .3, c = [0];
+    for (let k = 0; k < 20; k++) { let v = base * (.6 + rnd() * .8); if (rnd() < .08) v *= 1.7; c.push(c[k] + v); }
+    cum.push(c);
+  }
+  let win = 0;
+  for (let i = 1; i < 6; i++) if (cum[i][20] > cum[win][20]) win = i;
+  const m = cum[win][20];
+  cum.forEach(c => { for (let k = 0; k <= 20; k++) c[k] /= m; });
+  const r = { cum, win };
+  raceCache.set(R, r); if (raceCache.size > 40) raceCache.delete(raceCache.keys().next().value);
+  return r;
+}
+// vị trí 0..1 trên đường đua, u là số giây kể từ lúc xuất phát (con thắng chạm đích đúng giây thứ 20)
+function duckPos(R, i, u){
+  if (u <= 0) return 0;
+  const c = duckRace(R).cum[i];
+  if (u >= 20) return Math.min(1, c[20] + (u - 20) * c[20] / 20);
+  const k = Math.floor(u), f = u - k;
+  return c[k] + (c[k + 1] - c[k]) * f;
+}
+function duckG(i){
+  const c = DUCKS[i][1], d = shade(c, -.32);
+  return `<ellipse cx="0" cy="9" rx="17" ry="3" fill="rgba(255,255,255,.35)"/>`
+    + `<path d="M-14 -3 L-21 -9 L-16 2Z" fill="${c}" stroke="${d}" stroke-width="1"/>`
+    + `<path d="M-15 0 Q-17 -9 -8 -8 Q0 -7 6 -4 Q14 0 12 6 Q4 11 -6 10 Q-15 9 -15 0Z" fill="${c}" stroke="${d}" stroke-width="1.2"/>`
+    + `<path d="M-7 -1 Q0 -5 5 1 Q0 5 -7 3Z" fill="${shade(c, -.14)}"/>`
+    + `<circle cx="8" cy="-10" r="7" fill="${c}" stroke="${d}" stroke-width="1.2"/>`
+    + `<path d="M14 -10.5 L21.5 -8.5 L14 -6.5Z" fill="#ff9800" stroke="#c66900" stroke-width=".8"/>`
+    + `<circle cx="10" cy="-12" r="1.7" fill="#1a1a1a"/><circle cx="10.6" cy="-12.6" r=".55" fill="#fff"/>`
+    + `<text x="-3" y="6.5" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="9" fill="#fff" stroke="${d}" stroke-width="2" paint-order="stroke">${i + 1}</text>`;
+}
+const DUCK_X0 = 112, DUCK_X1 = 566;
+function trackInner(){
+  let s = "";
+  for (let i = 0; i < 6; i++) {
+    const y = 190 + i * 40;
+    s += `<rect x="72" y="${y}" width="536" height="40" fill="${i % 2 ? "#2f8fc4" : "#3aa0d4"}"/>`;
+    s += `<path d="M150 ${y + 30} q8 -4 16 0 M290 ${y + 12} q8 -4 16 0 M430 ${y + 28} q8 -4 16 0" stroke="#fff" stroke-opacity=".35" stroke-width="1.5" fill="none"/>`;
+    s += `<text x="80" y="${y + 26}" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="15" fill="#fff" opacity=".9">${i + 1}</text>`;
+    if (i) s += `<path d="M72 ${y} H608" stroke="#fff" stroke-width="2" stroke-dasharray="6 6" opacity=".75"/>`;
+  }
+  s += `<path d="M98 190 V430" stroke="#fff" stroke-width="3"/>`;
+  for (let r = 0; r < 12; r++) for (let c = 0; c < 2; c++) s += `<rect x="${588 + c * 8}" y="${190 + r * 20}" width="8" height="20" fill="${(r + c) % 2 ? "#222" : "#fff"}"/>`;
+  for (let i = 0; i < 6; i++) s += `<g data-kd="${i}" transform="translate(${DUCK_X0} ${212 + i * 40})"><g class="kdb" style="animation-delay:-${(i * .17).toFixed(2)}s">${duckG(i)}</g></g>`;
+  s += `<g data-kwin opacity="0"><rect x="196" y="272" width="288" height="76" rx="16" fill="rgba(26,8,32,.9)" stroke="#ffd86b" stroke-width="3"/>`
+    + `<text data-kwint x="340" y="304" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="24" fill="#ffe38a"></text>`
+    + `<text x="340" y="330" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="700" font-size="14" fill="#fff">về nhất</text></g>`;
+  return s;
+}
+
+/* ---- Bầu cua ---- */
+const BC = [["bau", "Bầu"], ["cua", "Cua"], ["tom", "Tôm"], ["ca", "Cá"], ["ga", "Gà"], ["nai", "Nai"]];
+const rollCache = new Map();
+function bauRoll(R){
+  if (rollCache.has(R)) return rollCache.get(R);
+  const rnd = kRng(ROOM + "|bau|" + R), r = [0, 1, 2].map(() => Math.floor(rnd() * 6));
+  rollCache.set(R, r); if (rollCache.size > 40) rollCache.delete(rollCache.keys().next().value);
+  return r;
+}
+// hình con vật trong ô 40x40
+function bcIcon(f){
+  const o = `stroke-linejoin="round" stroke-linecap="round"`;
+  switch (f) {
+    case 0: return `<path d="M20 3 V9" stroke="#5a3a1a" stroke-width="2" ${o}/><path d="M21 6 q6 -5 10 0 q-5 2 -10 0z" fill="#4caf50"/><circle cx="20" cy="15" r="7" fill="#c6d84a" stroke="#6b7a1a" stroke-width="1.3"/><circle cx="20" cy="27.5" r="10.5" fill="#c6d84a" stroke="#6b7a1a" stroke-width="1.3"/><path d="M14 23 q2 -3.5 6 -3.5" stroke="#fff" stroke-opacity=".7" stroke-width="2" fill="none" ${o}/>`;
+    case 1: return `<g stroke="#8a1a10" stroke-width="1.6" fill="none" ${o}><path d="M11 27 L4 31 M11 30 L6 35 M29 27 L36 31 M29 30 L34 35 M12 22 L8 15 M28 22 L32 15"/></g><path d="M4 11 q4 -6 8 -1 l-3 1 l3 2 q-4 4 -8 -2z M36 11 q-4 -6 -8 -1 l3 1 l-3 2 q4 4 8 -2z" fill="#e0402f" stroke="#8a1a10" stroke-width="1.2"/><ellipse cx="20" cy="25" rx="12" ry="8.5" fill="#e0402f" stroke="#8a1a10" stroke-width="1.4"/><path d="M17 17 V13 M23 17 V13" stroke="#8a1a10" stroke-width="1.4"/><circle cx="17" cy="12.5" r="2" fill="#fff" stroke="#8a1a10"/><circle cx="23" cy="12.5" r="2" fill="#fff" stroke="#8a1a10"/><circle cx="17" cy="12.5" r=".8" fill="#000"/><circle cx="23" cy="12.5" r=".8" fill="#000"/>`;
+    case 2: return `<path d="M31 9 Q38 22 27 30 Q19 35 11 30" stroke="#c94a1f" stroke-width="9" fill="none" ${o}/><path d="M31 9 Q38 22 27 30 Q19 35 11 30" stroke="#ff7043" stroke-width="6.6" fill="none" ${o}/><path d="M33 16 l-5 2 M33 23 l-5 0 M28 29 l-3 -3 M21 32 l-1 -4" stroke="#c94a1f" stroke-width="1.2"/><path d="M11 30 l-7 -5 l1 11z" fill="#ff7043" stroke="#c94a1f" stroke-width="1.2"/><path d="M30 8 Q22 2 10 4 M31 9 Q24 6 14 10" stroke="#c94a1f" stroke-width="1.1" fill="none"/><circle cx="32.5" cy="11" r="1.3" fill="#000"/>`;
+    case 3: return `<path d="M28 20 L38 12 L36 20 L38 28Z" fill="#2e8bd8" stroke="#1a5a90" stroke-width="1.2"/><ellipse cx="18" cy="20" rx="13" ry="9" fill="#2e8bd8" stroke="#1a5a90" stroke-width="1.4"/><path d="M15 12 q5 -6 10 0" fill="#5aa8e8" stroke="#1a5a90" stroke-width="1"/><path d="M20 15 q3 5 0 10 M24 15 q3 5 0 10" stroke="#1a5a90" stroke-width="1" fill="none" opacity=".6"/><circle cx="10" cy="18" r="2.4" fill="#fff"/><circle cx="9.6" cy="18" r="1.2" fill="#000"/><path d="M5.5 22 q2 1 3.5 0" stroke="#1a5a90" stroke-width="1" fill="none"/>`;
+    case 4: return `<path d="M10 22 Q2 14 6 6 Q9 14 13 16 M10 24 Q0 22 2 12" stroke="#2f7a3a" stroke-width="3" fill="none" ${o}/><path d="M9 20 Q4 12 9 8" stroke="#e08a1e" stroke-width="2.4" fill="none" ${o}/><path d="M15 34 V38 M23 34 V38" stroke="#e0a020" stroke-width="2" ${o}/><ellipse cx="19" cy="26" rx="11" ry="9" fill="#fff3e0" stroke="#8a6a4a" stroke-width="1.3"/><circle cx="27" cy="14" r="6.5" fill="#fff3e0" stroke="#8a6a4a" stroke-width="1.3"/><path d="M23 9 q1 -5 3 -1 q1 -5 3 0 q2 -4 3 1z" fill="#e53935"/><path d="M33 13 l5 2 l-5 2z" fill="#f2b33d" stroke="#b5821a" stroke-width=".8"/><path d="M31 18 q1 4 -1.5 4 q-1 -2 0 -4z" fill="#e53935"/><circle cx="28.5" cy="12.5" r="1.2" fill="#000"/><path d="M14 24 q5 -3 9 1" stroke="#c9a77a" stroke-width="1.2" fill="none"/>`;
+    case 5: return `<g stroke="#6e4426" stroke-width="2" fill="none" ${o}><path d="M15 12 L11 3 M11 7 L6 5 M13 8 L13 2 M25 12 L29 3 M29 7 L34 5 M27 8 L27 2"/></g><path d="M9 15 q-6 -2 -6 3 q4 2 8 0z M31 15 q6 -2 6 3 q-4 2 -8 0z" fill="#b07040" stroke="#6e4426" stroke-width="1.1"/><path d="M12 14 Q20 9 28 14 Q30 24 24 34 Q20 37 16 34 Q10 24 12 14Z" fill="#c4834a" stroke="#6e4426" stroke-width="1.3"/><ellipse cx="20" cy="31" rx="4.5" ry="3.2" fill="#f0d0a8"/><ellipse cx="20" cy="30" rx="2" ry="1.4" fill="#3a2418"/><circle cx="16" cy="20" r="1.6" fill="#000"/><circle cx="24" cy="20" r="1.6" fill="#000"/><g fill="#f0d0a8"><circle cx="17" cy="15" r=".9"/><circle cx="23" cy="16" r=".9"/></g>`;
+  }
+  return "";
+}
+const dieSVG = (x, y, f, sz = 24) => `<g transform="translate(${x - sz / 2} ${y - sz / 2})"><rect width="${sz}" height="${sz}" rx="${sz * .2}" fill="#fff" stroke="#9a8a7a" stroke-width="1.2"/><g transform="translate(${sz * .1} ${sz * .1}) scale(${sz * .8 / 40})">${bcIcon(f)}</g></g>`;
+// máy lắc, đĩa, bát, 3 xúc xắc (toạ độ trong cảnh)
+const KPLATE = { x: 940, y: 468 };
+function bauInner(){
+  let s = "";
+  // bảng cược treo tường: 2 hàng 3 ô
+  s += `<rect x="760" y="180" width="400" height="140" rx="14" fill="#145a36" stroke="url(#kGold)" stroke-width="4"/>`;
+  BC.forEach(([, n], f) => {
+    const x = 772 + (f % 3) * 128, y = 190 + Math.floor(f / 3) * 64;
+    s += `<g data-kbc="${f}"><rect x="${x}" y="${y}" width="120" height="58" rx="10" fill="#1f7a4a" stroke="#ffe38a" stroke-width="1.5"/>`
+      + `<g transform="translate(${x + 8} ${y + 9})">${bcIcon(f)}</g>`
+      + `<text x="${x + 82}" y="${y + 36}" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="19" fill="#fff8e8">${n}</text>`
+      + `<text data-kbcx x="${x + 110}" y="${y + 18}" text-anchor="end" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="15" fill="#ffe38a"></text></g>`;
+  });
+  // robot máy lắc
+  s += `<g><rect x="1036" y="380" width="56" height="62" rx="12" fill="#b8c4d2" stroke="#5a6a7c" stroke-width="2"/><text x="1064" y="416" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="10" fill="#3a4a5c">MÁY LẮC</text>`
+    + `<path d="M1064 334 V322" stroke="#5a6a7c" stroke-width="3"/><circle cx="1064" cy="318" r="5" fill="#ff4fa3"/>`
+    + `<rect x="1030" y="334" width="68" height="48" rx="14" fill="#cfd8e3" stroke="#5a6a7c" stroke-width="2"/><rect x="1039" y="343" width="50" height="28" rx="8" fill="#1d2b3a"/>`
+    + `<g data-keye><circle cx="1053" cy="357" r="4.5" fill="#6ff0ff"/><circle cx="1075" cy="357" r="4.5" fill="#6ff0ff"/></g></g>`;
+  s += `<path data-karm d="M1038 400 Q1004 380 ${KPLATE.x} 388" stroke="#7a8a9c" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+  // đĩa, xúc xắc, bát
+  s += `<g data-kplate><ellipse cx="${KPLATE.x}" cy="${KPLATE.y}" rx="68" ry="15" fill="#f6f1e6" stroke="#b8a888" stroke-width="2"/><ellipse cx="${KPLATE.x}" cy="${KPLATE.y - 2}" rx="54" ry="10" fill="#efe6d2"/>`
+    + `<g data-kdice></g>`
+    + `<g data-kbowl><path d="M${KPLATE.x - 58} ${KPLATE.y} Q${KPLATE.x - 60} ${KPLATE.y - 62} ${KPLATE.x} ${KPLATE.y - 64} Q${KPLATE.x + 60} ${KPLATE.y - 62} ${KPLATE.x + 58} ${KPLATE.y}Z" fill="#c8312f" stroke="#7a1612" stroke-width="2"/>`
+    + `<path d="M${KPLATE.x - 40} ${KPLATE.y - 40} Q${KPLATE.x - 20} ${KPLATE.y - 58} ${KPLATE.x + 6} ${KPLATE.y - 58}" stroke="#fff" stroke-opacity=".35" stroke-width="5" fill="none" stroke-linecap="round"/>`
+    + `<path d="M${KPLATE.x - 58} ${KPLATE.y - 8} H${KPLATE.x + 58}" stroke="#ffd86b" stroke-width="3"/><circle cx="${KPLATE.x}" cy="${KPLATE.y - 68}" r="7" fill="#ffd86b" stroke="#a8843e" stroke-width="1.5"/></g></g>`;
+  return s;
+}
+
+/* ---- Cược và trả thưởng (lưu trên máy để tải lại trang vẫn được trả) ---- */
+const kKey = () => "chua_casino_" + meId;
+let kBets = null;
+const kLoad = () => { if (!kBets) { const v = ls.get(kKey(), []); kBets = Array.isArray(v) ? v : []; } return kBets; };
+const kSave = () => ls.set(kKey(), kBets);
+const myStake = (g, R, k) => kLoad().filter(b => b.g === g && b.R === R && (k === undefined || b.k === k)).reduce((a, b) => a + b.u, 0);
+function placeBet(g, k){
+  if (!me) return;
+  const { R, s } = kState();
+  if (s >= 30) { toast("Hết giờ đặt cược ván này, chờ ván sau"); return; }
+  const u = kChip * 2;
+  if (!spend(u)) return;
+  const L = kLoad(), b = L.find(x => x.g === g && x.R === R && x.k === k && !x.paid);
+  if (b) b.u += u; else L.push({ g, R, k, u, paid: false });
+  kSave();
+  say(players.get(meId), `Cược ${kChip} đồng ${g === "duck" ? duckName(k) : BC[k][1]}`, 1800);
+  kUi(true);
+}
+// tiền nhận về của một ván (đơn vị nửa đồng)
+function kPayout(g, R){
+  const L = kLoad().filter(b => b.g === g && b.R === R);
+  if (g === "duck") { const w = duckRace(R).win; return L.filter(b => b.k === w).reduce((a, b) => a + b.u * 5, 0); }
+  const roll = bauRoll(R);
+  return L.reduce((a, b) => { const n = roll.filter(f => f === b.k).length; return a + (n ? b.u * (n + 1) : 0); }, 0);
+}
+function kSettle(){
+  if (!me || !meId) return;
+  const L = kLoad(); if (!L.length) return;
+  const n = kNow(), done = new Set();
+  for (const b of L) {
+    if (b.paid) continue;
+    const at = b.R * 60000 + (b.g === "duck" ? 50000 : 38000);
+    if (n < at) continue;
+    const id = b.g + "|" + b.R; if (done.has(id)) continue; done.add(id);
+    const win = kPayout(b.g, b.R), bet = myStake(b.g, b.R);
+    L.forEach(x => { if (x.g === b.g && x.R === b.R) x.paid = true; });
+    const what = b.g === "duck" ? `Đua vịt: ${duckName(duckRace(b.R).win)} về nhất` : `Bầu cua: ${bauRoll(b.R).map(f => BC[f][1]).join(", ")}`;
+    if (win > 0) { earn(win); toast(`${what}. Bạn trúng ${fmtCoin(win)} đồng (cược ${fmtCoin(bet)})`); say(players.get(meId), `Trúng ${fmtCoin(win)} đồng!`, 2600); }
+    else toast(`${what}. Ván này bạn không trúng (cược ${fmtCoin(bet)})`);
+  }
+  // giữ lại 40 ván gần nhất
+  const R = kState().R, keep = L.filter(b => !b.paid || b.R > R - 40);
+  if (keep.length !== L.length || done.size) { kBets = keep; kSave(); kUi(true); }
+}
+setInterval(kSettle, 500);
+
+/* ---- Bảng cược ---- */
+function kChipsHTML(){
+  return K_CHIPS.map(([v, c]) => `<button type="button" class="kchip" data-kchip="${v}" style="--c:${c}" aria-pressed="${kChip === v}">${v}</button>`).join("")
+    + `<span class="kwallet">Ví ${fmtCoin(coin2)} đồng</span>`;
+}
+function kPhase(g, s){
+  if (s < 30) return ["bet", `Đặt cược: còn ${Math.ceil(30 - s)} giây`, (30 - s) / 30];
+  if (g === "duck") return s < 50 ? ["run", `Đang đua: ${Math.ceil(50 - s)} giây`, (50 - s) / 20] : ["res", `Ván mới sau ${Math.ceil(60 - s)} giây`, (60 - s) / 10];
+  return s < 38 ? ["run", "Máy đang lắc...", (38 - s) / 8] : ["res", `Ván mới sau ${Math.ceil(60 - s)} giây`, (60 - s) / 22];
+}
+const stakeTxt = u => u ? `Bạn: ${fmtCoin(u)}đ` : "&nbsp;";
+let kSig = "";
+function kUi(force){
+  const dOpen = $("mDuck").classList.contains("open"), bOpen = $("mBau").classList.contains("open");
+  if (!dOpen && !bOpen) return;
+  const { R, s } = kState();
+  for (const [g, open] of [["duck", dOpen], ["bau", bOpen]]) {
+    if (!open) continue;
+    const [ph, txt, frac] = kPhase(g, s);
+    $(g === "duck" ? "kDuckClock" : "kBauClock").textContent = txt;
+    $(g === "duck" ? "kDuckBar" : "kBauBar").style.width = Math.max(0, Math.min(1, frac)) * 100 + "%";
+    const sig = g + R + ph + kChip + coin2 + myStake(g, R) + (force ? Math.random() : "");
+    if (sig === kSig) continue; kSig = sig;
+    document.querySelectorAll(`#${g === "duck" ? "mDuck" : "mBau"} [data-kchips]`).forEach(e => { e.innerHTML = kChipsHTML(); });
+    const showR = ph === "bet" ? R - 1 : R, revealed = ph === "res" || ph === "bet";
+    if (g === "duck") {
+      const w = duckRace(showR).win;
+      $("kDuckGrid").innerHTML = DUCKS.map((d, i) => `<button type="button" class="kopt${revealed && ph === "res" && i === w ? " win" : ""}" data-kduck="${i}" ${ph === "bet" ? "" : "disabled"}><svg viewBox="-24 -20 48 34" width="56" height="40" aria-hidden="true">${duckG(i)}</svg><b>${duckName(i)}</b><span class="st">${stakeTxt(myStake("duck", R, i))}</span></button>`).join("");
+      const mine = myStake("duck", showR), got = kPayout("duck", showR);
+      $("kDuckRes").innerHTML = ph === "run" ? (myStake("duck", R) ? `Bạn cược ${fmtCoin(myStake("duck", R))} đồng ván này. Chờ về đích...` : "Ván này bạn không cược.")
+        : `${ph === "bet" ? "Ván trước" : "Kết quả"}: <b>${duckName(w)}</b> về nhất. ` + (mine ? (got ? `Bạn trúng <b>${fmtCoin(got)} đồng</b>.` : "Bạn không trúng.") : (ph === "bet" ? "Chọn mức cược rồi bấm vào con vịt." : "Bạn không cược ván này."));
+      let h = ""; for (let r = (ph === "bet" ? R - 1 : (ph === "res" ? R : R - 1)), n = 0; n < 8; r--, n++) h += `<span class="kh" title="${kTime(r)}"><svg viewBox="-24 -20 48 34" width="30" height="22" aria-hidden="true">${duckG(duckRace(r).win)}</svg></span>`;
+      $("kDuckHist").innerHTML = `<span>Các ván trước:</span>` + h;
+    } else {
+      const roll = bauRoll(showR);
+      $("kBauGrid").innerHTML = BC.map(([, n], f) => { const c = revealed ? roll.filter(x => x === f).length : 0; return `<button type="button" class="kopt${c && ph === "res" ? " win" : ""}" data-kbau="${f}" ${ph === "bet" ? "" : "disabled"}><svg viewBox="0 0 40 40" width="44" height="44" aria-hidden="true">${bcIcon(f)}</svg><b>${n}</b><span class="st">${stakeTxt(myStake("bau", R, f))}</span>${c && ph === "res" ? `<i class="kx">x${c}</i>` : ""}</button>`; }).join("");
+      const mine = myStake("bau", showR), got = kPayout("bau", showR);
+      $("kBauRes").innerHTML = ph === "run" ? (myStake("bau", R) ? `Bạn cược ${fmtCoin(myStake("bau", R))} đồng ván này. Chờ mở bát...` : "Ván này bạn không cược.")
+        : `${ph === "bet" ? "Ván trước" : "Kết quả"}: <b>${roll.map(f => BC[f][1]).join(", ")}</b>. ` + (mine ? (got ? `Bạn nhận <b>${fmtCoin(got)} đồng</b>.` : "Bạn không trúng.") : (ph === "bet" ? "Chọn mức cược rồi bấm vào ô, đặt được nhiều ô." : "Bạn không cược ván này."));
+      let h = ""; for (let r = (ph === "res" ? R : R - 1), n = 0; n < 6; r--, n++) h += `<span class="kh kd3" title="${kTime(r)}"><svg viewBox="0 0 84 28" width="72" height="24" aria-hidden="true">${bauRoll(r).map((f, j) => dieSVG(14 + j * 28, 14, f, 24)).join("")}</svg></span>`;
+      $("kBauHist").innerHTML = `<span>Các ván trước:</span>` + h;
+    }
+  }
+}
+setInterval(() => kUi(false), 250);
+document.addEventListener("click", e => {
+  const c = e.target.closest && e.target.closest("[data-kchip]"); if (c) { kChip = Number(c.dataset.kchip); kUi(true); return; }
+  const d = e.target.closest && e.target.closest("[data-kduck]"); if (d) { placeBet("duck", Number(d.dataset.kduck)); return; }
+  const b = e.target.closest && e.target.closest("[data-kbau]"); if (b) { placeBet("bau", Number(b.dataset.kbau)); return; }
+});
+function openCasino(g){
+  if (g === "duck") { if (!$("kTrackMini").innerHTML) $("kTrackMini").innerHTML = trackInner(); }
+  else if (!$("kBauMini").innerHTML) $("kBauMini").innerHTML = bauInner();
+  kSig = ""; kDiceSig = ""; // vẽ lại xúc xắc cho khung xem mới mở
+  openModal(g === "duck" ? "mDuck" : "mBau"); kUi(true);
+}
+
+/* ---- Vẽ mỗi khung hình: vịt chạy, máy lắc, mở bát ---- */
+let kDiceSig = "";
+function kFrame(){
+  requestAnimationFrame(kFrame);
+  const inMap = curMap === "casino", dOpen = $("mDuck").classList.contains("open"), bOpen = $("mBau").classList.contains("open");
+  if (!inMap && !dOpen && !bOpen) return;
+  const { R, s } = kState();
+  // đua vịt
+  const u = s - 30, race = duckRace(R), showWin = s >= 50;
+  document.querySelectorAll("[data-kd]").forEach(el => {
+    const i = Number(el.dataset.kd), p = s < 30 ? 0 : duckPos(R, i, u), x = DUCK_X0 + p * (DUCK_X1 - DUCK_X0);
+    const big = showWin && i === race.win ? 1.25 : 1;
+    el.setAttribute("transform", `translate(${x.toFixed(1)} ${212 + i * 40}) scale(${big})`);
+  });
+  document.querySelectorAll("[data-kwin]").forEach(el => { el.setAttribute("opacity", showWin ? 1 : 0); });
+  document.querySelectorAll("[data-kwint]").forEach(el => { const t = duckName(race.win); if (el.textContent !== t) el.textContent = t; });
+  const dp = kPhase("duck", s)[1], ds = $("kDuckSign"); if (ds && ds.textContent !== dp) ds.textContent = dp;
+  // bầu cua
+  const shaking = s >= 30 && s < 38, open = s >= 38, lift = open ? Math.min(1, (s - 38) / .8) : 0;
+  const t = kNow() / 1000, sx = shaking ? Math.sin(t * 38) * 7 : 0, sy = shaking ? -Math.abs(Math.sin(t * 19)) * 12 - 8 : 0, sr = shaking ? Math.sin(t * 27) * 7 : 0;
+  document.querySelectorAll("[data-kplate]").forEach(el => el.setAttribute("transform", `translate(${sx.toFixed(1)} ${sy.toFixed(1)}) rotate(${sr.toFixed(1)} ${KPLATE.x} ${KPLATE.y})`));
+  const bx = -96 * lift, by = -46 * lift, br = -22 * lift;
+  document.querySelectorAll("[data-kbowl]").forEach(el => el.setAttribute("transform", `translate(${bx.toFixed(1)} ${by.toFixed(1)}) rotate(${br.toFixed(1)} ${KPLATE.x} ${KPLATE.y - 30})`));
+  const kx = KPLATE.x + bx + sx, ky = KPLATE.y - 68 + by + sy;
+  document.querySelectorAll("[data-karm]").forEach(el => el.setAttribute("d", `M1038 400 Q${((1038 + kx) / 2).toFixed(1)} ${(Math.min(400, ky) - 22).toFixed(1)} ${kx.toFixed(1)} ${ky.toFixed(1)}`));
+  document.querySelectorAll("[data-keye] circle").forEach(el => el.setAttribute("fill", shaking ? "#ffd86b" : open ? "#8dff8a" : "#6ff0ff"));
+  const roll = bauRoll(R), dsig = open ? "o" + R : "c";
+  if (dsig !== kDiceSig) {
+    kDiceSig = dsig;
+    const html = open ? roll.map((f, j) => dieSVG(KPLATE.x - 28 + j * 28, KPLATE.y - (j === 1 ? 6 : 12), f, 24)).join("") : "";
+    document.querySelectorAll("[data-kdice]").forEach(el => { el.innerHTML = html; });
+  }
+  document.querySelectorAll("[data-kbc]").forEach(el => {
+    const f = Number(el.dataset.kbc), c = open ? roll.filter(x => x === f).length : 0;
+    el.classList.toggle("kwin", !!c);
+    const tx = el.querySelector("[data-kbcx]"), v = c ? "x" + c : ""; if (tx && tx.textContent !== v) tx.textContent = v;
+  });
+  const bp = kPhase("bau", s)[1], bs = $("kBauSign"); if (bs && bs.textContent !== bp) bs.textContent = bp;
+}
+$("kTrackWorld").innerHTML = trackInner();
+$("kBauWorld").innerHTML = bauInner();
+requestAnimationFrame(kFrame);
 
 /* ---------------- Hành động ---------------- */
 const CHUA_PAID = new Set(["incense"]);
@@ -3056,6 +3450,7 @@ function doAct(act){
   if (!me) return;
   hideHint();
   if (act === "hit") { startHit(); return; }
+  if (act === "duck" || act === "bau") { openCasino(act); return; }
   if (RITES.has(act) && isSnake(me)) { say(players.get(meId), `Đang là rắn, còn ${snakeLeftMin()} phút nữa mới hành lễ được`, 2500); return; }
   try { const a = audio(); if (a.state === "suspended") a.resume(); } catch {}
   if (act === "menu") { openMenu(-1); return; }
