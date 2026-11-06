@@ -2696,16 +2696,12 @@ function medSecOf(p){
   if (p.id === meId) return Math.floor(dayMedNow().ms / 1000);
   return p.d.tdd === dayMedNow().d ? Number(p.d.tds) || 0 : 0;
 }
-// cho cá ăn, quét lá: mỗi lần +5 phút thiền hôm nay (không cộng tiền, không tính sen), mỗi loại tối đa 10 lần/ngày
-const BONUS_MS = 5 * 60000, BONUS_MAX = 10;
+// cho cá ăn, quét lá: mỗi lần +5 phút thiền hôm nay (không cộng tiền, không tính sen), không giới hạn số lần
+const BONUS_MS = 5 * 60000;
 function bonusMed(kind){
-  const D = dayMedNow(), key = "chua_bonus_" + meId;
-  let b = ls.get(key, null); if (!b || b.d !== D.d) b = { d: D.d, feed: 0, quet: 0 };
-  const p = players.get(meId), what = kind === "feed" ? "cho cá ăn" : "quét lá";
-  if ((b[kind] || 0) >= BONUS_MAX) { say(p, `Hôm nay ${what} đã đủ ${BONUS_MAX} lần cộng phút thiền`, 2600); return; }
-  b[kind] = (b[kind] || 0) + 1; ls.set(key, b);
+  const D = dayMedNow();
   D.ms += BONUS_MS; syncDayMed(true);
-  say(p, `+5 phút thiền hôm nay (${what} ${b[kind]}/${BONUS_MAX}), tổng ${fmtMin(Math.floor(D.ms / 1000))}`, 3000);
+  say(players.get(meId), `+5 phút thiền hôm nay, tổng ${fmtMin(Math.floor(D.ms / 1000))}`, 3000);
 }
 const fmtMin = sec => sec < 60 ? `${sec} giây` : `${Math.floor(sec / 60)} phút`;
 function tickThien(dtMs, seated){
