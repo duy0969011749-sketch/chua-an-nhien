@@ -117,6 +117,19 @@
   .av.sit .lg{transform:scaleY(.42)}
   #stage.map-quan .pl:not(.walk) .av.v-front .pray{display:none}
   #stage.map-quan .pl:not(.walk) .av.v-front .side{display:inline}
+  /* đánh người: giơ dép hoặc chổi ra sau rồi vụt xuống trúng lúc 45% (540 ms) */
+  .av .phit{transform-origin:43px 53px;animation:phit 1.2s ease-in both}
+  @keyframes phit{0%{transform:rotate(44deg);opacity:0}10%{opacity:1;transform:rotate(18deg)}34%{transform:rotate(10deg) translateY(-1.5px)}45%{transform:rotate(92deg)}55%{transform:rotate(80deg)}80%{transform:rotate(84deg)}100%{transform:rotate(54deg);opacity:0}}
+  .pl .hitfx{position:absolute;left:50%;top:-22px;width:72px;height:26px;margin-left:-36px;pointer-events:none;z-index:5}
+  .pl .hitfx i{position:absolute;left:50%;top:50%;width:13px;height:13px;margin:-6.5px;background:#ffd23e;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);animation:dizzy 1.1s linear infinite}
+  .pl .hitfx i:nth-child(2){animation-delay:-.37s}.pl .hitfx i:nth-child(3){animation-delay:-.74s}
+  @keyframes dizzy{0%{transform:translate(-26px,0) scale(.7)}25%{transform:translate(0,7px) scale(1.15)}50%{transform:translate(26px,0) scale(.7)}75%{transform:translate(0,-6px) scale(.55)}100%{transform:translate(-26px,0) scale(.7)}}
+  .pl .hitfx b{position:absolute;left:50%;top:18px;margin-left:-18px;font:800 15px/1 system-ui,sans-serif;color:#fff;-webkit-text-stroke:3px #b5352c;paint-order:stroke;animation:bop .7s ease-out both}
+  @keyframes bop{0%{transform:scale(.3);opacity:0}25%{transform:scale(1.25);opacity:1}100%{transform:translateY(-14px) scale(1);opacity:0}}
+  .av.knockR{animation:knock .5s ease-out}
+  .av.knockL{animation:knock .5s ease-out reverse}
+  @keyframes knock{0%,100%{transform:none}25%{transform:translateX(9px) rotate(9deg)}55%{transform:translateX(4px) rotate(-3deg)}}
+  @media (prefers-reduced-motion:reduce){.pl .hitfx i,.av.knockR,.av.knockL{animation:none}}
   /* nâng ly, gắp món */
   .av.posing .pray{display:none!important}
   .av.posing .side{display:inline!important}
@@ -972,17 +985,20 @@
   <div class="acts" id="actsQuan" role="toolbar" aria-label="Hành động ở quán" hidden>
     <button class="act" data-do="zo" type="button"><span class="disc">Zô</span><span class="lbl">Nâng ly</span></button>
     <button class="act" data-do="gap" type="button"><span class="disc">Gắp</span><span class="lbl">Gắp món</span></button>
+    <button class="act hit" data-do="hit" type="button"><i class="cost free">Free</i><span class="disc">Đánh</span><span class="lbl">Đánh người</span></button>
     <button class="act" data-do="menu" type="button"><i class="cost">0,5đ</i><span class="disc">Menu</span><span class="lbl">Gọi món</span></button>
     <button class="act hutbtn" data-do="hut" type="button" hidden><i class="cost free">Free</i><span class="disc">Hút</span><span class="lbl">Hút trà sữa</span></button>
   </div>
   <div class="acts" id="actsTra" role="toolbar" aria-label="Hành động ở quán trà sữa" hidden>
     <button class="act" data-do="order" type="button"><i class="cost">0,5đ</i><span class="disc">Gọi</span><span class="lbl">Gọi trà sữa</span></button>
+    <button class="act hit" data-do="hit" type="button"><i class="cost free">Free</i><span class="disc">Đánh</span><span class="lbl">Đánh người</span></button>
     <button class="act" data-do="hut" type="button"><i class="cost free">Free</i><span class="disc">Hút</span><span class="lbl">Hút trà sữa</span></button>
   </div>
   <div class="acts" id="actsVuon" role="toolbar" aria-label="Hành động ở vườn" hidden>
     <button class="act" data-do="feed" type="button"><i class="cost">0,5đ</i><span class="disc">Cá</span><span class="lbl">Cho cá ăn</span></button>
     <button class="act" data-do="quet" type="button"><span class="disc">Quét</span><span class="lbl">Quét lá</span></button>
     <button class="act rite" data-do="thien" type="button"><i class="cost free">+1đ</i><span class="disc">Thiền</span><span class="lbl">Ngồi thiền</span></button>
+    <button class="act hit" data-do="hit" type="button"><i class="cost free">Free</i><span class="disc">Đánh</span><span class="lbl">Đánh người</span></button>
     <button class="act" data-do="tra" type="button"><i class="cost free">Free</i><span class="disc">Trà</span><span class="lbl">Uống trà</span></button>
     <button class="act hutbtn" data-do="hut" type="button" hidden><i class="cost free">Free</i><span class="disc">Hút</span><span class="lbl">Hút trà sữa</span></button>
   </div>
@@ -2117,6 +2133,15 @@ function playAct(p, act, remote){
     case "zo": startPose(p, "zo"); say(p, "Zô!", 1500); p.zoAt = performance.now(); checkClink(p); break;
     case "gap": startPose(p, "gap"); break;
     case "feed": startPose(p, "feed"); say(p, "Cá ơi, ăn đi nào", 1800); { const src = p.id === meId ? me : p; later(p, 500, () => feedFish(src.x, src.y)); } break;
+    case "hit": {
+      const src = p.id === meId ? me : p.d;
+      p.hitT = src.hitT; p.hitW = src.hitW === "choi" ? "choi" : "dep";
+      const t = players.get(p.hitT);
+      if (t) p.flip = t.x < (p.id === meId ? me.x : p.x);
+      startPose(p, "hit"); say(p, p.hitW === "choi" ? "Ăn chổi này!" : "Ăn dép này!", 1500);
+      later(p, 540, () => hitImpact(p, remote));
+      break;
+    }
     case "quet": startPose(p, "quet"); say(p, "Quét lá sân chùa", 1800); break;
     case "hut": startPose(p, "hut"); break;
     case "tra": startPose(p, "tra"); say(p, "Mời trà", 1500); p.teaAt = performance.now(); checkTea(p); break;
@@ -2232,7 +2257,7 @@ function tick(now){
     const dl = drinkLeft(p.d.drink);
     const key = snake ? "snake|" + p.d.color : v + (p.pose && !p.act ? "|" + p.pose + p.poseSeq : "") + (dl ? `|d${p.d.drink.d}${p.d.drink.top}${Math.ceil(dl / 60000)}` : "");
     if (key !== p.view) {
-      p.view = key; swapAvatar(av, snake ? snakeSVG(p.d) : avatarSVG(p.d, v, p.act, p.pose && !p.act ? { pose: p.pose, food: p.pose === "gap" ? foodFor(p) : p.pose === "hut" ? p.d.drink : "" } : null));
+      p.view = key; swapAvatar(av, snake ? snakeSVG(p.d) : avatarSVG(p.d, v, p.act, p.pose && !p.act ? { pose: p.pose, food: p.pose === "gap" ? foodFor(p) : p.pose === "hut" ? p.d.drink : p.pose === "hit" ? p.hitW : "" } : null));
       av.classList.toggle("v-front", v === "front"); av.classList.toggle("acting", !!p.act);
       av.classList.toggle("posing", !!(p.pose && !p.act));
       av.classList.toggle("medit", p.pose === "thien" && !p.act);
@@ -2245,7 +2270,7 @@ function tick(now){
     p.el.classList.toggle("walk", moving || p.anim.w > .12);
     const s = 1.12 + (src.y - WALK.y0) / (WALK.y1 - WALK.y0) * .4;
     p.el.style.transform = `translate(${src.x.toFixed(1)}px,${src.y.toFixed(1)}px) scale(${s.toFixed(3)})`;
-    p.el.style.zIndex = Math.round(src.y);
+    p.el.style.zIndex = Math.round(src.y) + (p.pose === "hit" ? 40 : 0); // người đang vụt nằm trên để thấy dép, chổi
   }
   // chưa vào chùa vẫn phóng cảnh vừa màn hình, nhìn vào giữa chánh điện
   tickKoi(now, dt);
@@ -2357,7 +2382,7 @@ function sitAt(id){
 }
 
 /* Tư thế nâng ly / gắp món (tay phải) */
-const POSE_MS = { zo: 2400, gap: 2600, tra: 2600, quet: 2200, feed: 1800, hut: 2400 };
+const POSE_MS = { hit: 1200, zo: 2400, gap: 2600, tra: 2600, quet: 2200, feed: 1800, hut: 2400 };
 function startPose(p, pose){ p.pose = pose; p.poseUntil = performance.now() + POSE_MS[pose]; p.poseSeq = (p.poseSeq || 0) + 1; }
 function poseSVG(pose, front, SL, sleeveR, food){
   const skin = `fill="url(#sk)" ${OL}`, rf = SL === "short" ? skin : `fill="${sleeveR}" ${OL}`;
@@ -2388,6 +2413,13 @@ function poseSVG(pose, front, SL, sleeveR, food){
     const A = `<g class="pgA"><path d="M42.5 53 Q50 58 50 70 L45 71.5 Q45 62 40 57.5Z" ${rf}/>${cap}${cup(46, 72)}<circle cx="47.5" cy="73.5" r="3" ${skin}/></g>`;
     const B = `<g class="pgB"><g transform="translate(0 2.5)"><path d="M42.5 53 Q50 57 50 64 L45.5 66 Q45 60 40 57.5Z" ${rf}/><path d="M50 63 Q46 52 38 46.5 L36 50 Q42 54 45.5 65Z" ${rf}/>${cap}${cup(33, 45)}<circle cx="36.5" cy="48.2" r="3" ${skin}/></g></g>`;
     return A + B;
+  }
+  if (pose === "hit") {
+    // food là vũ khí: "dep" dép tổ ong cầm ở gót, "choi" chổi rơm cầm cán, đầu chổi hướng lên
+    const W = food === "choi"
+      ? `<path d="M51 27 L49 3" stroke="#a8743e" stroke-width="2.2" stroke-linecap="round"/><path d="M45.5 5 Q49 1 52.5 5 L57 -12 Q49 -16 41 -12Z" fill="#d9b36a" stroke="#8a6a2f" stroke-width=".8"/><path d="M45.5 5 Q49 2.4 52.5 5" stroke="#b5352c" stroke-width="1.6" fill="none"/><path d="M44 -10 L46.5 2 M49 -13 L49 2 M54 -10 L51.5 2" stroke="#8a6a2f" stroke-width=".6"/>`
+      : `<g transform="rotate(-8 51 25)"><rect x="46.5" y="5" width="9" height="21" rx="4.4" fill="#2f74c0" stroke="#1d4a7a" stroke-width=".8"/><rect x="47.8" y="7" width="6.4" height="17" rx="3.2" fill="#5a9be0"/><path d="M47.2 16 Q51 12 54.8 16 M51 13.5 V8.5" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/></g>`;
+    return `<g class="phit"><path d="M42.5 53 Q52 50 53.5 41 Q51.5 37.5 48 39 Q47 46 40 50.5 Z" ${rf}/><path d="M53.3 41.5 Q55 33 52.5 26 L49 27 Q50.5 33 48.5 40 Z" ${rf}/>${cap}${W}<circle cx="51" cy="25.5" r="3.1" ${skin}/></g>`;
   }
   if (pose === "zo") {
     const glass = `<rect x="47" y="14" width="8" height="11" rx="1.4" fill="#f2b33d" stroke="#8a5a1a" stroke-width=".6"/><path d="M46.8 15.2 q2 -2.8 4 0 q2 -2.8 4.2 0 v1.6 h-8.2z" fill="#fff"/><rect x="48.4" y="17" width="1.6" height="7" rx=".8" fill="#fff" opacity=".45"/>`;
@@ -2647,8 +2679,27 @@ function checkSnake(now){
 }
 const snakeLeftMin = () => Math.max(1, Math.ceil((Number(me.snake) - Date.now()) / 60000));
 // 1 đồng cho mỗi phút thiền, tính theo tổng thời gian đã lưu nên giây lẻ được cộng dồn qua các lần ngồi
+// thời gian thiền trong ngày: dùng để so ai được đánh ai; qua 0 giờ giờ Việt Nam là về 0
+let dayMed = null, dayMedSent = -1;
+function dayMedNow(){
+  const d = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }).format(new Date());
+  if (!dayMed) { const v = ls.get("chua_thien_day_" + meId, null); dayMed = v && v.d === d && typeof v.ms === "number" ? v : { d, ms: 0 }; }
+  if (dayMed.d !== d) dayMed = { d, ms: 0 };
+  return dayMed;
+}
+function syncDayMed(force){
+  const D = dayMedNow(), sec = Math.floor(D.ms / 1000);
+  if (force || sec - dayMedSent >= 10 || me.tdd !== D.d) { dayMedSent = sec; ls.set("chua_thien_day_" + meId, D); setMe({ tdd: D.d, tds: sec }); }
+}
+// số giây thiền hôm nay của một người (người khác: theo dữ liệu đồng bộ, khác ngày thì tính 0)
+function medSecOf(p){
+  if (p.id === meId) return Math.floor(dayMedNow().ms / 1000);
+  return p.d.tdd === dayMedNow().d ? Number(p.d.tds) || 0 : 0;
+}
+const fmtMin = sec => sec < 60 ? `${sec} giây` : `${Math.floor(sec / 60)} phút`;
 function tickThien(dtMs, seated){
-  if (!seated) { if (thienSession) { thienSession = 0; flushThien(); } return; }
+  if (!seated) { if (thienSession) { thienSession = 0; flushThien(); syncDayMed(true); } return; }
+  dayMedNow().ms += dtMs; syncDayMed();
   const before = Math.floor(thienMs / 60000);
   thienSession += dtMs; thienMs += dtMs; thienPending += dtMs;
   const after = Math.floor(thienMs / 60000);
@@ -2915,9 +2966,64 @@ function switchMap(k, silent){
 const CHUA_PAID = new Set(["incense"]);
 let moLast = 0;
 const RITES = new Set(["bow", "incense", "mo", "bell", "xam", "so", "thien"]);
+/* Đánh người: chỉ người thiền hôm nay lâu hơn được đánh người thiền ít hơn; không ở chánh điện, không đánh người đang thiền */
+const isMeditating = p => { const S = seatOf(p); return !!(S && S.kind === "cushion"); };
+function hitCheck(t){
+  const mine = medSecOf(players.get(meId)), theirs = medSecOf(t), nm = t.d.name || "Người kia";
+  if (isMeditating(t)) return `${nm} đang thiền, không đánh được`;
+  if (mine <= theirs) return `Hôm nay bạn thiền ${fmtMin(mine)}, ${nm} thiền ${fmtMin(theirs)}. Phải thiền lâu hơn mới đánh được`;
+  return "";
+}
+function startHit(tries = 0){
+  const meP = players.get(meId);
+  if (curMap === "chua") { say(meP, "Không đánh người trong chánh điện", 2500); return; }
+  if (isSnake(me)) { say(meP, `Đang là rắn, không cầm dép được (còn ${snakeLeftMin()} phút)`, 2500); return; }
+  if (meP.pose === "hit") return;
+  const others = [...players.values()].filter(p => p.id !== meId)
+    .map(p => ({ p, d: Math.hypot(p.x - me.x, p.y - me.y), why: hitCheck(p) })).sort((a, b) => a.d - b.d);
+  if (!others.length) { say(meP, "Không có ai ở đây để đánh", 2500); return; }
+  const ok = others.find(o => !o.why);
+  if (!ok) { say(meP, others[0].why, 3500); return; }
+  const t = ok.p, side = me.x <= t.x ? -1 : 1, sx = t.x + side * 34, sy = t.y + 2;
+  const hit = () => {
+    const why = hitCheck(t);
+    if (!players.has(t.id)) { say(meP, "Người kia đã đi mất", 2200); return; }
+    if (why) { say(meP, why, 3000); return; }
+    if (Math.hypot(t.x - me.x, t.y - me.y) > 60) { if (tries < 3) startHit(tries + 1); else say(meP, `${t.d.name || "Người kia"} chạy nhanh quá`, 2200); return; }
+    me.hitT = t.id; me.hitW = Math.random() < .5 ? "dep" : "choi";
+    playAct(meP, "hit", false);
+    net.update({ act: "hit", actTs: Date.now(), hitT: me.hitT, hitW: me.hitW });
+  };
+  if (Math.hypot(sx - me.x, sy - me.y) > 10) { if (me.seat) setMe({ seat: "" }); setTarget(sx, sy); pending = hit; }
+  else hit();
+}
+function playHitSound(vol = 1){
+  if (!soundOn) return;
+  const a = audio(), n = Math.floor(a.sampleRate * .12), b = a.createBuffer(1, n, a.sampleRate), ch = b.getChannelData(0);
+  for (let i = 0; i < n; i++) ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 3);
+  const s = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain();
+  s.buffer = b; f.type = "lowpass"; f.frequency.value = 1400; g.gain.value = .55 * vol;
+  s.connect(f).connect(g).connect(a.destination); s.start();
+}
+// lúc dép hoặc chổi trúng: người bị đánh giật lùi, sao bay quanh đầu; máy của người bị đánh dời vị trí thật ra xa
+function hitImpact(p, remote){
+  const t = players.get(p.hitT); if (!t) return;
+  const src = p.id === meId ? me : p, dir = t.x >= src.x ? 1 : -1;
+  const av = t.el.querySelector(".av");
+  av.classList.remove("knockR", "knockL"); void av.offsetWidth; av.classList.add(dir > 0 ? "knockR" : "knockL");
+  setTimeout(() => av.classList.remove("knockR", "knockL"), 520);
+  t.el.querySelectorAll(".hitfx").forEach(e => e.remove());
+  const fx = document.createElement("div"); fx.className = "hitfx";
+  fx.innerHTML = `<i></i><i></i><i></i><b>${p.hitW === "choi" ? "Vụt!" : "Bốp!"}</b>`;
+  t.el.appendChild(fx); setTimeout(() => fx.remove(), 3000);
+  playHitSound(remote && t.id !== meId ? .4 : 1);
+  say(t, ["Ui da!", "Á đau!", "Sao đánh tui?", "Huhu"][Math.floor(Math.random() * 4)], 2200);
+  if (t.id === meId && !isMeditating(t)) { pending = null; setTarget(me.x + dir * 30, me.y); }
+}
 function doAct(act){
   if (!me) return;
   hideHint();
+  if (act === "hit") { startHit(); return; }
   if (RITES.has(act) && isSnake(me)) { say(players.get(meId), `Đang là rắn, còn ${snakeLeftMin()} phút nữa mới hành lễ được`, 2500); return; }
   try { const a = audio(); if (a.state === "suspended") a.resume(); } catch {}
   if (act === "menu") { openMenu(-1); return; }
