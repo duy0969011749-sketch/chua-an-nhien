@@ -2696,6 +2696,17 @@ function medSecOf(p){
   if (p.id === meId) return Math.floor(dayMedNow().ms / 1000);
   return p.d.tdd === dayMedNow().d ? Number(p.d.tds) || 0 : 0;
 }
+// cho cá ăn, quét lá: mỗi lần +5 phút thiền hôm nay (không cộng tiền, không tính sen), mỗi loại tối đa 10 lần/ngày
+const BONUS_MS = 5 * 60000, BONUS_MAX = 10;
+function bonusMed(kind){
+  const D = dayMedNow(), key = "chua_bonus_" + meId;
+  let b = ls.get(key, null); if (!b || b.d !== D.d) b = { d: D.d, feed: 0, quet: 0 };
+  const p = players.get(meId), what = kind === "feed" ? "cho cá ăn" : "quét lá";
+  if ((b[kind] || 0) >= BONUS_MAX) { say(p, `Hôm nay ${what} đã đủ ${BONUS_MAX} lần cộng phút thiền`, 2600); return; }
+  b[kind] = (b[kind] || 0) + 1; ls.set(key, b);
+  D.ms += BONUS_MS; syncDayMed(true);
+  say(p, `+5 phút thiền hôm nay (${what} ${b[kind]}/${BONUS_MAX}), tổng ${fmtMin(Math.floor(D.ms / 1000))}`, 3000);
+}
 const fmtMin = sec => sec < 60 ? `${sec} giây` : `${Math.floor(sec / 60)} phút`;
 function tickThien(dtMs, seated){
   if (!seated) { if (thienSession) { thienSession = 0; flushThien(); syncDayMed(true); } return; }
@@ -3049,7 +3060,7 @@ function doAct(act){
   }
   if (act === "feed") {
     const e2 = pondEdge(me.x, me.y);
-    const go = () => { if (!spend(1)) return; playAct(players.get(meId), "feed", false); net.update({ act, actTs: Date.now(), x: Math.round(me.x), y: Math.round(me.y), tx: Math.round(me.tx), ty: Math.round(me.ty) }); };
+    const go = () => { if (!spend(1)) return; bonusMed("feed"); playAct(players.get(meId), "feed", false); net.update({ act, actTs: Date.now(), x: Math.round(me.x), y: Math.round(me.y), tx: Math.round(me.tx), ty: Math.round(me.ty) }); };
     if (Math.hypot(me.x - e2.x, me.y - e2.y) > 30) { setTarget(e2.x, e2.y); pending = go; } else go();
     return;
   }
@@ -3061,6 +3072,7 @@ function doAct(act){
       playAct(players.get(meId), "quet", false); net.update({ act, actTs: Date.now() });
       later(players.get(meId), 1800, () => {
         const n = leafCount(i); if (!n) return;
+        bonusMed("quet");
         statsCache = { ...(statsCache || {}), ["lf" + i]: Date.now() }; renderLeaves();
         net.markStat("lf" + i).catch(() => {}); net.bump("leaves", n).catch(() => {});
       });
