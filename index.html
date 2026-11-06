@@ -353,6 +353,10 @@
   .nm .h{font-size:10.5px;font-weight:600;color:#f7d77c}
   .pl.me .nm{background:linear-gradient(#f7d77c,#d9a53c);color:#4a2a10}
   .pl.me .nm .h{color:#7a4a10}
+  /* danh hiệu: đánh người hơn 10 lần trong ngày */
+  .nm .t{font-size:10.5px;font-weight:800;letter-spacing:.03em;color:#ff5145;margin-top:1px}
+  .pl.me .nm .t{color:#b3150c}
+  .pl.titled .bub{margin-bottom:46px}
   .bub{position:absolute;left:50%;bottom:100%;margin-bottom:34px;transform:translateX(-50%) scale(.6);opacity:0;white-space:normal;width:max-content;max-width:220px;text-align:center;line-height:1.25;overflow-wrap:anywhere;font-size:13px;font-weight:600;color:var(--ink);background:var(--paper);border:2px solid var(--gold-deep);padding:4px 10px;border-radius:12px;transition:opacity .2s,transform .2s;pointer-events:none}
   .bub::after{content:"";position:absolute;left:50%;top:100%;margin-left:-6px;border:6px solid transparent;border-top-color:var(--gold-deep)}
   .bub.show{opacity:1;transform:translateX(-50%) scale(1)}
@@ -2095,9 +2099,24 @@ function createPlayer(d){
   players.set(d.id, p); applyProfile(p); return p;
 }
 const fmtH = h => (Math.round((Number(h) || 0) * 10) / 10).toFixed(1).replace(".", ",") + " giờ";
+// số lần đánh trong ngày (htd: ngày giờ Việt Nam, htn: số lần); hơn 10 lần thì có danh hiệu, qua 0 giờ thì mất
+const TITLE_HITS = 10, todayVNd = () => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }).format(new Date());
+const hitTitle = d => d && d.htd === todayVNd() && Number(d.htn) > TITLE_HITS ? "BẬC THẦY GÕ TIỂU NHÂN" : "";
+function countHit(){
+  const d = todayVNd(), key = "chua_hits_" + meId;
+  let h = ls.get(key, null); if (!h || h.d !== d) h = { d, n: 0 };
+  h.n++; ls.set(key, h);
+  setMe({ htd: d, htn: h.n });
+  const p = players.get(meId); applyProfile(p);
+  if (h.n === TITLE_HITS + 1) later(p, 2600, () => say(p, "Đạt danh hiệu BẬC THẦY GÕ TIỂU NHÂN", 3500));
+}
+// qua 0 giờ thì danh hiệu hôm qua tự mất
+setInterval(() => { for (const p of players.values()) if (p.d.htd) applyProfile(p); }, 30000);
 function applyProfile(p){
   const hrs = p.id === meId ? onlineHours() : p.d.on;
-  p.el.querySelector(".nm").innerHTML = `<span class="n">${esc(p.d.name || "Khách")}</span><span class="h">${fmtH(hrs)}</span>`;
+  const title = hitTitle(p.d);
+  p.el.querySelector(".nm").innerHTML = `<span class="n">${esc(p.d.name || "Khách")}</span><span class="h">${fmtH(hrs)}</span>` + (title ? `<span class="t">${title}</span>` : "");
+  p.el.classList.toggle("titled", !!title);
   const k = profKey(p.d); if (k !== p.pk) { p.pk = k; p.view = ""; }
 }
 function say(p, text, ms = 2600){
@@ -2672,6 +2691,8 @@ function checkSnake(now){
     snakeChecked = true;
     const until = Number(ls.get(snakeKey(), 0)) || 0;
     if (until > now && Number(me.snake) !== until) setMe({ snake: until });
+    const h = ls.get("chua_hits_" + meId, null);
+    if (h && h.d === todayVNd() && h.n && Number(me.htn) !== h.n) { setMe({ htd: h.d, htn: h.n }); applyProfile(players.get(meId)); }
   }
   const on = isSnake(me);
   document.body.classList.toggle("is-snake", on);
@@ -3002,6 +3023,7 @@ function startHit(tries = 0){
     net.update({ act: "hit", actTs: Date.now(), hitT: me.hitT, hitW: me.hitW });
     // mỗi lần đánh, người đánh mất 1 phút thiền hôm nay (không âm)
     const D = dayMedNow(); D.ms = Math.max(0, D.ms - 60000); syncDayMed(true);
+    countHit();
     later(meP, 1300, () => say(meP, `-1 phút thiền hôm nay, còn ${fmtMin(Math.floor(dayMedNow().ms / 1000))}`, 2600));
   };
   if (Math.hypot(sx - me.x, sy - me.y) > 10) { if (me.seat) setMe({ seat: "" }); setTarget(sx, sy); pending = hit; }
