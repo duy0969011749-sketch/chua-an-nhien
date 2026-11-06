@@ -3000,6 +3000,9 @@ function startHit(tries = 0){
     me.hitT = t.id; me.hitW = Math.random() < .5 ? "dep" : "choi";
     playAct(meP, "hit", false);
     net.update({ act: "hit", actTs: Date.now(), hitT: me.hitT, hitW: me.hitW });
+    // mỗi lần đánh, người đánh mất 1 phút thiền hôm nay (không âm)
+    const D = dayMedNow(); D.ms = Math.max(0, D.ms - 60000); syncDayMed(true);
+    later(meP, 1300, () => say(meP, `-1 phút thiền hôm nay, còn ${fmtMin(Math.floor(dayMedNow().ms / 1000))}`, 2600));
   };
   if (Math.hypot(sx - me.x, sy - me.y) > 10) { if (me.seat) setMe({ seat: "" }); setTarget(sx, sy); pending = hit; }
   else hit();
