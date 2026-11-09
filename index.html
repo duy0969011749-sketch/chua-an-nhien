@@ -418,7 +418,8 @@
   .nm{position:absolute;left:50%;bottom:100%;transform:translateX(-50%);margin-bottom:-2px;white-space:nowrap;display:flex;flex-direction:column;align-items:center;line-height:1.05;padding:3px 9px 3px;border-radius:10px;background:rgba(30,10,8,.66);color:#fff}
   .nm .n{font-size:13px;font-weight:700}
   .nm .h{font-size:10.5px;font-weight:600;color:#f7d77c}
-  .pl.crown .nm{margin-bottom:12px}
+  .pl .nm{margin-bottom:3px}
+  .pl.crown .nm{margin-bottom:16px}
   .pl.me .nm{background:linear-gradient(#f7d77c,#d9a53c);color:#4a2a10}
   .pl.me .nm .h{color:#7a4a10}
   /* danh hiệu: đánh người hơn 10 lần trong ngày */
@@ -1739,13 +1740,15 @@ const CLOUD_SVG = `<div class="cloud"><svg viewBox="0 0 140 60" aria-hidden="tru
   <g fill="none" stroke="#d3dce8" stroke-width="1.2" stroke-linecap="round"><path d="M50 36 q5 -5 10 0"/><path d="M80 33 q5 -5 10 0"/><path d="M64 41 Q72 39 82 41"/></g>
   <path d="M47 23 Q51 17 58 18 M64 12 Q71 8 78 11 M86 17 Q92 15 97 19" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></g></svg></div>`;
 
-/* Tỷ lệ dáng chibi: thân kéo dài (neo ở bàn chân y=91), đầu thu nhỏ (neo ở cằm 32,54).
-   Đầu chiếm khoảng 2/5 chiều cao. Bàn tay, bàn chân bù ngược để giữ tròn. */
-const FIG = { body: 1.25, head: .8 };
+/* Tỷ lệ dáng chibi: body kéo dài thân (neo ở bàn chân y=91), head co đầu (neo ở cằm 32,54),
+   neck nâng đầu lên để lộ cổ (đơn vị hình nhân vật). Bàn tay, bàn chân bù ngược để giữ tròn. */
+const FIG = { body: 1, head: 1, neck: 2 };
 const bodyT = () => `translate(0 ${(91 - 91 * FIG.body).toFixed(2)}) scale(1 ${FIG.body})`;
-const headT = () => `translate(32 54) scale(${FIG.head} ${(FIG.head / FIG.body).toFixed(4)}) translate(-32 -54)`;
+const headT = () => `translate(32 ${54 - FIG.neck / FIG.body}) scale(${FIG.head} ${(FIG.head / FIG.body).toFixed(4)}) translate(-32 -54)`;
+// cổ: nối cằm (đã nâng lên FIG.neck) xuống cổ áo, có bóng dưới cằm
+const neckSVG = () => { const y0 = 54 - FIG.neck / FIG.body - 6; return `<path d="M28.6 ${y0} L28.4 55 Q32 56.4 35.6 55 L35.4 ${y0}Z" fill="#f1c4a5" stroke="#8a5a44" stroke-opacity=".55" stroke-width=".7"/><path d="M28.5 ${y0 + 5} Q32 ${y0 + 8.6} 35.5 ${y0 + 5} L35.5 ${y0 + 7} Q32 ${y0 + 10} 28.5 ${y0 + 7}Z" fill="#d99a7c" opacity=".55"/>`; };
 // tóc dài phía sau: co theo đầu nhưng neo sao cho đỉnh tóc (y=10) trùng đỉnh đầu
-const hairLongT = () => { const hy = 54 - 44 * FIG.head / FIG.body, a = (hy - 10 * FIG.head) / (1 - FIG.head); return `translate(32 ${a.toFixed(2)}) scale(${FIG.head}) translate(-32 ${(-a).toFixed(2)})`; };
+const hairLongT = () => { if (FIG.head === 1) return `translate(0 ${-FIG.neck / FIG.body})`; const hy = 54 - FIG.neck / FIG.body - 44 * FIG.head / FIG.body, a = (hy - 10 * FIG.head) / (1 - FIG.head); return `translate(32 ${a.toFixed(2)}) scale(${FIG.head}) translate(-32 ${(-a).toFixed(2)})`; };
 // giữ tròn một hình trong thân đã kéo dài: co lại quanh tâm (x, y)
 const unS = (x, y, g) => `<g transform="translate(${x} ${y}) scale(1 ${(1 / FIG.body).toFixed(4)}) translate(${-x} ${-y})">${g}</g>`;
 // giày vải: thân giày, đế sáng, vệt bóng mũi giày
@@ -1932,7 +1935,7 @@ function avatarSVG(d, view, act, opt){
   // cổ & đầu
   let body = "";
   if (act) { body = s; s = `<g class="k-hd">`; }
-  s += (act ? "" : `<g class="hw">`) + `<rect x="28.5" y="46" width="7" height="8" rx="2" fill="#f1c4a5"/><g transform="${headT()}"><g class="head">`;
+  s += (act ? "" : `<g class="hw">`) + `${neckSVG()}<g transform="${headT()}"><g class="head">`;
   s += `<ellipse cx="11.4" cy="39" rx="2.8" ry="3.6" fill="url(#sk)" ${OL}/><ellipse cx="52.6" cy="39" rx="2.8" ry="3.6" fill="url(#sk)" ${OL}/>`;
   s += `<ellipse cx="32" cy="34.5" rx="21.5" ry="20" fill="url(#sk)" ${OL}/>`;
   // mũ ni vẽ theo đầu cũ (tròn r19), phóng theo đầu mới
