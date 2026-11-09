@@ -272,10 +272,18 @@
   .pl.walk .head{animation:none}
   .av{position:relative}
   .av .bw{transform-origin:32px 88px}
+  /* bắt đầu hành lễ: khuỵu nhẹ lấy đà rồi vào động tác (không để hình nhảy cụt) */
+  .av.acting > svg:not(.av-old) .bw{animation:actIn .42s cubic-bezier(.3,.7,.4,1)}
+  @keyframes actIn{0%{transform:translateY(2px) scale(1.03,.95)}55%{transform:translateY(-.6px) scale(.99,1.02)}100%{transform:none}}
+  /* thiền: thở chậm, ngực vai phồng xẹp mỗi 5 giây; đầu thở cùng nhịp */
+  .av.medit .bw{animation:medBreath 5s ease-in-out infinite}
+  .av.medit .head{animation:breath 5s ease-in-out infinite}
+  @keyframes medBreath{0%,100%{transform:none}42%,55%{transform:translateY(-.5px) scale(1.018,1.024)}}
+  @media (prefers-reduced-motion:reduce){.av.acting > svg:not(.av-old) .bw,.av.medit .bw{animation:none}}
   .av .hw{transform-origin:32px 54px}
   .av .hsw{transform-origin:32px 14px}
   .av .robe{transform-origin:32px 52px}
-  .av svg.av-old{position:absolute;left:0;top:0;pointer-events:none;animation:avOut .2s ease-out forwards}
+  .av svg.av-old{position:absolute;left:0;top:0;pointer-events:none;animation:avOut .26s ease-out forwards}
   @keyframes avOut{to{opacity:0}}
   .av .k-legs{transform-origin:32px 89px}
   .av .k-tor{transform-origin:32px 50px}
@@ -292,35 +300,35 @@
   .av[data-act=incense] .p-inc,.av[data-act=xam] .p-tube{opacity:1}
 
   /* Lạy: chắp tay, đưa lên trán, quỳ, úp tay rạp đầu, đứng dậy; 3 lạy */
-  .av[data-act=bow] .k-legs{animation:bwLeg 2.6s ease-in-out 3}
-  .av[data-act=bow] .k-seat,.av[data-act=bow] .k-soles{animation:bwSit 2.6s ease-in-out 3}
-  .av[data-act=bow] .k-tor{animation:bwTor 2.6s ease-in-out 3}
-  .av[data-act=bow] .k-hd{animation:bwHd 2.6s ease-in-out 3}
-  .av[data-act=bow] .k-arms{animation:bwArm 2.6s ease-in-out 3}
-  .av[data-act=bow] .k-aj{animation:bwJ 2.6s ease-in-out 3}
-  .av[data-act=bow] .k-af{animation:bwF 2.6s ease-in-out 3}
-  .av[data-act=bow] .k-ad{animation:bwD 2.6s ease-in-out 3}
-  .av[data-act=bow] .k-hair{animation:bwHair 2.6s ease-in-out 3}
-  @keyframes bwHair{0%,40%,70%,100%{opacity:1}48%,62%{opacity:0}}
+  .av[data-act=bow] .k-legs{animation:bwLeg 3s ease-in-out 3}
+  .av[data-act=bow] .k-seat,.av[data-act=bow] .k-soles{animation:bwSit 3s ease-in-out 3}
+  .av[data-act=bow] .k-tor{animation:bwTor 3s ease-in-out 3}
+  .av[data-act=bow] .k-hd{animation:bwHd 3s ease-in-out 3}
+  .av[data-act=bow] .k-arms{animation:bwArm 3s ease-in-out 3}
+  .av[data-act=bow] .k-aj{animation:bwJ 3s ease-in-out 3}
+  .av[data-act=bow] .k-af{animation:bwF 3s ease-in-out 3}
+  .av[data-act=bow] .k-ad{animation:bwD 3s ease-in-out 3}
+  .av[data-act=bow] .k-hair{animation:bwHair 3s ease-in-out 3}
+  @keyframes bwHair{0%,40%,72%,100%{opacity:1}47%,65%{opacity:0}}
   @keyframes bwLeg{0%,20%,82%,100%{transform:none}30%,74%{transform:scaleY(0)}}
   @keyframes bwSit{0%,20%,82%,100%{opacity:0}30%,74%{opacity:1}}
-  @keyframes bwTor{0%,20%,82%,100%{transform:none}30%,40%,70%,74%{transform:translateY(10px) scaleY(var(--ks))}50%,62%{transform:translateY(16px) scale(1.12,var(--kp))}}
-  @keyframes bwHd{0%,20%,82%,100%{transform:none}9%,14%{transform:translateY(2px)}30%,40%,70%,74%{transform:translateY(10px)}50%,62%{transform:translateY(42px) scale(.7)}}
-  @keyframes bwArm{0%,20%,82%,100%{transform:none}30%,40%,70%,74%{transform:translateY(10px)}50%,62%{transform:translateY(16px)}}
+  @keyframes bwTor{0%,20%,82%,100%{transform:none}30%,40%,72%,75%{transform:translateY(10px) scaleY(var(--ks))}49%,65%{transform:translateY(16px) scale(1.12,var(--kp))}}
+  @keyframes bwHd{0%,20%,82%,100%{transform:none}9%,14%{transform:translateY(2px)}30%,40%,72%,75%{transform:translateY(10px)}49%,65%{transform:translateY(42px) scale(.7)}}
+  @keyframes bwArm{0%,20%,82%,100%{transform:none}30%,40%,72%,75%{transform:translateY(10px)}49%,65%{transform:translateY(16px)}}
   @keyframes bwJ{0%,3%,97%,100%{opacity:1}8%,92%{opacity:0}}
-  @keyframes bwF{0%,3%{opacity:0}8%,41%{opacity:1}45%,66%{opacity:0}70%,92%{opacity:1}97%,100%{opacity:0}}
-  @keyframes bwD{0%,41%{opacity:0}45%,66%{opacity:1}70%,100%{opacity:0}}
+  @keyframes bwF{0%,3%{opacity:0}8%,41%{opacity:1}45%,68%{opacity:0}72%,92%{opacity:1}97%,100%{opacity:0}}
+  @keyframes bwD{0%,41%{opacity:0}45%,68%{opacity:1}72%,100%{opacity:0}}
 
   /* Thắp hương: cầm 3 nén hương lên trán, vái 3 vái, cắm vào bát hương, vái 1 vái */
-  .av[data-act=incense] .k-tor{animation:icTor 6.4s ease-in-out both}
-  .av[data-act=incense] .k-hd{animation:icHd 6.4s ease-in-out both}
-  .av[data-act=incense] .k-arms{animation:icArm 6.4s ease-in-out both}
-  .av[data-act=incense] .k-aj{animation:icJ 6.4s ease-in-out both}
-  .av[data-act=incense] .k-af{animation:icF 6.4s ease-in-out both}
-  .av[data-act=incense] .p-inc{animation:icInc 6.4s ease-in-out both}
+  .av[data-act=incense] .k-tor{animation:icTor 7.2s ease-in-out both}
+  .av[data-act=incense] .k-hd{animation:icHd 7.2s ease-in-out both}
+  .av[data-act=incense] .k-arms{animation:icArm 7.2s ease-in-out both}
+  .av[data-act=incense] .k-aj{animation:icJ 7.2s ease-in-out both}
+  .av[data-act=incense] .k-af{animation:icF 7.2s ease-in-out both}
+  .av[data-act=incense] .p-inc{animation:icInc 7.2s ease-in-out both}
   @keyframes icTor{0%,10%,26%,42%,58%,80%,96%,100%{transform:none}18%,34%,50%,88%{transform:translateY(3px) scaleY(.94)}}
   @keyframes icHd{0%,10%,26%,42%,58%,80%,96%,100%{transform:none}18%,34%,50%,88%{transform:translateY(7px) scale(.97)}}
-  @keyframes icArm{0%,10%,26%,42%,58%,76%,80%,96%,100%{transform:none}18%,34%,50%,88%{transform:translateY(5px)}64%,70%{transform:translateY(-6px)}}
+  @keyframes icArm{0%,10%,26%,42%,57%,77%,80%,96%,100%{transform:none}18%,34%,50%,88%{transform:translateY(5px)}62%,73%{transform:translateY(-6px)}}
   @keyframes icJ{0%,2%,78%,100%{opacity:1}7%,74%{opacity:0}}
   @keyframes icF{0%,2%,78%,100%{opacity:0}7%,74%{opacity:1}}
   @keyframes icInc{0%,4%{opacity:0;transform:none}9%,62%{opacity:1;transform:none}70%{opacity:1;transform:translateY(-8px) scale(.9)}75%,100%{opacity:0;transform:translateY(-8px) scale(.9)}}
@@ -2079,7 +2087,7 @@ function swapAvatar(av, html){
   av.innerHTML = html;
   if (old && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
     old.classList.add("av-old"); av.appendChild(old);
-    setTimeout(() => old.remove(), 220);
+    setTimeout(() => old.remove(), 280);
   }
 }
 
@@ -2479,7 +2487,7 @@ function say(p, text, ms = 2600){
   clearTimeout(p.bubT); p.bubT = setTimeout(() => b.classList.remove("show"), ms);
 }
 /* Thời lượng mỗi động tác (ms), khớp với keyframes trong CSS */
-const ACT_MS = { bow: 7800, incense: 6400, bell: 4200, mo: 2600, xam: 6000, so: 5000, pray: 5500 };
+const ACT_MS = { bow: 9000, incense: 7200, bell: 4200, mo: 2600, xam: 6000, so: 5000, pray: 5500 };
 function later(p, ms, fn){ (p.timers = p.timers || []).push(setTimeout(fn, ms)); }
 function stopAct(p){ (p.timers || []).forEach(clearTimeout); p.timers = []; p.act = null; p.actOut = false; }
 function startAct(p, act){
@@ -2499,7 +2507,7 @@ function moStrike(p, remote){
 function playAct(p, act, remote){
   switch (act) {
     case "bow": startAct(p, "bow"); say(p, "Nam mô Bổn Sư Thích Ca Mâu Ni Phật", 3000); break;
-    case "incense": startAct(p, "incense"); say(p, "Thắp ba nén tâm hương", 3000); later(p, 4600, addIncense); break;
+    case "incense": startAct(p, "incense"); say(p, "Thắp ba nén tâm hương", 3000); later(p, 5200, addIncense); break;
     case "bell": startAct(p, "bell"); say(p, "Thỉnh chuông", 3000); later(p, 1680, () => { swingBell(); playBell(remote ? .35 : 1); }); break;
     case "mo": moStrike(p, remote); say(p, "Nam mô A Di Đà Phật", 1600); break;
     case "xam": startAct(p, "xam"); say(p, "Đang xin xăm", 3000); break;
@@ -2613,7 +2621,7 @@ function tick(now){
       if (moving) stopAct(p);
       else if (now > p.actUntil) {
         if (p.act === "mo" && !p.actOut) { p.actOut = true; p.actUntil = now + 650; av.dataset.out = "1"; }
-        else { stopAct(p); p.backUntil = now + 400; p.happyUntil = now + 2800; }
+        else { stopAct(p); p.backUntil = now + 400; p.happyUntil = now + 3400; if (p.anim && !RM.matches) p.anim.sqv += ANIM.sqStop * .8; }
       }
     }
     let v = p.view && !p.view.startsWith("act:") ? p.view.split("|")[0] : "front";
