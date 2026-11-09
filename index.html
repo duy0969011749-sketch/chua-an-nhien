@@ -1767,9 +1767,65 @@ const unS = (x, y, g) => `<g transform="translate(${x} ${y}) scale(1 ${(1 / FIG.
 const shoe = (x, c, ol) => `<ellipse cx="${x}" cy="89" rx="5" ry="2.8" fill="${c}"${ol}/><path d="M${x - 4.6} 89.9 Q${x} 92.2 ${x + 4.6} 89.9" stroke="#f3e6d0" stroke-width="1.1" fill="none" opacity=".75"/><path d="M${x - 2.6} 87.6 Q${x - .5} 86.7 ${x + 1.6} 87.2" stroke="#fff" stroke-width=".8" fill="none" opacity=".35" stroke-linecap="round"/>`;
 /* Chất vải cho thân áo: bóng trụ tròn, ánh sáng vai, nếp gấp ở eo và gấu, đai lưng, hoa văn thêu.
    s là phần SVG thân áo đã vẽ; các mảnh tô màu áo được phủ thêm lớp bóng cùng hình. */
+/* Chi tiết riêng từng bộ đồ (vẽ trên thân áo, dưới tay chắp) */
+const GOLD = "#e9c46a", GOLD_D = "#a87a22";
+function outfitDetail(o, f, hem){
+  const { front, dark, light, vAo } = f;
+  const pip = (d, c = GOLD, w = .9) => `<path d="${d}" stroke="${c}" stroke-width="${w}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const btn = (x, y, r = .95) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${GOLD}" stroke="${GOLD_D}" stroke-width=".4"/><circle cx="${x - r * .3}" cy="${y - r * .3}" r="${r * .35}" fill="#fff" opacity=".6"/>`;
+  let s = "";
+  switch (o) {
+    case "trang": // áo tràng: viền nẹp cổ chạy dài, xẻ hai bên tà
+      if (front) s += pip("M25 51.6 L37 67", "#fff", .5) + pip("M17 78 L16.2 86 M47 78 L47.8 86", dark, .8);
+      else s += pip("M32 52 V86", dark, .6);
+      break;
+    case "aodai": // áo dài: viền cổ kim tuyến, khuy vàng chéo, tà bay viền vàng, cành sen thêu
+      if (front) {
+        s += pip("M27.4 49.6 H36.6", GOLD, .8) + btn(38.5, 54.6, .8) + btn(41, 56.3, .8) + btn(42.6, 59.2, .8);
+        s += pip("M21 68.8 L17.6 87.4 Q32 89.9 46.4 87.4 L43 68.8", GOLD, .8);
+        s += `<g fill="none" stroke="${GOLD}" stroke-width=".55" opacity=".9"><path d="M40 86 Q37 80 38.5 73 Q39.5 70 41.5 69.5"/><path d="M38.6 77 q-3 -1.4 -3.8 -4 q3 .4 3.8 4Z M39.2 73.4 q2.6 -2.2 4.4 -1.4 q-1.8 2.2 -4.4 1.4Z"/></g>`;
+      } else s += pip("M21 68.8 L17.6 87.4 Q32 89.9 46.4 87.4 L43 68.8", GOLD, .8);
+      break;
+    case "baba": // bà ba: cổ tròn viền, hai túi có nắp, xẻ tà hai bên
+      if (front) s += `<path d="M21.2 66.4 h7 v6.2 q-3.5 1.4 -7 0Z M35.8 66.4 h7 v6.2 q-3.5 1.4 -7 0Z" fill="${light}" fill-opacity=".25" stroke="${dark}" stroke-width=".6"/>` + pip("M21.2 66.4 h7 M35.8 66.4 h7", dark, .9) + pip("M18.4 70 L17.6 74.6 M45.6 70 L46.4 74.6", dark, .7);
+      else s += pip("M18.4 70 L17.6 74.6 M45.6 70 L46.4 74.6", dark, .7);
+      break;
+    case "thun": // áo thun: bo cổ gân, bo gấu
+      s += pip("M17.8 72.4 Q32 75 46.2 72.4", light, 1.4) + pip("M17.8 72.4 Q32 75 46.2 72.4", dark, .35);
+      if (front) s += pip("M26.6 50.2 Q32 55.8 37.4 50.2", light, 1.6) + pip("M26.6 50.2 Q32 55.8 37.4 50.2", dark, .4);
+      break;
+    case "casa": // cà sa: nếp vải vắt chéo từ vai, khoen gỗ trên vai (cà sa thường)
+      s += `<g stroke="${vAo ? "#7a1d18" : dark}" fill="none" opacity=".35" stroke-width=".8" stroke-linecap="round">` + (front ? `<path d="M43 56 Q34 66 26 80"/><path d="M45.6 64 Q38 74 32 86"/>` : `<path d="M21 56 Q30 66 38 80"/><path d="M18.4 64 Q26 74 32 86"/>`) + `</g>`;
+      if (front && !vAo) s += `<circle cx="40.4" cy="55.6" r="1.8" fill="none" stroke="#8a5a2b" stroke-width="1.1"/>`;
+      s += `<path d="M16.4 85 Q32 90 47.6 85 L47.9 87.4 Q32 92.4 16.1 87.4Z" fill="${shade(light, .1)}" opacity=".55"/>`;
+      break;
+    case "lam": // áo lam: khuy tàu chéo ngực, viền cổ
+      if (front) s += pip("M26 50 L33.5 60 L39 50", "#fff", .5) + `<g stroke="${light}" stroke-width="1.1" stroke-linecap="round"><path d="M36.2 61.5 h3.4 M36.8 64.5 h3.4 M37.4 67.5 h3.4"/></g>` + btn(40, 61.5, .7) + btn(40.6, 64.5, .7) + btn(41.2, 67.5, .7);
+      break;
+    case "tuthan": // tứ thân: dây yếm quanh cổ, thắt lưng bao hai màu buông dải, viền gấu
+      if (front) s += pip("M26.5 50.5 Q24.5 47.5 27 46 M37.5 50.5 Q39.5 47.5 37 46", "#e8836f", .8)
+        + `<path d="M29.6 67.2 Q28 75 26.8 81 L29.4 80.4 Q30.6 74 31.6 67.6Z" fill="#7ab87a" stroke="#3a2418" stroke-opacity=".4" stroke-width=".4"/><path d="M34.4 67.2 Q36 75 37.2 81 L34.6 80.4 Q33.4 74 32.4 67.6Z" fill="#e8836f" stroke="#3a2418" stroke-opacity=".4" stroke-width=".4"/>`;
+      s += pip(`M16.2 ${hem - 1.4} Q32 ${hem + 3.2} 47.8 ${hem - 1.4}`, light, 1.2);
+      break;
+    case "somi": // sơ mi: nẹp khuy đôi, cổ tay áo sẫm
+      if (front) s += pip("M31 55 V75 M33 55 V75", dark, .4);
+      else s += pip("M19.5 57 Q32 59 44.5 57", dark, .6);
+      break;
+    case "vay": // váy liền: nơ ở eo, viền ren gấu, tay phồng
+      s += `<g fill="#fff" opacity=".85">` + [16, 20.5, 25, 29.5, 34, 38.5, 43, 47.5].map((x, i) => `<circle cx="${x}" cy="${80.6 + Math.sin(i / 7 * Math.PI) * 1.8}" r="1.3"/>`).join("") + `</g>`;
+      if (front) s += `<g transform="translate(32 63.6)"><path d="M0 0 L-5 -2.6 Q-6 0 -5 2.6Z M0 0 L5 -2.6 Q6 0 5 2.6Z" fill="${light}" stroke="${dark}" stroke-width=".5"/><circle r="1.2" fill="${dark}"/></g>`;
+      else s += `<g transform="translate(32 63.6)"><path d="M0 0 L-6.4 -3.4 Q-7.6 0 -6.4 3.4Z M0 0 L6.4 -3.4 Q7.6 0 6.4 3.4Z" fill="${light}" stroke="${dark}" stroke-width=".5"/><path d="M-.8 .8 L-3 9 M.8 .8 L3 9" stroke="${light}" stroke-width="1.6" stroke-linecap="round"/><circle r="1.4" fill="${dark}"/></g>`;
+      break;
+  }
+  return s;
+}
 function fabric(s, f){
   const { o, k, front, dark, light, robe, vAo } = f, hem = HEM[o] || 80;
-  s = s.replace(/<path d="([^"]+)" fill="url\(#rb[^"]+\)"[^>]*\/>/g, (m, dd) => m + `<path d="${dd}" fill="url(#cy${k})"/>`);
+  // chất liệu: lụa (bóng + hoa văn dệt chìm) cho đồ truyền thống, cotton trơn cho áo thun, sọc nhỏ cho sơ mi
+  const silk = !["thun", "somi"].includes(o), weave = silk && !["casa"].includes(o);
+  s = s.replace(/<path d="([^"]+)" fill="url\(#rb[^"]+\)"[^>]*\/>/g, (m, dd) => m + `<path d="${dd}" fill="url(#cy${k})"/>`
+    + (weave ? `<path d="${dd}" fill="url(#pt${k})" opacity=".08"/>` : o === "somi" ? `<path d="${dd}" fill="url(#ps${k})" opacity=".45"/>` : "")
+    + (silk ? `<path d="${dd}" fill="url(#sh${k})"/>` : ""));
   // ánh sáng trên vai
   s += `<path d="M21.5 53 Q32 48.6 42.5 53" stroke="#fff" stroke-opacity=".2" stroke-width="1.8" fill="none" stroke-linecap="round"/>`;
   // nếp gấp: hai bên eo và sóng gấu áo
@@ -1782,8 +1838,9 @@ function fabric(s, f){
     s += `<path d="M18.6 ${y} Q32 ${y + 3} 45.4 ${y} L45.6 ${y + 2.6} Q32 ${y + 5.6} 18.4 ${y + 2.6}Z" fill="${bc}" stroke="#3a2418" stroke-opacity=".5" stroke-width=".6"/>`;
     if (front) s += `<path d="M35.6 ${y + 3.2} q1.6 4.6 -.4 8.8 M37.4 ${y + 3} q2.4 4 1.6 8.2" stroke="${bc}" stroke-width="1.6" fill="none" stroke-linecap="round"/><ellipse cx="36.4" cy="${y + 2.6}" rx="1.8" ry="1.4" fill="${bc}" stroke="#3a2418" stroke-opacity=".5" stroke-width=".5"/>`;
   }
+  s += outfitDetail(o, f, hem);
   // hoa văn mây thêu nhỏ ở vạt áo (không áp cho cà sa và sơ mi)
-  if (front && !vAo && !["casa", "somi", "thun", "aodai"].includes(o)) {
+  if (front && !vAo && !["casa", "somi", "thun", "aodai", "baba"].includes(o)) {
     const cloud = (x, y) => `<path d="M${x - 3} ${y} q0 -2 2 -1.6 q.8 -1.8 2.6 -.6 q2 -.4 1.6 1.6 q1.4 1.4 -.6 1.8 Z" fill="none" stroke="${light}" stroke-width=".7" opacity=".9"/><path d="M${x - .6} ${y - .6} q1 .6 .3 1.2" stroke="${light}" stroke-width=".5" fill="none" opacity=".9"/>`;
     s += cloud(22.5, hem - 4.5) + cloud(41.5, hem - 4.5);
   }
@@ -1806,6 +1863,9 @@ function avatarSVG(d, view, act, opt){
     <linearGradient id="rb${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${light}"/><stop offset=".5" stop-color="${c}"/><stop offset="1" stop-color="${dark}"/></linearGradient>
     <linearGradient id="sl${k}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${dark}"/><stop offset="1" stop-color="${c}"/></linearGradient>
     <linearGradient id="sr${k}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${c}"/><stop offset="1" stop-color="${dark}"/></linearGradient>
+    <pattern id="pt${k}" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M3.5 1.6 L5.4 3.5 L3.5 5.4 L1.6 3.5Z" fill="none" stroke="#fff" stroke-width=".3"/><circle cx="0" cy="0" r=".45" fill="#fff"/><circle cx="7" cy="7" r=".45" fill="#fff"/></pattern>
+    <pattern id="ps${k}" width="2.6" height="10" patternUnits="userSpaceOnUse"><path d="M1.3 0 V10" stroke="${dark}" stroke-width=".3"/></pattern>
+    <linearGradient id="sh${k}" x1="0" y1="0" x2="1" y2="1"><stop offset=".28" stop-color="#fff" stop-opacity="0"/><stop offset=".42" stop-color="#fff" stop-opacity=".24"/><stop offset=".5" stop-color="#fff" stop-opacity=".06"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/></linearGradient>
     <linearGradient id="cy${k}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".26"/><stop offset=".22" stop-color="#000" stop-opacity="0"/><stop offset=".42" stop-color="#fff" stop-opacity=".12"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".3"/></linearGradient><clipPath id="tl${k}"><rect x="-20" y="49" width="104" height="60"/></clipPath><clipPath id="hc${k}"><rect x="-20" y="-30" width="104" height="79.5"/></clipPath></defs>`;
   s += `<ellipse cx="32" cy="92" rx="17" ry="4" fill="rgba(0,0,0,.28)"/><g class="bw"><g class="bS" transform="${bodyT()}">`;
 
