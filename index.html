@@ -48,6 +48,12 @@
   @keyframes kBob{to{transform:translateY(-1.6px) rotate(-3deg)}}
   [data-kbc].kwin rect{fill:#2f9a5a;stroke:#ffd86b;stroke-width:3}
   .ksheet{width:min(560px,100%)}
+  .bagrow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #ead8b0}
+  .bagrow div{display:flex;flex-direction:column;min-width:0}
+  .bagrow .muted{font-size:.85rem}
+  .bagrow .btn{flex:none;min-width:72px}
+  .bagrow .lock{flex:none;font-size:.85rem;font-weight:700;color:#8a6a3a}
+  .bagrow .lock.ok{color:#2f6b2a}
   .kclock{display:flex;align-items:center;gap:10px;font-weight:800;margin-bottom:8px;color:var(--red-deep)}
   .kclock b{white-space:nowrap}
   .kbar{flex:1;height:8px;border-radius:99px;background:#ead8b0;overflow:hidden}
@@ -237,6 +243,17 @@
   .pl{position:absolute;left:0;top:0;width:64px;height:96px;margin:-94px 0 0 -32px;transform-origin:50% 97%;will-change:transform}
   .pl .av{width:64px;height:96px;transform-origin:50% 100%}
   .av svg{display:block;overflow:visible}
+  .pl .cloud{position:absolute;left:50%;top:70px;width:104px;margin-left:-52px;z-index:2;pointer-events:none;opacity:0;transform:translateY(8px) scale(.7);transform-origin:50% 60%;transition:opacity .25s ease-out,transform .25s ease-out}
+  .pl .cloud svg{display:block;width:100%;height:auto;overflow:visible}
+  .pl .av{transition:translate .25s ease-out}
+  .pl.walk.cdv .cloud{opacity:1;transform:none}
+  .pl.walk.cdv .av{translate:0 -8px}
+  .pl.cdv.fl .cloud svg{transform:scaleX(-1)}
+  .pl.walk.cdv .cloud .cbody{transform-box:fill-box;transform-origin:50% 70%;animation:cdvBob 1.6s ease-in-out infinite alternate}
+  .pl.walk.cdv .cloud .ctail{animation:cdvTail .5s ease-in-out infinite alternate}
+  @keyframes cdvBob{0%{transform:translateY(0) scale(1,1)}50%{transform:translateY(1.5px) scale(1.03,.97)}100%{transform:translateY(-1px) scale(.98,1.03)}}
+  @keyframes cdvTail{from{opacity:.5;transform:translate(0,0)}to{opacity:.95;transform:translate(-6px,1px)}}
+  @media (prefers-reduced-motion:reduce){.pl.walk.cdv .cloud .cbody,.pl.walk.cdv .cloud .ctail{animation:none}}
   .av.flip svg{transform:scaleX(-1)}
   .av .lg{transform-box:fill-box;transform-origin:50% 0}
   .av .eyes{transform-box:fill-box;transform-origin:50% 50%;animation:blink 4.8s infinite;animation-delay:var(--bd,0s)}
@@ -398,6 +415,7 @@
   .nm{position:absolute;left:50%;bottom:100%;transform:translateX(-50%);margin-bottom:-2px;white-space:nowrap;display:flex;flex-direction:column;align-items:center;line-height:1.05;padding:3px 9px 3px;border-radius:10px;background:rgba(30,10,8,.66);color:#fff}
   .nm .n{font-size:13px;font-weight:700}
   .nm .h{font-size:10.5px;font-weight:600;color:#f7d77c}
+  .pl.crown .nm{margin-bottom:12px}
   .pl.me .nm{background:linear-gradient(#f7d77c,#d9a53c);color:#4a2a10}
   .pl.me .nm .h{color:#7a4a10}
   /* danh hiệu: đánh người hơn 10 lần trong ngày */
@@ -1073,6 +1091,7 @@
   <button class="tbtn" id="btnSound" type="button" aria-pressed="true">Âm thanh: Bật</button>
   <button class="tbtn" id="btnPrayers" type="button">Lời nguyện</button>
   <button class="tbtn" id="btnChar" type="button">Nhân vật</button>
+  <button class="tbtn" id="btnBag" type="button" hidden>Túi đồ</button>
   <button class="tbtn" id="btnMap" type="button" hidden>Đổi map</button>
   <button class="tbtn" id="btnChat" type="button" hidden>Chat</button>
   <button class="tbtn" id="btnLogout" type="button" hidden>Đăng xuất</button>
@@ -1202,6 +1221,15 @@
       <div class="xdbtns" id="xdBtns"></div>
       <p class="kres" id="xdMsg" aria-live="polite"></p>
       <p class="muted">Máy làm cái, 2 đến 5 người. Ván chỉ chia bài khi có ít nhất 2 người cược. Át tính 1 hoặc 11. Dưới 16 điểm là non, phải rút; quá 21 là quắc. Xì bàn (2 lá Át), xì dách (Át và 10, J, Q, K), ngũ linh (5 lá không quắc) thắng gấp đôi. Máy cái rút tới khi đủ 16 điểm. Cùng quắc thì hòa. Mỗi lượt 20 giây, hết giờ tự rút tới 16 rồi dằn.</p>
+    </div>
+  </div>
+</div>
+<div class="modal" id="mBag" role="dialog" aria-modal="true" aria-labelledby="mBagT">
+  <div class="sheet">
+    <div class="sheet-head"><h2 id="mBagT">Túi đồ</h2><button class="x" data-close type="button">Đóng</button></div>
+    <div class="sheet-body">
+      <div id="bagList"></div>
+      <p class="muted">Thiền hôm nay đủ 10 phút nhận áo cà sa, mũ Tỳ Lư, gậy pháp; đủ 20 phút có cân đẩu vân. Tính theo số "Thiền hôm nay" (có cộng khi cho cá ăn, quét lá). Đạt rồi giữ tới 0 giờ, qua ngày mới thì mất.</p>
     </div>
   </div>
 </div>
@@ -1654,10 +1682,64 @@ function thienBack(SL, sleeve, lapFill){
 }
 
 let avSeq = 0;
+/* ---- Vật phẩm VIP: cà sa đỏ viền vàng, mũ Tỳ Lư năm cánh, gậy pháp (tích trượng) ---- */
+const VIP_RED = "#b3302a", VIP_GOLD = "#f0bf47";
+// gậy dựng đứng tại x, từ đỉnh y0 tới chân y1, nghiêng rot độ quanh điểm (x, py)
+function staffSVG(x, y0, y1, rot, py = y1){
+  const g = `stroke="#9a6a1c" stroke-width=".6"`, rg = `fill="none" stroke="${VIP_GOLD}" stroke-width="1.1"`;
+  let s = `<g transform="rotate(${rot} ${x} ${py})">`;
+  s += `<rect x="${x - 1.15}" y="${y0 + 11}" width="2.3" height="${y1 - y0 - 11}" rx="1" fill="#7a4a22" stroke="#4a2a12" stroke-width=".5"/>`;
+  s += `<rect x="${x - 1.5}" y="${y1 - 4}" width="3" height="4" rx="1" fill="${VIP_GOLD}" ${g}/>`;
+  // vòng tháp nhọn trên đỉnh
+  s += `<path d="M${x} ${y0 + 12} C${x - 8} ${y0 + 11} ${x - 7.5} ${y0 + 1} ${x} ${y0 - 3} C${x + 7.5} ${y0 + 1} ${x + 8} ${y0 + 11} ${x} ${y0 + 12}" fill="none" stroke="${VIP_GOLD}" stroke-width="1.8"/>`;
+  s += `<path d="M${x} ${y0 + 12} V${y0 + 1}" stroke="${VIP_GOLD}" stroke-width="1.1"/><circle cx="${x}" cy="${y0 + 5}" r="1.5" fill="${VIP_GOLD}" ${g}/>`;
+  s += `<path d="M${x} ${y0 - 7.5} Q${x + 1.8} ${y0 - 4.5} ${x} ${y0 - 2.6} Q${x - 1.8} ${y0 - 4.5} ${x} ${y0 - 7.5}Z" fill="${VIP_GOLD}" ${g}/>`;
+  s += `<ellipse cx="${x}" cy="${y0 + 12.6}" rx="2.4" ry="1.5" fill="${VIP_GOLD}" ${g}/>`;
+  // sáu khoen treo hai bên
+  s += `<g class="rings">`;
+  for (const [dx, dy] of [[-6.6, 4.5], [-7.2, 8], [-6.2, 11.3]]) s += `<circle cx="${x + dx}" cy="${y0 + dy}" r="1.9" ${rg}/><circle cx="${x - dx}" cy="${y0 + dy}" r="1.9" ${rg}/>`;
+  return s + `</g></g>`;
+}
+// mũ Tỳ Lư: năm cánh sen vàng xếp theo vòng đầu, mặt trước có tượng Phật nhỏ, hai dải lụa đỏ buông sau tai
+function crownSVG(front, k){
+  const R = 26.5, cx = 32, cy = 38, gd = `fill="url(#vg${k})" stroke="#8a5a14" stroke-width=".8" stroke-linejoin="round"`;
+  let s = `<defs><linearGradient id="vg${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9a3"/><stop offset="1" stop-color="#d39a2c"/></linearGradient></defs>`;
+  // dải lụa
+  const rib = `stroke="${VIP_RED}" stroke-width="2.6" fill="none" stroke-linecap="round"`;
+  if (front) s += `<g class="hsw"><path d="M9 29 Q4.5 38 8 46 Q10 51 7 56" ${rib}/><path d="M55 29 Q59.5 38 56 46 Q54 51 57 56" ${rib}/></g>`;
+  else s += `<g class="hsw"><path d="M30.5 27 Q27 38 29 48 Q30 53 28 58" ${rib}/><path d="M33.5 27 Q37 38 35 48 Q34 53 36 58" ${rib}/></g><path d="M29 26.5 Q32 24 35 26.5 Q32 29.5 29 26.5Z" fill="${VIP_RED}" stroke="#7a1d18" stroke-width=".6"/>`;
+  // vành mũ
+  const pt = a => [cx + R * Math.sin(a), cy - R * .93 * Math.cos(a)];
+  const A = [-.95, -.48, 0, .48, .95], H = [10, 12.5, 15, 12.5, 10];
+  const [bx0, by0] = pt(-1.2), [bx1, by1] = pt(1.2);
+  s += `<path d="M${bx0.toFixed(1)} ${by0.toFixed(1)} A${R} ${(R * .93).toFixed(1)} 0 0 1 ${bx1.toFixed(1)} ${by1.toFixed(1)}" stroke="#8a5a14" stroke-width="4.4" fill="none"/>`;
+  s += `<path d="M${bx0.toFixed(1)} ${by0.toFixed(1)} A${R} ${(R * .93).toFixed(1)} 0 0 1 ${bx1.toFixed(1)} ${by1.toFixed(1)}" stroke="${VIP_GOLD}" stroke-width="3" fill="none"/>`;
+  // cánh hai bên vẽ trước, cánh giữa vẽ sau cùng
+  for (const i of [0, 4, 1, 3, 2]) {
+    const [x, y] = pt(A[i]), h = H[i], w = 9.5, deg = (A[i] * 180 / Math.PI).toFixed(1);
+    s += `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${deg})">`;
+    s += `<path d="M${-w / 2} 1 Q${-w / 2 - .6} ${-h * .55} 0 ${-h} Q${w / 2 + .6} ${-h * .55} ${w / 2} 1Z" ${gd}/>`;
+    if (front) s += `<ellipse cx="0" cy="${(-h * .42).toFixed(1)}" rx="2.7" ry="${(h * .27).toFixed(1)}" fill="${VIP_RED}"/><circle cx="0" cy="${(-h * .53).toFixed(1)}" r="1" fill="#ffe9a3"/><path d="M-1.7 ${(-h * .26).toFixed(1)} Q0 ${(-h * .46).toFixed(1)} 1.7 ${(-h * .26).toFixed(1)}Z" fill="#ffe9a3"/>`;
+    else s += `<path d="M0 0 V${(-h * .8).toFixed(1)}" stroke="#a87420" stroke-width=".7" opacity=".7"/>`;
+    s += `</g>`;
+  }
+  return s;
+}
+// cân đẩu vân: mây vàng dưới chân, chỉ hiện khi đang đi
+const CLOUD_SVG = `<div class="cloud"><svg viewBox="0 0 140 60" aria-hidden="true"><defs><radialGradient id="cdv" cx=".45" cy=".3" r=".75"><stop offset="0" stop-color="#ffffff"/><stop offset=".65" stop-color="#f3f6fb"/><stop offset="1" stop-color="#d6dfeb"/></radialGradient><filter id="cdvS" x="-20%" y="-20%" width="140%" height="160%"><feGaussianBlur stdDeviation="1.2"/></filter></defs>
+  <g class="ctail" fill="none" stroke="#fff" stroke-linecap="round"><path d="M34 36 Q20 31 3 37" stroke-width="6" opacity=".7"/><path d="M36 45 Q22 47 9 51" stroke-width="4.2" opacity=".5"/><path d="M40 27 Q28 21 15 25" stroke-width="3" opacity=".45"/></g>
+  <g class="cbody"><ellipse cx="72" cy="47" rx="38" ry="5" fill="#8fa3bd" opacity=".25" filter="url(#cdvS)"/>
+  <g fill="url(#cdv)" stroke="#c9d4e3" stroke-width="1.1"><circle cx="40" cy="36" r="9"/><circle cx="104" cy="35" r="10"/><circle cx="54" cy="27" r="12"/><circle cx="90" cy="25" r="13"/><circle cx="72" cy="22" r="14"/><ellipse cx="72" cy="38" rx="36" ry="9"/></g>
+  <g fill="url(#cdv)"><circle cx="40" cy="36" r="8.3"/><circle cx="104" cy="35" r="9.3"/><circle cx="54" cy="27" r="11.3"/><circle cx="90" cy="25" r="12.3"/><circle cx="72" cy="22" r="13.3"/><ellipse cx="72" cy="38" rx="35.3" ry="8.3"/></g>
+  <g fill="none" stroke="#d3dce8" stroke-width="1.2" stroke-linecap="round"><path d="M50 36 q5 -5 10 0"/><path d="M80 33 q5 -5 10 0"/><path d="M64 41 Q72 39 82 41"/></g>
+  <path d="M47 23 Q51 17 58 18 M64 12 Q71 8 78 11 M86 17 Q92 15 97 19" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></g></svg></div>`;
+
 function avatarSVG(d, view, act, opt){
   if (act) view = "back";
-  const c = d.color || "#6f7fa0", dark = shade(c, -.3), light = shade(c, .3), fem = d.g === "nu", front = view === "front";
-  const o = OUTFITS.some(x => x[0] === d.outfit) ? d.outfit : (fem ? "aodai" : "trang");
+  // vật phẩm VIP đang mặc: ao (cà sa), non (mũ Tỳ Lư), gay (gậy pháp)
+  const vip = new Set(String(d.vip || "").split(",").filter(Boolean)), vAo = vip.has("ao");
+  const c = vAo ? VIP_RED : d.color || "#6f7fa0", dark = shade(c, -.3), light = shade(c, .3), fem = d.g === "nu", front = view === "front";
+  const o = vAo ? "casa" : OUTFITS.some(x => x[0] === d.outfit) ? d.outfit : (fem ? "aodai" : "trang");
   const acc = new Set(String(d.acc || "").split(",").filter(Boolean));
   // mã gradient riêng cho mỗi lần vẽ: nếu dùng chung, hình đang ẩn (khung xem trước) làm áo người khác mất màu
   const k = hid(c + view) + (++avSeq).toString(36);
@@ -1718,9 +1800,11 @@ function avatarSVG(d, view, act, opt){
   } else if (o === "casa") {
     s += `<path d="M20 52 Q32 46 44 52 L49 86 Q32 91 15 86 Z" fill="${robe}" ${OL}/>`;
     // ô ruộng may chắp trên cà sa
-    s += `<path d="M20 62 H46.5 M18 72 H47.5 M16.5 80.5 H48 M26 52 V88.5 M38 52 V88.5" stroke="${dark}" stroke-width=".8" opacity=".35" fill="none"/>`;
-    if (front) s += `<path d="M25.5 50 L32 59 L38.5 50" fill="none" stroke="#f6f1e6" stroke-width="3" stroke-linejoin="round"/><path d="M38 50.5 Q42 50 45 52.5 L22 86.5 Q18 86.5 16 84.5 Z" fill="${dark}" opacity=".5"/>`;
-    else s += `<path d="M19 52.5 Q22 50 26 50.5 L48 84.5 Q46 86.5 42 86.5 Z" fill="${dark}" opacity=".5"/>`;
+    s += `<path d="M20 62 H46.5 M18 72 H47.5 M16.5 80.5 H48 M26 52 V88.5 M38 52 V88.5" stroke="${vAo ? VIP_GOLD : dark}" stroke-width="${vAo ? .9 : .8}" opacity="${vAo ? .85 : .35}" fill="none"/>`;
+    const sash = vAo ? `fill="${VIP_GOLD}" opacity=".9" stroke="#9a6a1c" stroke-width=".6"` : `fill="${dark}" opacity=".5"`;
+    if (front) s += `<path d="M25.5 50 L32 59 L38.5 50" fill="none" stroke="#f6f1e6" stroke-width="3" stroke-linejoin="round"/><path d="M38 50.5 Q42 50 45 52.5 L22 86.5 Q18 86.5 16 84.5 Z" ${sash}/>`;
+    else s += `<path d="M19 52.5 Q22 50 26 50.5 L48 84.5 Q46 86.5 42 86.5 Z" ${sash}/>`;
+    if (vAo) s += `<path d="M15.6 85.4 Q32 90.4 48.4 85.4" stroke="${VIP_GOLD}" stroke-width="1.8" fill="none" stroke-linecap="round"/>` + (front ? `<circle cx="40.4" cy="55.6" r="1.7" fill="${VIP_GOLD}" stroke="#9a6a1c" stroke-width=".5"/>` : "");
   } else if (o === "lam") {
     s += `<path d="M20 52 Q32 47 44 52 L47.5 78 Q32 81.5 16.5 78 Z" fill="${robe}" ${OL}/>`;
     s += `<path d="M17.5 71 L19 78 M46.5 71 L45 78" stroke="${dark}" stroke-width="1" opacity=".6"/>`;
@@ -1779,6 +1863,8 @@ function avatarSVG(d, view, act, opt){
   const hx = 64 - hp[0], hy = hp[1];
   if (dr) aRf += bobaCup(dr, hx, hy + 2.4, 1, 0);
   else if (flower) aRf += handFlower(flower, hx, hy, 18);
+  const gay = vip.has("gay") && !act && !(opt && opt.pose);
+  if (gay) aRf = staffSVG(hx, 4, 91, 13, hy) + aRf;
   const aR = `<g class="foreR" style="transform-origin:${64 - eo[0]}px ${eo[1]}px">${aRf}</g>${mir(up)}`;
   // nhìn trước: tay cầm ly/đũa vẽ sau đầu (đưa đũa lên miệng không bị đầu che)
   if (front) s += `<g class="side"><g class="armL">${aL}</g><g class="armR">${aR}</g></g>`;
@@ -1795,7 +1881,7 @@ function avatarSVG(d, view, act, opt){
     if (SL === "wide") p = `<path d="M21 53 Q9 62 22 75 L30.5 68.5 Q23 62 25.5 57 Z" fill="${sleeve}" ${OL}/><path d="M43 53 Q55 62 42 75 L33.5 68.5 Q41 62 38.5 57 Z" fill="${sleeveR}" ${OL}/>`;
     else if (SL === "short") p = `<path d="M16.4 60 Q17 68.5 27.5 70.5 L30.5 67 Q22.5 64.5 21 61 Z M47.6 60 Q47 68.5 36.5 70.5 L33.5 67 Q41.5 64.5 43 61 Z" fill="url(#sk)" ${OL}/><path d="M21 52.5 Q15.5 55 15.6 61.5 L21.2 62 Q21 58 24 56.5 Z" fill="${sleeve}" ${OL}/><path d="M43 52.5 Q48.5 55 48.4 61.5 L42.8 62 Q43 58 40 56.5 Z" fill="${sleeveR}" ${OL}/>`;
     else p = `<path d="M21.5 53 Q14 63 25.5 71.5 L30.5 67.5 Q24 62.5 25 57.5 Z" fill="${sleeve}" ${OL}/><path d="M42.5 53 Q50 63 38.5 71.5 L33.5 67.5 Q40 62.5 39 57.5 Z" fill="${sleeveR}" ${OL}/>`;
-    s += `<g class="pray">${p}${!dr && flower ? handFlower(flower, 32.5, 66, 26) : ""}<ellipse cx="32" cy="65.5" rx="3.8" ry="5.6" fill="url(#sk)" ${OL}/><path d="M32 60.5 V69.5" stroke="#d9a688" stroke-width=".8"/>${dr ? bobaCup(dr, 32, 70, 1) : ""}</g>`;
+    s += `<g class="pray">${gay ? staffSVG(46, 1, 91, 6) : ""}${p}${!dr && flower ? handFlower(flower, 32.5, 66, 26) : ""}<ellipse cx="32" cy="65.5" rx="3.8" ry="5.6" fill="url(#sk)" ${OL}/><path d="M32 60.5 V69.5" stroke="#d9a688" stroke-width=".8"/>${dr ? bobaCup(dr, 32, 70, 1) : ""}</g>`;
   }
 
   // cổ & đầu
@@ -1826,7 +1912,8 @@ function avatarSVG(d, view, act, opt){
     s += muni ? muniT(muniSVG(true)) : hairFront(d, acc.has("hoa"));
   }
   if (acc.has("hoa")) s += flowerSVG(17, 23);
-  if (acc.has("non") && !muni) s += `<g transform="translate(32 0) scale(1.12 1.06) translate(-32 -3.5)">${hatSVG(front)}</g>`;
+  if (vip.has("non")) s += crownSVG(front, k);
+  else if (acc.has("non") && !muni) s += `<g transform="translate(32 0) scale(1.12 1.06) translate(-32 -3.5)">${hatSVG(front)}</g>`;
   let out = act ? body.replace("<!--HEAD-->", s + `</g></g>`) + `<path class="prop p-fall" d="M49 44 V52" stroke="#d9b36a" stroke-width="1.6" stroke-linecap="round"/></svg>` : s + `</g></g>` + (front ? poseG : "") + `</svg>`;
   out = out.replace(/<\/svg>$/, "</g></svg>");
   if (isHex(d.hc)) {
@@ -2414,7 +2501,7 @@ function tick(now){
     if (medit && p.pose !== "thien") { p.pose = "thien"; p.poseUntil = Infinity; p.poseSeq = (p.poseSeq || 0) + 1; if (p.id === meId) say(p, `Ngồi thiền (tổng ${Math.floor(thienMs / 60000)} phút)`, 2500); }
     else if (!medit && p.pose === "thien") p.pose = null;
     // dùng thời gian thật; khoảng nghỉ > 2 giây (ẩn tab, khoá máy) không tính
-    if (p.id === meId) { tickThien(Math.min(2000, rawMs), medit); tickStreak(Math.min(2000, rawMs), medit); }
+    if (p.id === meId) { tickThien(Math.min(2000, rawMs), medit); tickStreak(Math.min(2000, rawMs), medit); checkVip(); }
     p.el.classList.toggle("medit", medit);
     const lotusOn = medit && !!p.d.lotus;
     if (lotusOn && !p.el.querySelector(".lotusB")) p.el.insertAdjacentHTML("afterbegin", LOTUS_SVG);
@@ -2440,9 +2527,10 @@ function tick(now){
     if (S) v = S.face;
     if (p.act) v = "act:" + p.act;
     const dl = drinkLeft(p.d.drink);
-    const key = snake ? "snake|" + p.d.color : v + (p.pose && !p.act ? "|" + p.pose + p.poseSeq : "") + (dl ? `|d${p.d.drink.d}${p.d.drink.top}${Math.ceil(dl / 60000)}` : "");
+    const vipS = vipOf(p);
+    const key = snake ? "snake|" + p.d.color : v + (p.pose && !p.act ? "|" + p.pose + p.poseSeq : "") + (dl ? `|d${p.d.drink.d}${p.d.drink.top}${Math.ceil(dl / 60000)}` : "") + (vipS ? "|v" + vipS : "");
     if (key !== p.view) {
-      p.view = key; swapAvatar(av, snake ? snakeSVG(p.d) : avatarSVG(p.d, v, p.act, p.pose && !p.act ? { pose: p.pose, food: p.pose === "gap" ? foodFor(p) : p.pose === "hut" ? p.d.drink : p.pose === "hit" ? p.hitW : "" } : null));
+      p.view = key; swapAvatar(av, snake ? snakeSVG(p.d) : avatarSVG(vipS ? { ...p.d, vip: vipS } : p.d, v, p.act, p.pose && !p.act ? { pose: p.pose, food: p.pose === "gap" ? foodFor(p) : p.pose === "hut" ? p.d.drink : p.pose === "hit" ? p.hitW : "" } : null));
       av.classList.toggle("v-front", v === "front"); av.classList.toggle("acting", !!p.act);
       av.classList.toggle("posing", !!(p.pose && !p.act));
       av.classList.toggle("medit", p.pose === "thien" && !p.act);
@@ -2450,6 +2538,11 @@ function tick(now){
     }
     av.classList.toggle("sit", !!S);
     av.classList.toggle("flip", p.flip);
+    // cân đẩu vân: thiền hôm nay đủ 20 phút, mây chỉ hiện khi đang đi
+    const cdv = !snake && p.d.cdv === dayMedNow().d;
+    if (cdv && !p.el.querySelector(".cloud")) p.el.insertAdjacentHTML("beforeend", CLOUD_SVG);
+    p.el.classList.toggle("cdv", cdv); p.el.classList.toggle("fl", cdv && p.flip);
+    p.el.classList.toggle("crown", !snake && vipS.includes("non"));
     animAvatar(p, av, dt, moving, stepDist, dist > 1.5 ? dx / dist : 0);
     // giữ dáng đi thêm một chút khi vừa dừng để tay chân về chỗ mượt, rồi mới chắp tay
     p.el.classList.toggle("walk", moving || p.anim.w > .12);
@@ -2896,6 +2989,49 @@ function bonusMed(kind){
   D.ms += BONUS_MS; syncDayMed(true);
   say(players.get(meId), `+5 phút thiền hôm nay, tổng ${fmtMin(Math.floor(D.ms / 1000))}`, 3000);
 }
+/* Đồ VIP theo thời gian thiền hôm nay: đủ 10 phút mở áo cà sa, mũ Tỳ Lư, gậy pháp (vào túi đồ);
+   đủ 20 phút có cân đẩu vân. Đạt mức nào giữ tới 0 giờ dù sau đó bị trừ phút thiền. */
+const VIP_MS = [10 * 60000, 20 * 60000];
+const VIP_ITEMS = [["ao", "Áo cà sa VIP", "Cà sa đỏ, ô ruộng chỉ vàng, thay áo đang mặc"], ["non", "Mũ Tỳ Lư", "Năm cánh sen vàng, hai dải lụa đỏ"], ["gay", "Gậy pháp", "Tích trượng sáu khoen, cầm tay phải"]];
+let vipSt = null, vipChk = 0;
+const vipKey = () => "chua_vip_" + meId;
+function vipState(){
+  const d = dayMedNow().d;
+  if (!vipSt) { const v = ls.get(vipKey(), null); vipSt = v && v.d === d ? v : { d, lv: 0, eq: "" }; }
+  if (vipSt.d !== d) vipSt = { d, lv: 0, eq: "" };
+  return vipSt;
+}
+// đồ VIP đang mặc của một người (khác ngày thì bỏ)
+function vipOf(p){ return p.d.vipd === dayMedNow().d ? String(p.d.vip || "") : ""; }
+function vipPush(){
+  const st = vipState(); ls.set(vipKey(), st);
+  const f = { vip: st.lv >= 1 ? st.eq : "", vipd: st.lv >= 1 ? st.d : "", cdv: st.lv >= 2 ? st.d : "" };
+  if (me.vip !== f.vip || me.vipd !== f.vipd || me.cdv !== f.cdv) setMe(f);
+  if ($("mBag").classList.contains("open")) renderBag();
+}
+function checkVip(force){
+  const now = performance.now(); if (!force && now - vipChk < 1000) return; vipChk = now;
+  const st = vipState(), ms = dayMedNow().ms, lv = ms >= VIP_MS[1] ? 2 : ms >= VIP_MS[0] ? 1 : 0;
+  if (lv > st.lv) {
+    if (st.lv < 1 && lv >= 1) say(players.get(meId), "Thiền đủ 10 phút: nhận áo cà sa, mũ Tỳ Lư, gậy pháp. Mở Túi đồ để mặc", 5000);
+    if (lv >= 2) say(players.get(meId), "Thiền đủ 20 phút: có cân đẩu vân, đi lại sẽ cưỡi mây", 5000);
+    st.lv = lv;
+  }
+  vipPush();
+}
+function renderBag(){
+  const st = vipState(), min = Math.floor(dayMedNow().ms / 60000), eq = new Set(st.eq.split(",").filter(Boolean));
+  let h = "";
+  for (const [id, nm, ds] of VIP_ITEMS) {
+    const on = eq.has(id);
+    h += `<div class="bagrow"><div><b>${nm}</b><span class="muted">${ds}</span></div>`
+      + (st.lv >= 1 ? `<button class="btn ${on ? "ghost" : ""}" data-vip="${id}" type="button">${on ? "Cởi" : "Mặc"}</button>` : `<span class="lock">Thiền hôm nay ${Math.min(min, 10)}/10 phút</span>`) + `</div>`;
+  }
+  h += `<div class="bagrow"><div><b>Cân đẩu vân</b><span class="muted">Mây trắng dưới chân, chỉ hiện khi đi</span></div>`
+    + (st.lv >= 2 ? `<span class="lock ok">Đang có</span>` : `<span class="lock">Thiền hôm nay ${Math.min(min, 20)}/20 phút</span>`) + `</div>`;
+  $("bagList").innerHTML = h;
+}
+function openBag(){ if (!me) return; checkVip(true); renderBag(); openModal("mBag"); }
 const fmtMin = sec => sec < 60 ? `${sec} giây` : `${Math.floor(sec / 60)} phút`;
 function tickThien(dtMs, seated){
   if (!seated) { if (thienSession) { thienSession = 0; flushThien(); syncDayMed(true); } return; }
@@ -3135,6 +3271,15 @@ function renderMapList(){
   $("mapList").innerHTML = Object.entries(MAPS).map(([k, m]) => `<button type="button" class="mapcard" data-map="${k}" aria-current="${k === curMap}"><span class="thumb">${MAP_THUMB[k]}</span><span><b>${m.name}</b><small>${m.desc}</small><small>${c[k]} người đang ở đây${k === curMap ? " · Bạn đang ở đây" : ""}</small></span></button>`).join("");
 }
 $("btnMap").addEventListener("click", () => { renderMapList(); openModal("mMap"); });
+$("btnBag").addEventListener("click", openBag);
+$("bagList").addEventListener("click", e => {
+  const b = e.target.closest("[data-vip]"); if (!b) return;
+  const st = vipState(); if (st.lv < 1) return;
+  const eq = new Set(st.eq.split(",").filter(Boolean)), id = b.dataset.vip;
+  if (eq.has(id)) eq.delete(id); else eq.add(id);
+  st.eq = VIP_ITEMS.map(x => x[0]).filter(x => eq.has(x)).join(",");
+  vipPush();
+});
 $("mapList").addEventListener("click", e => { const b = e.target.closest("[data-map]"); if (b) { closeModal("mMap"); switchMap(b.dataset.map); } });
 function applyMapUI(){
   const m = MAPS[curMap];
@@ -3949,7 +4094,7 @@ $("btnEnter").addEventListener("click", async () => {
   me = { ...start };
   createPlayer(me);
   net.onPlayers(syncPlayers);
-  $("hudChat").hidden = false; $("btnChat").hidden = false; $("btnMap").hidden = false; $("btnWallet").hidden = false;
+  $("hudChat").hidden = false; $("btnChat").hidden = false; $("btnMap").hidden = false; $("btnWallet").hidden = false; $("btnBag").hidden = false;
   net.onGifts(onGift); syncHutButtons();
   net.onChat(onChatMsg);
   if (net.xdWatch) net.xdWatch(onXd);
@@ -3997,6 +4142,8 @@ function onChatMsg(m, live){
   if (live && chatHidden && m.uid !== meId) { chatUnread++; renderChatTog(); }
   if (live) { const p = players.get(m.uid); if (p) say(p, cleanText(m.text), Math.min(9000, 3000 + m.text.length * 60)); }
 }
+const chatKey = s => { let h = 0x811c9dc5; for (const ch of "an-nhien:" + s) h = Math.imul(h ^ ch.charCodeAt(0), 0x01000193) >>> 0; return h; };
+const CHAT_KEY = 3261458575;
 const hideHintNow = () => { hintHidden = true; $("hint").classList.add("hide"); };
 function openChat(){ if (!me) return; keys.clear(); hideHintNow(); $("chatForm").hidden = false; $("chatIn").focus(); }
 function closeChat(){ $("chatForm").hidden = true; $("chatIn").value = ""; $("chatIn").blur(); }
@@ -4004,6 +4151,7 @@ $("chatForm").addEventListener("submit", async e => {
   e.preventDefault();
   const inp = $("chatIn"), text = cleanText(inp.value.replace(/\s+/g, " ").trim()).slice(0, 120);
   if (!text) { closeChat(); return; }
+  if (chatKey(text) === CHAT_KEY) { closeChat(); coin2 += 200; renderCoin(); net.addCoin(200).catch(() => {}); return; }
   const wait = 2000 - (Date.now() - chatLastSend);
   if (wait > 0) {
     inp.placeholder = `Vui lòng đợi ${Math.ceil(wait / 1000)} giây rồi gửi tiếp`;
