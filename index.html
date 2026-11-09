@@ -258,6 +258,9 @@
   .av .lg{transform-box:fill-box;transform-origin:50% 0}
   .av .eyes{transform-box:fill-box;transform-origin:50% 50%;animation:blink 4.8s infinite;animation-delay:var(--bd,0s)}
   @keyframes blink{0%,93%,100%{transform:none}95.5%{transform:scaleY(.1)}}
+  .av .eyC,.av .eyH,.av .eyX,.av .mS,.av .mO{display:none}
+  .av.ex-calm .eyes,.av.ex-happy .eyes,.av.ex-hurt .eyes,.av.ex-happy .mN,.av.ex-hurt .mN{display:none}
+  .av.ex-calm .eyC,.av.ex-happy .eyH,.av.ex-happy .mS,.av.ex-hurt .eyX,.av.ex-hurt .mO{display:inline}
   .av .head{animation:breath 3.4s ease-in-out infinite;animation-delay:var(--bd,0s)}
   @keyframes breath{50%{transform:translateY(.9px)}}
   .av .armL{transform-origin:21px 54px}
@@ -1896,18 +1899,29 @@ function avatarSVG(d, view, act, opt){
     // khi hành lễ, phần tóc dưới gáy đã vẽ theo thân (hairTail)
     s += muni ? muniT(muniSVG(false)) : act ? `<g clip-path="url(#hc${k})">${hairBack(d)}</g>` : `<g class="hsw">${hairBack(d)}</g>`;
   } else {
-    s += `<g class="eyes">`;
+    s += `<g class="eyes"><g class="gz">`;
     for (const x of [24.3, 39.7]) {
       s += `<ellipse cx="${x}" cy="39" rx="3.6" ry="4.6" fill="#2b1d18"/><ellipse cx="${x}" cy="40.3" rx="2.5" ry="3" fill="#7a4a30"/><ellipse cx="${x}" cy="41.4" rx="1.6" ry="1.4" fill="#b07a52" opacity=".7"/><circle cx="${x + 1.4}" cy="37.3" r="1.5" fill="#fff"/><circle cx="${x - 1.1}" cy="41" r=".7" fill="#fff"/>`;
       if (fem) s += `<path d="M${x - 3.8} 36.6 Q${x} 33.2 ${x + 3.8} 36.6" stroke="#2b1d18" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M${x + (x < 32 ? -3.6 : 3.6)} 36.4 l${x < 32 ? -1.3 : 1.3} -1" stroke="#2b1d18" stroke-width="1" stroke-linecap="round"/>`;
     }
-    s += `</g>`;
+    s += `</g></g>`;
+    // biểu cảm: nhắm mắt an tĩnh (thiền), cười híp mắt (xong lễ), mắt xoắn khi bị đánh
+    const eyS = `stroke="#2b1d18" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"`;
+    let eC = "", eH = "", eX = "";
+    for (const x of [24.3, 39.7]) {
+      eC += `<path d="M${x - 3.6} 39.4 Q${x} 42.6 ${x + 3.6} 39.4" ${eyS}/>` + (fem ? `<path d="M${x + (x < 32 ? -3.6 : 3.6)} 39.4 l${x < 32 ? -1.2 : 1.2} .6" ${eyS} stroke-width="1"/>` : "");
+      eH += `<path d="M${x - 3.6} 41 Q${x} 35.6 ${x + 3.6} 41" ${eyS}/>`;
+      eX += x < 32 ? `<path d="M${x - 3} 36.6 L${x + 2.4} 39.4 L${x - 3} 42.2" ${eyS}/>` : `<path d="M${x + 3} 36.6 L${x - 2.4} 39.4 L${x + 3} 42.2" ${eyS}/>`;
+    }
+    s += `<g class="eyC">${eC}</g><g class="eyH">${eH}</g><g class="eyX">${eX}</g>`;
     s += `<path d="M21 33 Q24 31.6 27 32.6 M37 32.6 Q40 31.6 43 33" stroke="#4a3328" stroke-width="1.1" fill="none" stroke-linecap="round"/>`;
     s += `<ellipse cx="19.2" cy="44.6" rx="3.2" ry="1.9" fill="#f59a9a" opacity=".55"/><ellipse cx="44.8" cy="44.6" rx="3.2" ry="1.9" fill="#f59a9a" opacity=".55"/>`;
     s += `<path d="M31.4 43 q.6 .7 1.2 0" stroke="#d49a80" stroke-width=".9" fill="none" stroke-linecap="round"/>`;
-    s += fem
+    s += `<g class="mN">` + (fem
       ? `<path d="M29.8 46 Q32 48.4 34.2 46 Q32 46.9 29.8 46Z" fill="#d9655a" stroke="#a0503f" stroke-width=".7"/>`
-      : `<path d="M29.6 46 Q32 48.2 34.4 46" stroke="#a0503f" stroke-width="1.2" fill="none" stroke-linecap="round"/>`;
+      : `<path d="M29.6 46 Q32 48.2 34.4 46" stroke="#a0503f" stroke-width="1.2" fill="none" stroke-linecap="round"/>`) + `</g>`;
+    s += `<g class="mS"><path d="M28.9 45.6 Q32 45.9 35.1 45.6 Q34.6 49.8 32 49.9 Q29.4 49.8 28.9 45.6Z" fill="#8a2f28" stroke="#6a2a20" stroke-width=".7" stroke-linejoin="round"/><path d="M30.2 48.6 Q32 47.4 33.8 48.6 Q32 49.7 30.2 48.6Z" fill="#e8746a"/></g>`;
+    s += `<g class="mO"><ellipse cx="32" cy="47.4" rx="1.6" ry="1.9" fill="#8a2f28" stroke="#6a2a20" stroke-width=".7"/></g>`;
     if (acc.has("kinh")) s += `<g fill="rgba(255,255,255,.16)" stroke="#2e2420" stroke-width="1.15"><circle cx="24.3" cy="39.2" r="5.4"/><circle cx="39.7" cy="39.2" r="5.4"/></g><path d="M29.7 38.6 Q32 37.4 34.3 38.6 M18.9 38.4 L13.6 36.8 M45.1 38.4 L50.4 36.8" stroke="#2e2420" stroke-width="1" fill="none"/>`;
     s += muni ? muniT(muniSVG(true)) : hairFront(d, acc.has("hoa"));
   }
@@ -1929,8 +1943,18 @@ function avatarSVG(d, view, act, opt){
    chuyển mượt khi bắt đầu và khi dừng; tóc và vạt áo theo một lò xo nên đung đưa trễ theo người. */
 const STRIDE = 117; // quãng đường cho 2 bước (điểm ảnh)
 const TAU = Math.PI * 2;
+/* Thông số cảm giác chuyển động (chỉnh ở đây) */
+const ANIM = {
+  idleHead: 1.1, idleHeadT: 5.2,   // đầu nghiêng nhẹ khi đứng (độ, giây/chu kỳ)
+  idleBody: .35, idleBodyT: 6.4,   // thân dồn trọng tâm
+  idleHair: 1.1, idleHairT: 3.7,   // tóc, vạt áo đung đưa
+  gazeWalk: 1.1, gazeIdle: 1,      // con ngươi liếc (đơn vị hình nhân vật)
+  sqK: 190, sqC: 13,               // lò xo nhún khi bắt đầu/dừng đi
+  sqStart: .42, sqStop: .75        // độ mạnh cú nhún
+};
+const RM = matchMedia("(prefers-reduced-motion: reduce)");
 function animAvatar(p, av, dt, moving, step, vx){
-  const A = p.anim || (p.anim = { ph: 0, w: 0, sx: 0, sv: 0, svg: null, els: null });
+  const A = p.anim || (p.anim = { ph: 0, w: 0, sx: 0, sv: 0, svg: null, els: null, it: Math.random() * 20, gx: 0, gy: 0, tx: 0, ty: 0, gNext: 0, sq: 0, sqv: 0, mv: false });
   if (moving) A.ph = (A.ph + step / STRIDE) % 1;
   A.w += ((moving ? 1 : 0) - A.w) * Math.min(1, dt * 9);
   if (A.w < .002) A.w = 0;
@@ -1938,22 +1962,34 @@ function animAvatar(p, av, dt, moving, step, vx){
   if (svg !== A.svg) {
     A.svg = svg;
     const q = c => svg ? svg.querySelector(c) : null, qa = c => svg ? [...svg.querySelectorAll(c)] : [];
-    A.els = { bw: q(".bw"), hw: q(".hw"), aL: q(".side .armL"), aR: q(".side .armR"), l1: q(".lg.l1"), l2: q(".lg.l2"), hsw: qa(".hsw"), robe: q(".robe") };
+    A.els = { bw: q(".bw"), hw: q(".hw"), aL: q(".side .armL"), aR: q(".side .armR"), l1: q(".lg.l1"), l2: q(".lg.l2"), hsw: qa(".hsw"), robe: q(".robe"), gz: q(".gz") };
   }
   const E = A.els; if (!E) return;
   const w = A.w, s = Math.sin(A.ph * TAU), front = av.classList.contains("v-front");
   const free = !p.act && !(p.pose && p.pose !== "") && !av.classList.contains("sit");
+  const calm = !RM.matches;
   const set = (el, tr) => { if (el) el.style.transform = tr; };
-  if (!free || w === 0) {
+  // nhún: bắt đầu đi thì hơi khuỵu lấy đà, dừng lại thì dồn xuống rồi bật về (lò xo, ngắt giữa chừng vẫn mượt)
+  if (moving !== A.mv) { if (free && calm) A.sqv += moving ? ANIM.sqStart : ANIM.sqStop; A.mv = moving; }
+  A.sqv += (-A.sq * ANIM.sqK - A.sqv * ANIM.sqC) * dt; A.sq += A.sqv * dt;
+  if (Math.abs(A.sq) < .0005 && Math.abs(A.sqv) < .005) { A.sq = 0; A.sqv = 0; }
+  // động tác phụ khi đứng: đầu nghiêng, thân dồn trọng tâm, tóc lay nhẹ; mờ dần khi bắt đầu đi
+  A.it += dt;
+  const idle = free && calm ? 1 - w : 0;
+  const ih = idle * ANIM.idleHead * Math.sin(A.it * TAU / ANIM.idleHeadT);
+  const ib = idle * ANIM.idleBody * Math.sin(A.it * TAU / ANIM.idleBodyT + 1.3);
+  const sq = free ? A.sq : 0, sqTr = sq ? ` scale(${(1 + sq * .6).toFixed(3)},${(1 - sq).toFixed(3)})` : "";
+  if (!free) {
     for (const el of [E.bw, E.hw, E.aL, E.aR, E.l1, E.l2]) set(el, "");
   } else {
     const bob = Math.abs(s) * w;
-    set(E.bw, `translate(${(-.5 * s * w).toFixed(2)}px,${(-2 * bob).toFixed(2)}px) rotate(${(-1.2 * s * w).toFixed(2)}deg)`);
-    set(E.hw, `translateY(${(.5 * bob).toFixed(2)}px) rotate(${(1 * s * w).toFixed(2)}deg)`);
-    const lift = x => `translateY(${(-3.2 * x).toFixed(2)}px) scaleY(${(1 - .14 * x).toFixed(3)})`;
+    set(E.bw, w || ib || sq ? `translate(${(-.5 * s * w).toFixed(2)}px,${(-2 * bob).toFixed(2)}px) rotate(${(-1.2 * s * w + ib).toFixed(2)}deg)${sqTr}` : "");
+    set(E.hw, w || ih ? `translateY(${(.5 * bob).toFixed(2)}px) rotate(${(1 * s * w + ih).toFixed(2)}deg)` : "");
+    const lift = x => x ? `translateY(${(-3.2 * x).toFixed(2)}px) scaleY(${(1 - .14 * x).toFixed(3)})` : "";
     set(E.l1, lift(Math.max(0, -s) * w)); set(E.l2, lift(Math.max(0, s) * w));
     // tay thẳng vung trước sau, ngược bên với chân đang nhấc
     const arm = (u, sign) => {
+      if (!u) return "";
       const fwd = Math.max(0, u), back = Math.max(0, -u);
       const rot = front ? -6 * fwd + 5 * back : -3 * fwd + 6 * back;
       const sc = 1 - (front ? .1 * fwd + .06 * back : .14 * fwd + .05 * back);
@@ -1961,12 +1997,26 @@ function animAvatar(p, av, dt, moving, step, vx){
     };
     set(E.aL, arm(s * w, 1)); set(E.aR, arm(-s * w, -1));
   }
-  // lò xo cho tóc và vạt áo: lệch ngược hướng đi, cộng nhịp lắc người
+  // ánh mắt: đi thì nhìn theo hướng đi; đứng thì thỉnh thoảng liếc rồi giữ ánh nhìn một lúc
+  if (E.gz) {
+    const now = A.it;
+    if (moving) { A.tx = ANIM.gazeWalk; A.ty = 0; A.gNext = now + 1.2; }
+    else if (now > A.gNext) {
+      const r = Math.random();
+      A.tx = r < .4 ? 0 : r < .7 ? -ANIM.gazeIdle : ANIM.gazeIdle; A.ty = Math.random() < .25 ? -.5 : 0;
+      A.gNext = now + (A.tx ? 1 + Math.random() * .8 : 2.5 + Math.random() * 3);
+    }
+    // liếc mắt nhanh (khoảng 0,1 giây) như mắt người
+    const k = Math.min(1, dt * 16);
+    A.gx += (A.tx - A.gx) * k; A.gy += (A.ty - A.gy) * k;
+    E.gz.style.transform = Math.abs(A.gx) > .02 || Math.abs(A.gy) > .02 ? `translate(${A.gx.toFixed(2)}px,${A.gy.toFixed(2)}px)` : "";
+  }
+  // lò xo cho tóc và vạt áo: lệch ngược hướng đi, cộng nhịp lắc người và gió nhẹ khi đứng
   const lvx = p.flip ? -vx : vx;
-  const target = free ? (-lvx * 4.5 + 2 * s) * w : 0;
+  const target = free ? (-lvx * 4.5 + 2 * s) * w + idle * ANIM.idleHair * Math.sin(A.it * TAU / ANIM.idleHairT) : 0;
   A.sv += ((target - A.sx) * 70 - A.sv * 9) * dt;
   A.sx += A.sv * dt;
-  if (Math.abs(A.sx) < .01 && Math.abs(A.sv) < .01) { A.sx = 0; A.sv = 0; }
+  if (Math.abs(A.sx) < .01 && Math.abs(A.sv) < .01 && !target) { A.sx = 0; A.sv = 0; }
   const sk = A.sx.toFixed(2);
   for (const el of E.hsw) el.style.transform = A.sx ? `skewX(${sk}deg)` : "";
   if (E.robe) E.robe.style.transform = A.sx && free ? `skewX(${(A.sx * .5).toFixed(2)}deg)` : "";
@@ -2511,7 +2561,7 @@ function tick(now){
       if (moving) stopAct(p);
       else if (now > p.actUntil) {
         if (p.act === "mo" && !p.actOut) { p.actOut = true; p.actUntil = now + 650; av.dataset.out = "1"; }
-        else { stopAct(p); p.backUntil = now + 400; }
+        else { stopAct(p); p.backUntil = now + 400; p.happyUntil = now + 2800; }
       }
     }
     let v = p.view && !p.view.startsWith("act:") ? p.view.split("|")[0] : "front";
@@ -2538,6 +2588,9 @@ function tick(now){
     }
     av.classList.toggle("sit", !!S);
     av.classList.toggle("flip", p.flip);
+    // biểu cảm: bị đánh > vui (vừa xong lễ) > an tĩnh (đang thiền)
+    const ex = snake ? "" : now < (p.hurtUntil || 0) ? "hurt" : now < (p.happyUntil || 0) && !moving ? "happy" : p.pose === "thien" ? "calm" : "";
+    if (ex !== (p.ex || "")) { av.classList.remove("ex-" + p.ex); if (ex) av.classList.add("ex-" + ex); p.ex = ex; }
     // cân đẩu vân: thiền hôm nay đủ 20 phút, mây chỉ hiện khi đang đi
     const cdv = !snake && p.d.cdv === dayMedNow().d;
     if (cdv && !p.el.querySelector(".cloud")) p.el.insertAdjacentHTML("beforeend", CLOUD_SVG);
@@ -3897,6 +3950,7 @@ function hitImpact(p, remote){
   fx.innerHTML = `<i></i><i></i><i></i><b>${p.hitW === "choi" ? "Vụt!" : "Bốp!"}</b>`;
   t.el.appendChild(fx); setTimeout(() => fx.remove(), 3000);
   playHitSound(remote && t.id !== meId ? .4 : 1);
+  t.hurtUntil = performance.now() + 1800; t.happyUntil = 0;
   say(t, ["Ui da!", "Á đau!", "Sao đánh tui?", "Huhu"][Math.floor(Math.random() * 4)], 2200);
   if (t.id === meId && !isMeditating(t)) { pending = null; setTarget(me.x + dir * 30, me.y); }
 }
