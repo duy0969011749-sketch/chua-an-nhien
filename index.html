@@ -1823,6 +1823,9 @@ function avatarSVG(d, view, act, opt){
 
   // nhìn sau lưng: tay nằm sau thân (chỗ đánh dấu được thay bằng tay ở dưới)
   if (!front) s += "<!--ARMS-->";
+  // cổ vẽ trước thân áo: cổ áo che chân cổ, chỉ lộ đoạn giữa cằm và cổ áo
+  // (khi hành lễ, cổ nằm trong nhóm đầu, vốn đã vẽ trước thân áo, để khi lạy rạp cổ khuất cùng đầu)
+  if (!act) s += neckSVG();
   // thân áo (nhóm "robe" để vạt áo đung đưa khi đi)
   s += `<g class="robe">`;
   const robeAt = s.length;
@@ -1935,7 +1938,7 @@ function avatarSVG(d, view, act, opt){
   // cổ & đầu
   let body = "";
   if (act) { body = s; s = `<g class="k-hd">`; }
-  s += (act ? "" : `<g class="hw">`) + `${neckSVG()}<g transform="${headT()}"><g class="head">`;
+  s += (act ? neckSVG() : `<g class="hw">`) + `<g transform="${headT()}"><g class="head">`;
   s += `<ellipse cx="11.4" cy="39" rx="2.8" ry="3.6" fill="url(#sk)" ${OL}/><ellipse cx="52.6" cy="39" rx="2.8" ry="3.6" fill="url(#sk)" ${OL}/>`;
   s += `<ellipse cx="32" cy="34.5" rx="21.5" ry="20" fill="url(#sk)" ${OL}/>`;
   // mũ ni vẽ theo đầu cũ (tròn r19), phóng theo đầu mới
