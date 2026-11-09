@@ -573,7 +573,7 @@
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <radialGradient id="sk" cx=".45" cy=".4" r=".7"><stop offset="0" stop-color="#ffe9d8"/><stop offset="1" stop-color="#f3c5a4"/></radialGradient>
-  <linearGradient id="hr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5e4336"/><stop offset="1" stop-color="#2c1d17"/></linearGradient>
+  <linearGradient id="hr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6c4d3d"/><stop offset=".45" stop-color="#4a3328"/><stop offset="1" stop-color="#23160f"/></linearGradient>
   <linearGradient id="hrB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6b5649"/><stop offset="1" stop-color="#3e2f28"/></linearGradient>
 </defs></svg>
 <div id="view">
@@ -1459,8 +1459,10 @@ const braid = (x, y0, y1) => {
 };
 // ---- Tóc mẫu A. Đầu: tâm (32,34.5), rx 21.5, ry 20. Màu tóc lấy từ url(#hr) để nhuộm được ----
 const HR = "url(#hr)", HRD = "#1a0f0a";
-const hShine = (p, w = 2.3) => `<path d="${p}" stroke="#fff" stroke-opacity=".34" stroke-width="${w}" fill="none" stroke-linecap="round" stroke-dasharray="7 2.6"/>`;
-const hStr = (p, op = .45) => `<path d="${p}" stroke="${HRD}" stroke-width=".8" fill="none" opacity="${op}" stroke-linecap="round"/>`;
+// vầng bóng tóc: một dải sáng mờ rộng và một vệt sáng mảnh đứt quãng, đọc thành tóc bóng mượt
+const hShine = (p, w = 2.3) => `<path d="${p}" stroke="#fff" stroke-opacity=".13" stroke-width="${w * 2.4}" fill="none" stroke-linecap="round"/><path d="${p}" stroke="#fff6ea" stroke-opacity=".55" stroke-width="${w * .7}" fill="none" stroke-linecap="round" stroke-dasharray="6 2.2 2 2.2"/>`;
+// sợi tóc nhiều lớp: rãnh tối và mép sáng lệch nhẹ bên cạnh
+const hStr = (p, op = .45) => `<path d="${p}" stroke="${HRD}" stroke-width=".85" fill="none" opacity="${op}" stroke-linecap="round"/><path d="${p}" transform="translate(.7 .35)" stroke="#fff" stroke-width=".55" fill="none" opacity="${(op * .4).toFixed(2)}" stroke-linecap="round"/>`;
 const hCurl = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${HR}" ${OL}/><path d="M${x - r * .45} ${y + r * .1} q${r * .45} ${-r * .55} ${r * .9} 0" stroke="#fff" stroke-opacity=".28" stroke-width=".8" fill="none"/>`;
 function hBraid(pts){
   let s = "";
@@ -1737,6 +1739,41 @@ const CLOUD_SVG = `<div class="cloud"><svg viewBox="0 0 140 60" aria-hidden="tru
   <g fill="none" stroke="#d3dce8" stroke-width="1.2" stroke-linecap="round"><path d="M50 36 q5 -5 10 0"/><path d="M80 33 q5 -5 10 0"/><path d="M64 41 Q72 39 82 41"/></g>
   <path d="M47 23 Q51 17 58 18 M64 12 Q71 8 78 11 M86 17 Q92 15 97 19" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></g></svg></div>`;
 
+/* Tỷ lệ dáng chibi: thân kéo dài (neo ở bàn chân y=91), đầu thu nhỏ (neo ở cằm 32,54).
+   Đầu chiếm khoảng 2/5 chiều cao. Bàn tay, bàn chân bù ngược để giữ tròn. */
+const FIG = { body: 1.25, head: .8 };
+const bodyT = () => `translate(0 ${(91 - 91 * FIG.body).toFixed(2)}) scale(1 ${FIG.body})`;
+const headT = () => `translate(32 54) scale(${FIG.head} ${(FIG.head / FIG.body).toFixed(4)}) translate(-32 -54)`;
+// tóc dài phía sau: co theo đầu nhưng neo sao cho đỉnh tóc (y=10) trùng đỉnh đầu
+const hairLongT = () => { const hy = 54 - 44 * FIG.head / FIG.body, a = (hy - 10 * FIG.head) / (1 - FIG.head); return `translate(32 ${a.toFixed(2)}) scale(${FIG.head}) translate(-32 ${(-a).toFixed(2)})`; };
+// giữ tròn một hình trong thân đã kéo dài: co lại quanh tâm (x, y)
+const unS = (x, y, g) => `<g transform="translate(${x} ${y}) scale(1 ${(1 / FIG.body).toFixed(4)}) translate(${-x} ${-y})">${g}</g>`;
+// giày vải: thân giày, đế sáng, vệt bóng mũi giày
+const shoe = (x, c, ol) => `<ellipse cx="${x}" cy="89" rx="5" ry="2.8" fill="${c}"${ol}/><path d="M${x - 4.6} 89.9 Q${x} 92.2 ${x + 4.6} 89.9" stroke="#f3e6d0" stroke-width="1.1" fill="none" opacity=".75"/><path d="M${x - 2.6} 87.6 Q${x - .5} 86.7 ${x + 1.6} 87.2" stroke="#fff" stroke-width=".8" fill="none" opacity=".35" stroke-linecap="round"/>`;
+/* Chất vải cho thân áo: bóng trụ tròn, ánh sáng vai, nếp gấp ở eo và gấu, đai lưng, hoa văn thêu.
+   s là phần SVG thân áo đã vẽ; các mảnh tô màu áo được phủ thêm lớp bóng cùng hình. */
+function fabric(s, f){
+  const { o, k, front, dark, light, robe, vAo } = f, hem = HEM[o] || 80;
+  s = s.replace(/<path d="([^"]+)" fill="url\(#rb[^"]+\)"[^>]*\/>/g, (m, dd) => m + `<path d="${dd}" fill="url(#cy${k})"/>`);
+  // ánh sáng trên vai
+  s += `<path d="M21.5 53 Q32 48.6 42.5 53" stroke="#fff" stroke-opacity=".2" stroke-width="1.8" fill="none" stroke-linecap="round"/>`;
+  // nếp gấp: hai bên eo và sóng gấu áo
+  s += `<g stroke="${dark}" fill="none" stroke-linecap="round" opacity=".38" stroke-width=".8"><path d="M20.4 58 Q22.6 60.5 22.4 64"/><path d="M43.6 58 Q41.4 60.5 41.6 64"/>`
+    + `<path d="M23 ${hem - 7} Q24.4 ${hem - 3.5} 23.6 ${hem}"/><path d="M41 ${hem - 7} Q39.6 ${hem - 3.5} 40.4 ${hem}"/><path d="M32 ${hem - 6} V${hem + 1.5}"/></g>`;
+  s += `<path d="M17 ${hem - 1.2} Q32 ${hem + 3.4} 47 ${hem - 1.2}" stroke="#fff" stroke-opacity=".16" stroke-width="1.4" fill="none"/>`;
+  // đai lưng thắt nút có hai dải buông (áo tràng, áo lam)
+  if (o === "trang" || o === "lam") {
+    const y = o === "trang" ? 66 : 63, bc = o === "trang" ? shade(dark, -.15) : light;
+    s += `<path d="M18.6 ${y} Q32 ${y + 3} 45.4 ${y} L45.6 ${y + 2.6} Q32 ${y + 5.6} 18.4 ${y + 2.6}Z" fill="${bc}" stroke="#3a2418" stroke-opacity=".5" stroke-width=".6"/>`;
+    if (front) s += `<path d="M35.6 ${y + 3.2} q1.6 4.6 -.4 8.8 M37.4 ${y + 3} q2.4 4 1.6 8.2" stroke="${bc}" stroke-width="1.6" fill="none" stroke-linecap="round"/><ellipse cx="36.4" cy="${y + 2.6}" rx="1.8" ry="1.4" fill="${bc}" stroke="#3a2418" stroke-opacity=".5" stroke-width=".5"/>`;
+  }
+  // hoa văn mây thêu nhỏ ở vạt áo (không áp cho cà sa và sơ mi)
+  if (front && !vAo && !["casa", "somi", "thun", "aodai"].includes(o)) {
+    const cloud = (x, y) => `<path d="M${x - 3} ${y} q0 -2 2 -1.6 q.8 -1.8 2.6 -.6 q2 -.4 1.6 1.6 q1.4 1.4 -.6 1.8 Z" fill="none" stroke="${light}" stroke-width=".7" opacity=".9"/><path d="M${x - .6} ${y - .6} q1 .6 .3 1.2" stroke="${light}" stroke-width=".5" fill="none" opacity=".9"/>`;
+    s += cloud(22.5, hem - 4.5) + cloud(41.5, hem - 4.5);
+  }
+  return s;
+}
 function avatarSVG(d, view, act, opt){
   if (act) view = "back";
   // vật phẩm VIP đang mặc: ao (cà sa), non (mũ Tỳ Lư), gay (gậy pháp)
@@ -1753,14 +1790,15 @@ function avatarSVG(d, view, act, opt){
   let s = `<svg viewBox="0 0 64 96" width="64" height="96" aria-hidden="true"${act ? ` style="--ks:${ks};--kp:${kp}"` : ""}><defs>
     <linearGradient id="rb${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${light}"/><stop offset=".5" stop-color="${c}"/><stop offset="1" stop-color="${dark}"/></linearGradient>
     <linearGradient id="sl${k}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${dark}"/><stop offset="1" stop-color="${c}"/></linearGradient>
-    <linearGradient id="sr${k}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${c}"/><stop offset="1" stop-color="${dark}"/></linearGradient><clipPath id="tl${k}"><rect x="-20" y="49" width="104" height="60"/></clipPath><clipPath id="hc${k}"><rect x="-20" y="-30" width="104" height="79.5"/></clipPath></defs>`;
-  s += `<ellipse cx="32" cy="92" rx="17" ry="4" fill="rgba(0,0,0,.28)"/><g class="bw">`;
+    <linearGradient id="sr${k}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${c}"/><stop offset="1" stop-color="${dark}"/></linearGradient>
+    <linearGradient id="cy${k}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".26"/><stop offset=".22" stop-color="#000" stop-opacity="0"/><stop offset=".42" stop-color="#fff" stop-opacity=".12"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".3"/></linearGradient><clipPath id="tl${k}"><rect x="-20" y="49" width="104" height="60"/></clipPath><clipPath id="hc${k}"><rect x="-20" y="-30" width="104" height="79.5"/></clipPath></defs>`;
+  s += `<ellipse cx="32" cy="92" rx="17" ry="4" fill="rgba(0,0,0,.28)"/><g class="bw"><g class="bS" transform="${bodyT()}">`;
 
   // chân
   const L = LEGS[o], lh = 89 - L.top, shoeOL = o === "thun" ? ` ${OL}` : "";
   if (act) s += `<g class="k-legs">`;
-  s += `<g class="lg l1"><rect x="23" y="${L.top}" width="7.5" height="${lh}" rx="3" fill="${L.c}"/><ellipse cx="26.5" cy="89" rx="5" ry="2.8" fill="${L.shoe}"${shoeOL}/></g>`;
-  s += `<g class="lg l2"><rect x="33.5" y="${L.top}" width="7.5" height="${lh}" rx="3" fill="${L.c}"/><ellipse cx="37.5" cy="89" rx="5" ry="2.8" fill="${L.shoe}"${shoeOL}/></g>`;
+  s += `<g class="lg l1"><rect x="23" y="${L.top}" width="7.5" height="${lh}" rx="3" fill="${L.c}"/>${unS(26.5, 89, shoe(26.5, L.shoe, shoeOL))}</g>`;
+  s += `<g class="lg l2"><rect x="33.5" y="${L.top}" width="7.5" height="${lh}" rx="3" fill="${L.c}"/>${unS(37.5, 89, shoe(37.5, L.shoe, shoeOL))}</g>`;
   if (o === "thun") s += `<path d="M26.7 ${L.top + 2} V86 M37.3 ${L.top + 2} V86" stroke="#7d97c2" stroke-width=".7" opacity=".7"/>`;
   let soles = "", headS = "", AA = null;
   if (act) {
@@ -1777,12 +1815,14 @@ function avatarSVG(d, view, act, opt){
 
   // tóc dài phía sau thân
   const muni = acc.has("muni"), flower = ["hong", "hue", "lav"].find(f => acc.has(f));
-  if (front && !muni) s += `<g class="hsw">${hairBehind(d.hair)}</g>`;
+  // tóc buông sau lưng: đỉnh tóc khớp với đầu đã thu nhỏ, phần đuôi dài theo thân mới (tóc dài vẫn chấm lưng)
+  if (front && !muni) s += `<g transform="${hairLongT()}"><g class="hsw">${hairBehind(d.hair)}</g></g>`;
 
   // nhìn sau lưng: tay nằm sau thân (chỗ đánh dấu được thay bằng tay ở dưới)
   if (!front) s += "<!--ARMS-->";
   // thân áo (nhóm "robe" để vạt áo đung đưa khi đi)
   s += `<g class="robe">`;
+  const robeAt = s.length;
   if (o === "trang") {
     s += `<path d="M20 52 Q32 46 44 52 L49 86 Q32 91 15 86 Z" fill="${robe}" ${OL}/>`;
     s += `<path d="M24 66 Q23 76 21.5 86 M40 66 Q41 76 42.5 86" stroke="${dark}" stroke-width="1" opacity=".45" fill="none"/>`;
@@ -1834,21 +1874,23 @@ function avatarSVG(d, view, act, opt){
     if (front) s += `<path d="M27 50.5 Q32 55 37 50.5" fill="none" stroke="${dark}" stroke-width="1.5"/><g transform="translate(32 64)"><circle r="4.6" fill="${light}" opacity=".9"/><path d="M0 -3 Q2.4 0 0 2.6 Q-2.4 0 0 -3Z M-3 .6 Q-1 -.2 0 2.6 Q-2.6 2.4 -3 .6Z M3 .6 Q1 -.2 0 2.6 Q2.6 2.4 3 .6Z" fill="${dark}" opacity=".75"/></g>`;
   }
   if (!front) s += `<path d="M26 50 Q32 53.5 38 50" stroke="${SL === "wide" ? "#f6f1e6" : light}" stroke-width="2.2" fill="none"/>`;
-  s += `</g>`;
+  s = s.slice(0, robeAt) + fabric(s.slice(robeAt), { o, k, front, dark, light, robe, vAo }) + `</g>`;
   if (front && acc.has("trang")) s += beadsSVG();
   if (act) {
-    if (!muni) s += hairTail(d, k);
+    if (!muni) s += `<g transform="${headT()}">${hairTail(d, k)}</g>`;
     s += `</g>` + soles + AA.top;
   }
 
   // tay buông (đi lại, quay lưng)
-  const hand = (x, y) => `<circle cx="${x}" cy="${y}" r="3.1" fill="url(#sk)" ${OL}/>`;
+  const hand = (x, y) => unS(x, y, `<circle cx="${x}" cy="${y}" r="3.1" fill="url(#sk)" ${OL}/>`);
   // tay buông khi đi lại, quay lưng, cầm đồ: hai đoạn bắp tay và cẳng tay để gập ở khuỷu khi vung
   const mir = g => `<g transform="translate(64 0) scale(-1 1)">${g}</g>`;
   let up, fo, eo, hp;
+  // viền tay áo: cà sa VIP viền vàng, áo tràng viền trắng ngà, áo khác viền sáng hơn màu áo
+  const trim = vAo ? VIP_GOLD : o === "trang" || o === "casa" ? "#f6f1e6" : light;
   if (SL === "wide") {
     hp = [19.5, 76.6]; eo = [19, 65];
-    fo = hand(...hp) + `<path d="M15 64 Q14.4 73.5 16.2 77 Q19.5 78.6 23.6 76 Q22.6 70 23 64.5Z" fill="${sleeve}" ${OL}/>`;
+    fo = hand(...hp) + `<path d="M15 64 Q14.4 73.5 16.2 77 Q19.5 78.6 23.6 76 Q22.6 70 23 64.5Z" fill="${sleeve}" ${OL}/><path d="M16.3 75.6 Q19.6 77.4 23.2 75" stroke="${trim}" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M17.5 66.5 Q18.5 70 18 73.5" stroke="${dark}" stroke-width=".7" fill="none" opacity=".4"/>`;
     up = `<path d="M21 53 Q15 57 14.6 65.5 Q19 67 23.3 65.8 Q23 61 24.8 58.5Z" fill="${sleeve}" ${OL}/>`;
   } else if (SL === "short") {
     hp = [19, 74.2]; eo = [18.9, 62.5];
@@ -1856,7 +1898,7 @@ function avatarSVG(d, view, act, opt){
     up = `<path d="M21 52.5 Q15.8 55 15.8 62.5 L21.6 63 Q21.4 58.5 24 56.5Z" fill="${sleeve}" ${OL}/>`;
   } else {
     hp = [19, 74.8]; eo = [18.8, 64.2];
-    fo = hand(...hp) + `<path d="M15.9 63 L16.4 73.2 L21.4 73.6 Q21.2 68 21.6 63.5Z" fill="${sleeve}" ${OL}/>`;
+    fo = hand(...hp) + `<path d="M15.9 63 L16.4 73.2 L21.4 73.6 Q21.2 68 21.6 63.5Z" fill="${sleeve}" ${OL}/><path d="M16.5 72.1 L21.3 72.5" stroke="${trim}" stroke-width="1.5" stroke-linecap="round"/>`;
     up = `<path d="M21.5 53 Q16.4 57 16 65 L21.8 65.4 Q21.6 61 24 58Z" fill="${sleeve}" ${OL}/>`;
   }
   const aL = `<g class="foreL" style="transform-origin:${eo[0]}px ${eo[1]}px">${fo}</g>${up}`;
@@ -1881,16 +1923,16 @@ function avatarSVG(d, view, act, opt){
   // tay chắp (đứng yên, quay mặt)
   if (front) {
     let p;
-    if (SL === "wide") p = `<path d="M21 53 Q9 62 22 75 L30.5 68.5 Q23 62 25.5 57 Z" fill="${sleeve}" ${OL}/><path d="M43 53 Q55 62 42 75 L33.5 68.5 Q41 62 38.5 57 Z" fill="${sleeveR}" ${OL}/>`;
+    if (SL === "wide") p = `<path d="M21 53 Q9 62 22 75 L30.5 68.5 Q23 62 25.5 57 Z" fill="${sleeve}" ${OL}/><path d="M43 53 Q55 62 42 75 L33.5 68.5 Q41 62 38.5 57 Z" fill="${sleeveR}" ${OL}/><path d="M22.6 73.8 L29.6 68.6 M41.4 73.8 L34.4 68.6" stroke="${trim}" stroke-width="1.6" stroke-linecap="round"/><path d="M17 61 Q18 67 22 71 M47 61 Q46 67 42 71" stroke="${dark}" stroke-width=".7" fill="none" opacity=".4"/>`;
     else if (SL === "short") p = `<path d="M16.4 60 Q17 68.5 27.5 70.5 L30.5 67 Q22.5 64.5 21 61 Z M47.6 60 Q47 68.5 36.5 70.5 L33.5 67 Q41.5 64.5 43 61 Z" fill="url(#sk)" ${OL}/><path d="M21 52.5 Q15.5 55 15.6 61.5 L21.2 62 Q21 58 24 56.5 Z" fill="${sleeve}" ${OL}/><path d="M43 52.5 Q48.5 55 48.4 61.5 L42.8 62 Q43 58 40 56.5 Z" fill="${sleeveR}" ${OL}/>`;
-    else p = `<path d="M21.5 53 Q14 63 25.5 71.5 L30.5 67.5 Q24 62.5 25 57.5 Z" fill="${sleeve}" ${OL}/><path d="M42.5 53 Q50 63 38.5 71.5 L33.5 67.5 Q40 62.5 39 57.5 Z" fill="${sleeveR}" ${OL}/>`;
-    s += `<g class="pray">${gay ? staffSVG(46, 1, 91, 6) : ""}${p}${!dr && flower ? handFlower(flower, 32.5, 66, 26) : ""}<ellipse cx="32" cy="65.5" rx="3.8" ry="5.6" fill="url(#sk)" ${OL}/><path d="M32 60.5 V69.5" stroke="#d9a688" stroke-width=".8"/>${dr ? bobaCup(dr, 32, 70, 1) : ""}</g>`;
+    else p = `<path d="M21.5 53 Q14 63 25.5 71.5 L30.5 67.5 Q24 62.5 25 57.5 Z" fill="${sleeve}" ${OL}/><path d="M42.5 53 Q50 63 38.5 71.5 L33.5 67.5 Q40 62.5 39 57.5 Z" fill="${sleeveR}" ${OL}/><path d="M26.2 70.4 L29.8 67.6 M37.8 70.4 L34.2 67.6" stroke="${trim}" stroke-width="1.5" stroke-linecap="round"/>`;
+    s += `<g class="pray">${gay ? staffSVG(46, 1, 91, 6) : ""}${p}${!dr && flower ? handFlower(flower, 32.5, 66, 26) : ""}${unS(32, 65.5, `<ellipse cx="32" cy="65.5" rx="3.8" ry="5.6" fill="url(#sk)" ${OL}/><path d="M32 60.5 V69.5" stroke="#d9a688" stroke-width=".8"/>`)}${dr ? bobaCup(dr, 32, 70, 1) : ""}</g>`;
   }
 
   // cổ & đầu
   let body = "";
   if (act) { body = s; s = `<g class="k-hd">`; }
-  s += (act ? "" : `<g class="hw">`) + `<rect x="28.5" y="46" width="7" height="8" rx="2" fill="#f1c4a5"/><g class="head">`;
+  s += (act ? "" : `<g class="hw">`) + `<rect x="28.5" y="46" width="7" height="8" rx="2" fill="#f1c4a5"/><g transform="${headT()}"><g class="head">`;
   s += `<ellipse cx="11.4" cy="39" rx="2.8" ry="3.6" fill="url(#sk)" ${OL}/><ellipse cx="52.6" cy="39" rx="2.8" ry="3.6" fill="url(#sk)" ${OL}/>`;
   s += `<ellipse cx="32" cy="34.5" rx="21.5" ry="20" fill="url(#sk)" ${OL}/>`;
   // mũ ni vẽ theo đầu cũ (tròn r19), phóng theo đầu mới
@@ -1928,10 +1970,10 @@ function avatarSVG(d, view, act, opt){
   if (acc.has("hoa")) s += flowerSVG(17, 23);
   if (vip.has("non")) s += crownSVG(front, k);
   else if (acc.has("non") && !muni) s += `<g transform="translate(32 0) scale(1.12 1.06) translate(-32 -3.5)">${hatSVG(front)}</g>`;
-  let out = act ? body.replace("<!--HEAD-->", s + `</g></g>`) + `<path class="prop p-fall" d="M49 44 V52" stroke="#d9b36a" stroke-width="1.6" stroke-linecap="round"/></svg>` : s + `</g></g>` + (front ? poseG : "") + `</svg>`;
-  out = out.replace(/<\/svg>$/, "</g></svg>");
+  let out = act ? body.replace("<!--HEAD-->", s + `</g></g></g>`) + `<path class="prop p-fall" d="M49 44 V52" stroke="#d9b36a" stroke-width="1.6" stroke-linecap="round"/></svg>` : s + `</g></g></g>` + (front ? poseG : "") + `</svg>`;
+  out = out.replace(/<\/svg>$/, "</g></g></svg>");
   if (isHex(d.hc)) {
-    const hc = d.hc, hg = `<linearGradient id="hr${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(hc, .22)}"/><stop offset="1" stop-color="${shade(hc, -.38)}"/></linearGradient>`
+    const hc = d.hc, hg = `<linearGradient id="hr${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(hc, .26)}"/><stop offset=".45" stop-color="${hc}"/><stop offset="1" stop-color="${shade(hc, -.45)}"/></linearGradient>`
       + `<linearGradient id="hrB${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(hc, .35)}"/><stop offset="1" stop-color="${shade(hc, -.12)}"/></linearGradient>`;
     out = out.replace("</defs>", hg + "</defs>").split("url(#hr)").join(`url(#hr${k})`).split("url(#hrB)").join(`url(#hrB${k})`);
   }
