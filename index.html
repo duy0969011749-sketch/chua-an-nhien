@@ -129,6 +129,10 @@
   .xddeck i:nth-child(2){transform:translate(2px,-2px)}.xddeck i:nth-child(3){transform:translate(4px,-4px)}
   @media (max-width:480px){.xdtable{height:420px;border-width:8px;border-radius:34px}.xdtable .xdrow .who{font-size:.74rem;padding:2px 7px}}
   @media (prefers-reduced-motion:reduce){.xdtable .xdrow.turn .who{animation:none}}
+  #mConfirm{z-index:40}
+  .cfsheet{width:min(380px,100%)}
+  .cfmsg{margin:4px 0 12px;font-size:1.05rem;line-height:1.5;text-align:center}
+  .cfmsg b{color:#8f1d16}
   .xdbtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
   .xdbtns .btn{flex:1 1 120px}
   .qstool.hmat{width:92px;height:34px;margin:-24px 0 0 -46px;border-radius:50%}
@@ -1346,6 +1350,17 @@
     <button class="act rite" data-do="xam" type="button"><i class="cost free">1/ngày</i><span class="disc">Xăm</span><span class="lbl">Xin xăm</span></button>
     <button class="act rite" data-do="so" type="button"><i class="cost free">1/ngày</i><span class="disc">Số</span><span class="lbl">Xin 8 số</span></button>
     <button class="act hutbtn" data-do="hut" type="button" hidden><i class="cost free">Free</i><span class="disc">Hút</span><span class="lbl">Hút trà sữa</span></button>
+  </div>
+</div>
+
+<!-- Hộp xác nhận chung: cược bầu cua, cược xì dách, rút bài, dằn -->
+<div class="modal" id="mConfirm" role="alertdialog" aria-modal="true" aria-labelledby="mConfirmT" aria-describedby="mConfirmP">
+  <div class="sheet cfsheet">
+    <div class="sheet-head"><h2 id="mConfirmT">Xác nhận</h2></div>
+    <div class="sheet-body">
+      <p id="mConfirmP" class="cfmsg"></p>
+      <div class="xdbtns"><button class="btn" id="mConfirmOk" type="button">Xác nhận</button><button class="btn alt" id="mConfirmNo" type="button">Hủy</button></div>
+    </div>
   </div>
 </div>
 
@@ -3800,8 +3815,11 @@ let kBets = null;
 const kLoad = () => { if (!kBets) { const v = ls.get(kKey(), []); kBets = Array.isArray(v) ? v : []; } return kBets; };
 const kSave = () => ls.set(kKey(), kBets);
 const myStake = (g, R, k) => kLoad().filter(b => b.g === g && b.R === R && (k === undefined || b.k === k)).reduce((a, b) => a + b.u, 0);
-function placeBet(g, k){
+async function placeBet(g, k){
   if (!me) return;
+  if (kState().s >= 30) { toast("Hết giờ đặt cược ván này, chờ ván sau"); return; }
+  if (coin2 < kChip * 2) { toast("Không đủ tiền để cược"); return; }
+  if (!await askConfirm("Xác nhận cược", `Cược <b>${kChip} đồng</b> vào <b>${BC[k][1]}</b>?<br><small>Ví còn ${fmtCoin(coin2 - kChip * 2)} đồng sau khi cược.</small>`)) return;
   const { R, s } = kState();
   if (s >= 30) { toast("Hết giờ đặt cược ván này, chờ ván sau"); return; }
   const u = kChip * 2;
@@ -4061,12 +4079,18 @@ async function xdDo(kind){
   if (!me) return;
   if (kind === "bet") {
     const u = kChip * 2;
+    if (coin2 < u) { toast("Không đủ tiền để cược"); return; }
+    if (!await askConfirm("Xác nhận cược", `Cược <b>${kChip} đồng</b> vào ván xì dách?<br><small>Ví còn ${fmtCoin(coin2 - u)} đồng sau khi cược.</small>`)) return;
     if (!spend(u)) return;
     let ok = false; try { ok = await xdAct("bet", u); } catch { ok = false; }
     if (!ok) { earn(u); toast("Hết giờ đặt cược ván này"); } else say(players.get(meId), `Cược ${kChip} đồng xì dách`, 1600);
     return;
   }
   if (kind === "sit" && curMap !== "casino") return;
+  if (kind === "hit" || kind === "stand") {
+    const mine = xdMine(), pts = mine ? xdPts(mine.cards) : 0;
+    if (!await askConfirm(kind === "hit" ? "Xác nhận rút bài" : "Xác nhận dằn", kind === "hit" ? `Rút thêm một lá?<br><small>Bài hiện có ${pts} điểm.</small>` : `Dằn với <b>${pts} điểm</b>?<br><small>Dằn rồi không rút thêm được.</small>`)) return;
+  }
   let ok = false;
   try { ok = await xdAct(kind); } catch (e) { toast("Chưa lưu được bàn xì dách. Cần cập nhật quy tắc Firebase (xem README)."); return; }
   if (kind === "sit") { if (!ok) { toast("Bàn đã đủ 5 người"); return; } net.xdHold(meId); const s = xdMine(); if (s) setTarget(...XD_SPOTS[s.at]); }
@@ -4362,12 +4386,24 @@ function hideHint(){ if (hintHidden) return; hintHidden = true; setTimeout(() =>
 /* ---------------- Hộp thoại ---------------- */
 let lastFocus = null;
 function openModal(id){ lastFocus = document.activeElement; $(id).classList.add("open"); const f = $(id).querySelector("input,textarea,button.btn"); f && setTimeout(() => f.focus(), 50); }
-function closeModal(id){ $(id).classList.remove("open"); lastFocus && lastFocus.focus && lastFocus.focus(); }
+function closeModal(id){
+  $(id).classList.remove("open"); lastFocus && lastFocus.focus && lastFocus.focus();
+  if (id === "mConfirm" && confirmRes) { const r = confirmRes; confirmRes = null; r(false); } // đóng bằng Esc, bấm ngoài hộp: coi như hủy
+}
+// hỏi xác nhận trước khi cược hoặc quyết định bài; trả về true nếu bấm Xác nhận
+let confirmRes = null;
+function askConfirm(title, html){
+  if (confirmRes) return Promise.resolve(false);
+  $("mConfirmT").textContent = title; $("mConfirmP").innerHTML = html;
+  return new Promise(res => { confirmRes = res; openModal("mConfirm"); setTimeout(() => $("mConfirmOk").focus(), 60); });
+}
+$("mConfirmOk").addEventListener("click", () => { const r = confirmRes; confirmRes = null; closeModal("mConfirm"); r && r(true); });
+$("mConfirmNo").addEventListener("click", () => closeModal("mConfirm"));
 document.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", () => closeModal(b.closest(".modal").id)));
 document.querySelectorAll(".modal").forEach(m => m.addEventListener("pointerdown", e => { if (e.target !== m || m.id === "mAuth") return; if (m.id !== "mChar" || me) closeModal(m.id); }));
 addEventListener("keydown", e => {
   if (e.key !== "Escape") return;
-  const m = document.querySelector(".modal.open"); if (!m) return;
+  const m = $("mConfirm").classList.contains("open") ? $("mConfirm") : document.querySelector(".modal.open"); if (!m) return;
   if (m.id === "mAuth" || (m.id === "mChar" && !me)) return;
   closeModal(m.id);
 });
