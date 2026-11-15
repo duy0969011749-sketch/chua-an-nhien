@@ -1236,7 +1236,7 @@
   <rect x="72" y="190" width="536" height="240" rx="10" fill="#1f6b45"/><rect x="72" y="190" width="536" height="240" rx="10" fill="none" stroke="#ffd86b" stroke-opacity=".45" stroke-width="2" stroke-dasharray="4 7"/>
   <ellipse cx="340" cy="310" rx="220" ry="96" fill="#2c8a5c" opacity=".55"/>
   <g pointer-events="none"><g transform="translate(232 312) rotate(-16)"><rect x="-34" y="-48" width="68" height="96" rx="8" fill="#fffdf6" stroke="#b9a37a" stroke-width="2"/><text x="-24" y="-20" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="26" fill="#1e1a1a">A</text><circle cx="0" cy="14" r="13" fill="#1e1a1a" opacity=".9"/><text x="0" y="22" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="22" fill="#fffdf6">A</text></g><g transform="translate(304 300) rotate(-5)"><rect x="-34" y="-48" width="68" height="96" rx="8" fill="#fffdf6" stroke="#b9a37a" stroke-width="2"/><text x="-24" y="-20" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="26" fill="#c8312f">K</text><circle cx="0" cy="14" r="13" fill="#c8312f" opacity=".9"/><text x="0" y="22" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="22" fill="#fffdf6">K</text></g><g transform="translate(376 300) rotate(6)"><rect x="-34" y="-48" width="68" height="96" rx="8" fill="#fffdf6" stroke="#b9a37a" stroke-width="2"/><text x="-24" y="-20" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="26" fill="#1e1a1a">10</text><circle cx="0" cy="14" r="13" fill="#1e1a1a" opacity=".9"/><text x="0" y="22" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="22" fill="#fffdf6">10</text></g><g transform="translate(448 312) rotate(17)"><rect x="-34" y="-48" width="68" height="96" rx="8" fill="#fffdf6" stroke="#b9a37a" stroke-width="2"/><text x="-24" y="-20" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="26" fill="#c8312f">A</text><circle cx="0" cy="14" r="13" fill="#c8312f" opacity=".9"/><text x="0" y="22" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="22" fill="#fffdf6">A</text></g></g>
-  <text x="340" y="416" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="700" font-size="15" fill="#fff8e8" opacity=".9">Máy làm cái · 2 đến 5 người · 21 điểm</text>
+  <text x="340" y="416" text-anchor="middle" font-family="'Baloo 2',sans-serif" font-weight="700" font-size="15" fill="#fff8e8" opacity=".9">Máy làm cái · 1 đến 5 người · 21 điểm</text>
   <rect x="300" y="444" width="80" height="26" fill="#5a3418"/>
 
   <!-- bàn bầu cua và máy lắc -->
@@ -1409,7 +1409,7 @@
       <div class="kchips" id="xdChips" hidden></div>
       <div class="xdbtns" id="xdBtns"></div>
       <p class="kres" id="xdMsg" aria-live="polite"></p>
-      <p class="muted">Máy làm cái, 2 đến 5 người. Ván chỉ chia bài khi có ít nhất 2 người cược. Át tính 1 hoặc 11. Dưới 16 điểm là non, phải rút; quá 21 là quắc. Xì bàn (2 lá Át), xì dách (Át và 10, J, Q, K), ngũ linh (5 lá không quắc) thắng gấp đôi. Máy cái rút tới khi đủ 16 điểm. Cùng quắc thì hòa. Mỗi lượt 20 giây, hết giờ tự rút tới 16 rồi dằn.</p>
+      <p class="muted">Máy làm cái, 1 đến 5 người, chơi một mình với máy cũng được. Ngồi một mình thì cược xong 2 giây là chia bài. Át tính 1 hoặc 11. Dưới 16 điểm là non, phải rút; quá 21 là quắc. Xì bàn (2 lá Át), xì dách (Át và 10, J, Q, K), ngũ linh (5 lá không quắc) thắng gấp đôi. Máy cái rút tới khi đủ 16 điểm. Cùng quắc thì hòa. Mỗi lượt 20 giây, hết giờ tự rút tới 16 rồi dằn.</p>
     </div>
   </div>
 </div>
@@ -3919,11 +3919,11 @@ function kFrame(){
 $("kBauWorld").innerHTML = bauInner();
 requestAnimationFrame(kFrame);
 
-/* ---------------- Xì dách: máy làm cái, 2-5 người ----------------
+/* ---------------- Xì dách: máy làm cái, 1-5 người ----------------
    Bàn chơi lưu chung trên Firebase (rooms/<phòng>/xd). Máy của người ngồi ghế đầu tiên lo chia bài, đếm giờ, máy cái rút bài;
    mỗi người tự rút, dằn, đặt cược của mình. Mọi thay đổi đi qua giao dịch (transaction) nên không giẫm lên nhau.
-   Một ván: 15 giây đặt cược (cần ít nhất 2 người có cược), mỗi lượt 20 giây, máy cái rút tới khi đủ 16 điểm, 8 giây xem kết quả. */
-const XD_MAX = 5, XD_MIN = 2, XD_BET_MS = 15000, XD_TURN_MS = 20000, XD_DONE_MS = 8000, XD_DEALER_STAND = 16;
+   Một ván: 15 giây đặt cược (ngồi một mình thì cược xong 2 giây là chia), mỗi lượt 20 giây, máy cái rút tới khi đủ 16 điểm, 8 giây xem kết quả. */
+const XD_MAX = 5, XD_MIN = 1, XD_SOLO_MS = 2000, XD_BET_MS = 15000, XD_TURN_MS = 20000, XD_DONE_MS = 8000, XD_DEALER_STAND = 16;
 const XD_SPOTS = [[528, 670], [584, 694], [640, 704], [696, 694], [752, 670]];
 let xd = {}, xdHand = 0;
 const xdSeats = x => Object.entries((x && x.seats) || {}).map(([id, s]) => ({ id, ...s, cards: arr(s.cards) })).sort((a, b) => a.at - b.at);
@@ -3990,8 +3990,8 @@ function xdStep(x, now){
   if (ph === "bet") {
     const B = S.filter(s => s.bet > 0);
     if (B.length < XD_MIN) {
-      // chưa đủ 2 người cược: trả lại tiền, chờ ván sau
-      for (const s of B) Object.assign(seats[s.id], { res: s.bet, rk: "Trả lại tiền (chưa đủ 2 người cược)" });
+      // chưa ai cược: chờ ván sau
+      for (const s of B) Object.assign(seats[s.id], { res: s.bet, rk: "Trả lại tiền (chưa ai cược)" });
       return { ...x, seats, ph: "done", t: now + 3000, turn: "" };
     }
     x.seed = ROOM + "|xd|" + x.hand + "|" + Math.random().toString(36).slice(2); x.idx = 0;
@@ -4039,7 +4039,12 @@ function xdAct(kind, u){
     }
     if (!m) return;
     if (kind === "leave") { delete seats[meId]; if (x.turn === meId) xdAdvance(x, now); return x; }
-    if (kind === "bet") { if (x.ph !== "bet" || now >= x.t) return; m.bet = (m.bet || 0) + u; return x; }
+    if (kind === "bet") {
+      if (x.ph !== "bet" || now >= x.t) return; m.bet = (m.bet || 0) + u;
+      // ngồi một mình: không phải chờ hết 15 giây, cược xong 2 giây là chia bài (bấm tiếp trong 2 giây để cược thêm)
+      if (Object.keys(seats).length === 1) x.t = Math.min(x.t, now + XD_SOLO_MS);
+      return x;
+    }
     if (x.ph !== "play" || x.turn !== meId || m.st !== "play") return;
     const c = arr(m.cards);
     if (kind === "hit") {
@@ -4106,7 +4111,7 @@ function cardHTML(c, hide){
 }
 function xdPhaseTxt(now){
   const ph = xd.ph || "wait", left = Math.max(0, Math.ceil(((xd.t || 0) - now) / 1000)), S = xdSeats(xd);
-  if (ph === "wait") return [`Chờ người chơi: ${S.length}/${XD_MAX} (cần ít nhất ${XD_MIN})`, 0];
+  if (ph === "wait") return [`Chờ người chơi: ${S.length}/${XD_MAX}`, 0];
   if (ph === "bet") return [`Đặt cược: còn ${left} giây`, ((xd.t || 0) - now) / XD_BET_MS];
   if (ph === "play") { const t = S.find(s => s.id === xd.turn); return [`Lượt ${t ? (t.id === meId ? "của bạn" : t.name) : ""}: ${left} giây`, ((xd.t || 0) - now) / XD_TURN_MS]; }
   if (ph === "dealer") return ["Máy cái đang rút bài", 1];
@@ -4152,7 +4157,7 @@ function xdRender(){
   $("xdBtns").innerHTML = btn;
   $("xdChips").hidden = !(mine && ph === "bet");
   $("xdChips").innerHTML = kChipsHTML();
-  $("xdMsg").textContent = !mine ? "Ngồi vào bàn để chơi. Cần ít nhất 2 người có cược thì mới chia bài."
+  $("xdMsg").textContent = !mine ? "Ngồi vào bàn để chơi với máy cái. Một mình cũng chơi được."
     : ph === "play" && xd.turn === meId ? (xdPts(mine.cards) < 16 ? "Dưới 16 điểm (non) phải rút thêm." : "Đủ 16 điểm, có thể dằn hoặc rút tiếp.")
     : ph === "bet" ? "Chọn mức cược rồi bấm Cược. Bấm nhiều lần để cược thêm."
     : (ph === "play" || ph === "dealer") && mine.bet ? "Rời bàn giữa ván sẽ mất tiền đã cược." : "";
