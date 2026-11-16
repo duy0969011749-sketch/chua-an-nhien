@@ -349,8 +349,8 @@
       radial-gradient(ellipse 56% 50% at 50% 26%,rgba(255,214,128,.16),rgba(255,214,128,0) 72%),
       radial-gradient(ellipse 82% 88% at 50% 48%,rgba(12,5,34,0) 54%,rgba(12,5,34,.52) 100%)}
   /* đổi hướng: xoay người nhanh thay vì lật tức thì; đổi map: hiện dần */
-  .av > svg:not(.av-old){transition:transform .16s ease-out}
-  #stage.mapin > svg,#stage.mapin > #players,#stage.mapin > #lightFx{animation:mapIn .45s ease-out both}
+  .av > svg:not(.av-old){transition:transform .48s ease-in-out}
+  #stage.mapin > svg,#stage.mapin > #players,#stage.mapin > #lightFx{animation:mapIn .9s ease-out both}
   @keyframes mapIn{from{opacity:0}to{opacity:1}}
   @media (prefers-reduced-motion:reduce){.av > svg:not(.av-old){transition:none}#stage.mapin > *{animation:none}}
   .av svg.av-old{position:absolute;left:0;top:0;pointer-events:none;animation:avOut .26s ease-out forwards}
@@ -702,13 +702,13 @@
     --panel:rgba(8,20,70,.78);--panel-line:rgba(160,200,255,.55);--grain:none;
     --wood:linear-gradient(180deg,rgba(70,120,230,.5),rgba(10,24,86,.88) 40%,rgba(5,12,52,.92))}
   html.ps2,html.ps2 body{background:radial-gradient(ellipse 80% 70% at 50% 40%,#0c1e66,#030823 75%);font-family:"Segoe UI",Verdana,Tahoma,"DejaVu Sans",system-ui,sans-serif;letter-spacing:.012em}
-  html.ps2 #stage svg{shape-rendering:crispEdges}
+  html.ps2 #stage svg{shape-rendering:geometricPrecision}
   html.ps2 #stage svg *{stroke-linejoin:miter}
   html.ps2 #psx{display:block;position:fixed;inset:0;z-index:5;pointer-events:none;
-    background:radial-gradient(ellipse 92% 92% at 50% 50%,rgba(0,0,0,0) 56%,rgba(2,6,34,.55) 100%),
-      linear-gradient(180deg,rgba(60,100,230,.10),rgba(8,16,90,.12)),
-      repeating-linear-gradient(180deg,rgba(0,0,0,.15) 0 1px,rgba(0,0,0,0) 1px 3px)}
-  html.ps2 #psx::after{content:"";position:absolute;inset:0;opacity:.55;image-rendering:pixelated;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' shape-rendering='crispEdges'%3E%3Crect x='0' y='0' width='1' height='1' fill='%23000' fill-opacity='.16'/%3E%3Crect x='2' y='2' width='1' height='1' fill='%23000' fill-opacity='.16'/%3E%3Crect x='2' y='0' width='1' height='1' fill='%23fff' fill-opacity='.05'/%3E%3Crect x='0' y='2' width='1' height='1' fill='%23fff' fill-opacity='.05'/%3E%3C/svg%3E") 0 0/4px 4px}
+    background:radial-gradient(ellipse 96% 96% at 50% 50%,rgba(0,0,0,0) 48%,rgba(2,6,34,.34) 78%,rgba(2,6,34,.5) 100%),
+      linear-gradient(180deg,rgba(150,180,255,.16) 0,rgba(110,150,240,.05) 34%,rgba(8,16,90,0) 56%,rgba(4,10,60,.2) 100%),
+      repeating-linear-gradient(180deg,rgba(0,0,0,.045) 0 1px,rgba(0,0,0,0) 1px 3px)}
+  html.ps2 #psx::after{content:"";position:absolute;inset:0;opacity:.14;image-rendering:pixelated;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' shape-rendering='crispEdges'%3E%3Crect x='0' y='0' width='1' height='1' fill='%23000' fill-opacity='.16'/%3E%3Crect x='2' y='2' width='1' height='1' fill='%23000' fill-opacity='.16'/%3E%3Crect x='2' y='0' width='1' height='1' fill='%23fff' fill-opacity='.05'/%3E%3Crect x='0' y='2' width='1' height='1' fill='%23fff' fill-opacity='.05'/%3E%3C/svg%3E") 0 0/4px 4px}
   html.ps2 .pill{border:1px solid rgba(172,210,255,.75);border-radius:5px;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
     background:linear-gradient(180deg,rgba(130,180,255,.34) 0,rgba(50,90,200,.22) 16%,rgba(6,16,66,.86) 58%,rgba(4,10,48,.9));
     box-shadow:inset 0 0 0 1px rgba(8,18,84,.7),0 0 14px rgba(70,130,255,.38),0 4px 12px rgba(0,0,0,.5)}
@@ -750,7 +750,14 @@
   html.ps2 input[type=number],html.ps2 input[type=email],html.ps2 input[type=password],html.ps2 input[type=text],html.ps2 textarea{border:2px solid #86adf0;border-radius:4px;background:#fff}
   html.ps2 input[type=email]:focus,html.ps2 input[type=password]:focus,html.ps2 input[type=text]:focus,html.ps2 textarea:focus{border-color:#2a55d0;box-shadow:0 0 0 3px rgba(80,140,255,.35)}
   html.ps2 .kchip[aria-pressed=true]{box-shadow:0 0 0 2px var(--c),0 0 0 5px #9fd0ff,0 5px 0 rgba(0,0,0,.3)}
-  html.ps2 #lightFx{opacity:.8}
+  html.ps2 #lightFx{opacity:.9}
+  /* 3D giả: phối cảnh cho nhân vật, viền sáng phía trên trái, độ dày và bóng phía dưới phải; khí quyển xanh nhạt ở xa */
+  html.ps2 .pl{perspective:380px}
+  html.ps2 .pl .av{transform-style:preserve-3d}
+  html.ps2 .pl .av > svg:not(.av-old){filter:drop-shadow(-.7px -.7px .5px rgba(214,236,255,.7)) drop-shadow(1.2px 1.6px 0 rgba(10,20,80,.55)) drop-shadow(2.5px 4px 3px rgba(0,0,30,.35))}
+  html.ps2 .pill,html.ps2 .tbtn{border-radius:9px}
+  html.ps2 .btn{border-radius:9px}
+  html.ps2 .sheet{border-radius:10px}
   /* màn đăng nhập: các cột sáng trôi lơ lửng trên nền xanh đen */
   html.ps2:has(#mAuth.open) #psxBoot{display:block;position:fixed;inset:0;z-index:25;pointer-events:none;overflow:hidden;
     background:radial-gradient(ellipse 70% 60% at 50% 55%,rgba(30,70,200,.35),rgba(2,6,40,0) 70%)}
@@ -1668,8 +1675,8 @@ function psxPath(d){
     else if (C === "L") to(n() + ox, n() + oy);
     else if (C === "H") to(n() + ox, y);
     else if (C === "V") to(x, n() + oy);
-    else if (C === "Q") { const a = n() + ox, b = n() + oy, e = n() + ox, g = n() + oy; if (Math.hypot(e - x, g - y) > 3.5) to(.25 * x + .5 * a + .25 * e, .25 * y + .5 * b + .25 * g); to(e, g); }
-    else if (C === "C") { const a = n() + ox, b = n() + oy, c = n() + ox, e = n() + oy, g = n() + ox, h = n() + oy; if (Math.hypot(g - x, h - y) > 3.5) to(.125 * x + .375 * a + .375 * c + .125 * g, .125 * y + .375 * b + .375 * e + .125 * h); to(g, h); }
+    else if (C === "Q") { const a = n() + ox, b = n() + oy, e = n() + ox, g = n() + oy; { const ln = Math.hypot(a - x, b - y) + Math.hypot(e - a, g - b), m = Math.min(8, Math.max(1, Math.ceil(ln / 2.6))); for (let j = 1; j < m; j++) { const u = j / m, v = 1 - u; to(v * v * x + 2 * v * u * a + u * u * e, v * v * y + 2 * v * u * b + u * u * g); } to(e, g); } }
+    else if (C === "C") { const a = n() + ox, b = n() + oy, c = n() + ox, e = n() + oy, g = n() + ox, h = n() + oy; { const ln = Math.hypot(a - x, b - y) + Math.hypot(c - a, e - b) + Math.hypot(g - c, h - e), m = Math.min(10, Math.max(1, Math.ceil(ln / 2.6))); for (let j = 1; j < m; j++) { const u = j / m, v = 1 - u; to(v * v * v * x + 3 * v * v * u * a + 3 * v * u * u * c + u * u * u * g, v * v * v * y + 3 * v * v * u * b + 3 * v * u * u * e + u * u * u * h); } to(g, h); } }
     else if (C === "S") { n(); n(); to(n() + ox, n() + oy); }
     else if (C === "T") to(n() + ox, n() + oy);
     else if (C === "A") { n(); n(); n(); n(); n(); to(n() + ox, n() + oy); }
@@ -1678,7 +1685,7 @@ function psxPath(d){
   return out;
 }
 function psxPts(cx, cy, rx, ry){
-  const k = Math.max(rx, ry), N = k < 1.6 ? 5 : k < 4 ? 6 : k < 9 ? 7 : 9; let s = "";
+  const k = Math.max(rx, ry), N = k < 1.6 ? 10 : k < 4 ? 16 : k < 9 ? 22 : 30; let s = "";
   for (let j = 0; j < N; j++) { const a = (j + .5) * 2 * Math.PI / N; s += (j ? " " : "") + (cx + Math.cos(a) * rx).toFixed(2) + "," + (cy + Math.sin(a) * ry).toFixed(2); }
   return s;
 }
@@ -2383,20 +2390,21 @@ function avatarSVG0(d, view, act, opt){
    chuyển mượt khi bắt đầu và khi dừng; tóc và vạt áo theo một lò xo nên đung đưa trễ theo người. */
 const STRIDE = 117; // quãng đường cho 2 bước (điểm ảnh)
 const TAU = Math.PI * 2;
+const SM = 3; // hệ số "mềm mại": các hằng số lò xo, tăng tốc, camera chia hoặc nhân theo số này (1 = bản gốc)
 /* Thông số cảm giác chuyển động (chỉnh ở đây) */
 const ANIM = {
   idleHead: 1.1, idleHeadT: 5.2,   // đầu nghiêng nhẹ khi đứng (độ, giây/chu kỳ)
   idleBody: .35, idleBodyT: 6.4,   // thân dồn trọng tâm
   idleHair: 1.1, idleHairT: 3.7,   // tóc, vạt áo đung đưa
   gazeWalk: 1.1, gazeIdle: 1,      // con ngươi liếc (đơn vị hình nhân vật)
-  sqK: 190, sqC: 13,               // lò xo nhún khi bắt đầu/dừng đi
+  sqK: 190 / SM, sqC: 13 / Math.sqrt(SM),               // lò xo nhún khi bắt đầu/dừng đi
   sqStart: .42, sqStop: .75        // độ mạnh cú nhún
 };
 const RM = matchMedia("(prefers-reduced-motion: reduce)");
 function animAvatar(p, av, dt, moving, step, vx){
   const A = p.anim || (p.anim = { ph: 0, w: 0, sx: 0, sv: 0, svg: null, els: null, it: Math.random() * 20, gx: 0, gy: 0, tx: 0, ty: 0, gNext: 0, sq: 0, sqv: 0, mv: false });
   if (moving) A.ph = (A.ph + step / STRIDE) % 1;
-  A.w += ((moving ? 1 : 0) - A.w) * Math.min(1, dt * 9);
+  A.w += ((moving ? 1 : 0) - A.w) * Math.min(1, dt * 9 / SM);
   if (A.w < .002) A.w = 0;
   const svg = av.firstElementChild;
   if (svg !== A.svg) {
@@ -2454,9 +2462,15 @@ function animAvatar(p, av, dt, moving, step, vx){
   // lò xo cho tóc và vạt áo: lệch ngược hướng đi, cộng nhịp lắc người và gió nhẹ khi đứng
   const lvx = p.flip ? -vx : vx;
   const target = free ? (-lvx * 4.5 + 2 * s) * w + idle * ANIM.idleHair * Math.sin(A.it * TAU / ANIM.idleHairT) : 0;
-  A.sv += ((target - A.sx) * 70 - A.sv * 9) * dt;
+  A.sv += ((target - A.sx) * (70 / SM) - A.sv * (9 / Math.sqrt(SM))) * dt;
   A.sx += A.sv * dt;
   if (Math.abs(A.sx) < .01 && Math.abs(A.sv) < .01 && !target) { A.sx = 0; A.sv = 0; }
+  // 3D giả (khi bật PS2): thân xoay quanh trục dọc theo hướng đi, đứng yên thì lắc nhẹ; có phối cảnh từ .pl
+  if (PS2 && calm) {
+    const yt = free ? vx * 26 * w + idle * 3.5 * Math.sin(A.it * TAU / 6.5 + 2) : 0;
+    A.yaw = (A.yaw || 0) + (yt - (A.yaw || 0)) * Math.min(1, dt * 4 / SM);
+    av.style.rotate = Math.abs(A.yaw) > .05 ? `0 1 0 ${A.yaw.toFixed(1)}deg` : "";
+  }
   const sk = A.sx.toFixed(2);
   for (const el of E.hsw) el.style.transform = A.sx ? `skewX(${sk}deg)` : "";
   if (E.robe) E.robe.style.transform = A.sx && free ? `skewX(${(A.sx * .5).toFixed(2)}deg)` : "";
@@ -2775,7 +2789,7 @@ function updateCamera(fx, fy, dt){
   const tx = clamp(vw / 2 - fx * scale, vw - W * scale, 0);
   const ty = clamp(vh / 2 - (fy - 140) * scale, vh - H * scale, 0);
   if (firstCam) { camX = tx; camY = ty; firstCam = false; }
-  const k = 1 - Math.pow(.002, dt);
+  const k = 1 - Math.pow(.002, dt / SM);
   camX += (tx - camX) * k; camY += (ty - camY) * k;
   stage.style.transform = `translate(${camX.toFixed(1)}px,${camY.toFixed(1)}px) scale(${scale})`;
 }
@@ -2938,7 +2952,7 @@ function syncPlayers(obj){
 }
 
 /* ---------------- Vòng lặp ---------------- */
-const SPEED = 130, ACC = 520, DEC = 240; // tăng tốc / hãm (px/s²): bắt đầu và dừng có đà, không khựng
+const SPEED = 130, ACC = 520 / SM, DEC = 240 / SM; // tăng tốc / hãm (px/s²): bắt đầu và dừng có đà, không khựng
 const keys = new Set();
 let lastSend = 0, last = performance.now(), pending = null, lastDir = "", keyMoving = false;
 
