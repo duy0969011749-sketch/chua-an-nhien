@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet">
+<script>try{if(localStorage.getItem("chua_ps2")!=="0")document.documentElement.classList.add("ps2")}catch(e){document.documentElement.classList.add("ps2")}</script>
 <style>
   :root{
     --red:#b3261e; --red-deep:#7a1612; --gold:#f2c45a; --gold-deep:#c9962f;
@@ -693,6 +694,71 @@
   .bdFlag{transform-box:fill-box;transform-origin:50% 0;animation:bdFlag 1.6s ease-in-out infinite alternate}
   @keyframes bdFlag{from{transform:skewX(-10deg)}to{transform:skewX(10deg) scaleY(.92)}}
   @media (prefers-reduced-motion:reduce){.bdSway use,.bdFlag{animation:none}}
+
+  /* ================= Phong cách đồ họa PS2 (bật mặc định, có nút tắt) =================
+     Hình đa giác thấp poly (tạo bằng mã khi tải trang), mép răng cưa, màu xanh đen, bảng kính xanh, lưới quét và chấm li ti như màn hình CRT. */
+  #psx,#psxBoot{display:none}
+  html.ps2{--red:#2d55d4;--red-deep:#0f2580;--gold:#a9d2ff;--gold-deep:#5d8fe6;--paper:#f1f6ff;--paper-2:#d8e4fb;--ink:#0f2150;--muted:#566694;
+    --panel:rgba(8,20,70,.78);--panel-line:rgba(160,200,255,.55);--grain:none;
+    --wood:linear-gradient(180deg,rgba(70,120,230,.5),rgba(10,24,86,.88) 40%,rgba(5,12,52,.92))}
+  html.ps2,html.ps2 body{background:radial-gradient(ellipse 80% 70% at 50% 40%,#0c1e66,#030823 75%);font-family:"Segoe UI",Verdana,Tahoma,"DejaVu Sans",system-ui,sans-serif;letter-spacing:.012em}
+  html.ps2 #stage svg{shape-rendering:crispEdges}
+  html.ps2 #stage svg *{stroke-linejoin:miter}
+  html.ps2 #psx{display:block;position:fixed;inset:0;z-index:5;pointer-events:none;
+    background:radial-gradient(ellipse 92% 92% at 50% 50%,rgba(0,0,0,0) 56%,rgba(2,6,34,.55) 100%),
+      linear-gradient(180deg,rgba(60,100,230,.10),rgba(8,16,90,.12)),
+      repeating-linear-gradient(180deg,rgba(0,0,0,.15) 0 1px,rgba(0,0,0,0) 1px 3px)}
+  html.ps2 #psx::after{content:"";position:absolute;inset:0;opacity:.55;image-rendering:pixelated;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' shape-rendering='crispEdges'%3E%3Crect x='0' y='0' width='1' height='1' fill='%23000' fill-opacity='.16'/%3E%3Crect x='2' y='2' width='1' height='1' fill='%23000' fill-opacity='.16'/%3E%3Crect x='2' y='0' width='1' height='1' fill='%23fff' fill-opacity='.05'/%3E%3Crect x='0' y='2' width='1' height='1' fill='%23fff' fill-opacity='.05'/%3E%3C/svg%3E") 0 0/4px 4px}
+  html.ps2 .pill{border:1px solid rgba(172,210,255,.75);border-radius:5px;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+    background:linear-gradient(180deg,rgba(130,180,255,.34) 0,rgba(50,90,200,.22) 16%,rgba(6,16,66,.86) 58%,rgba(4,10,48,.9));
+    box-shadow:inset 0 0 0 1px rgba(8,18,84,.7),0 0 14px rgba(70,130,255,.38),0 4px 12px rgba(0,0,0,.5)}
+  html.ps2 .info h1{color:#d8ebff;text-shadow:0 0 8px rgba(120,180,255,.8);letter-spacing:.04em}
+  html.ps2 .info .stats b{color:#9fd0ff}
+  html.ps2 .tbtn{border-radius:4px;border:1px solid rgba(172,210,255,.7);color:#e8f2ff;font-weight:600;letter-spacing:.03em;
+    background:linear-gradient(180deg,rgba(120,170,255,.34) 0,rgba(40,80,190,.22) 18%,rgba(6,16,66,.88) 62%);
+    box-shadow:inset 3px 0 0 #5d9bff,0 0 10px rgba(70,130,255,.3),0 3px 8px rgba(0,0,0,.45)}
+  html.ps2 .tbtn:hover{box-shadow:inset 5px 0 0 #bfe0ff,0 0 16px rgba(120,180,255,.7),0 3px 8px rgba(0,0,0,.45);color:#fff}
+  html.ps2 .modal{background:rgba(2,8,44,.66)}
+  html.ps2 .sheet{background:linear-gradient(180deg,#f7faff,#d5e2fa);border:2px solid #86adf0;outline:1px solid rgba(255,255,255,.7);outline-offset:-5px;border-radius:6px;
+    box-shadow:0 0 0 1px #0b1c63,0 0 28px rgba(90,150,255,.55),0 18px 50px rgba(0,0,0,.55)}
+  html.ps2 .sheet-head{background:linear-gradient(180deg,#4f84f2 0,#2347b8 46%,#0e2278 50%,#102a86);border-bottom:2px solid #9fd0ff;border-radius:4px 4px 0 0;box-shadow:0 2px 0 #08165a;color:#fff;text-shadow:0 1px 0 #06124a}
+  html.ps2 .sheet-head h2{letter-spacing:.05em}
+  html.ps2 .x{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);border-radius:3px}
+  html.ps2 .btn{border-radius:5px;border:1px solid #b6d4ff;color:#fff;font-weight:700;letter-spacing:.03em;text-shadow:0 1px 0 rgba(6,16,80,.6);
+    background:linear-gradient(180deg,#6b9bff 0,#3560dc 48%,#1b3fb0 52%,#2551c8);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 3px 0 #0b1a5c,0 0 10px rgba(80,140,255,.35)}
+  html.ps2 .btn:active{box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 1px 0 #0b1a5c}
+  html.ps2 .btn.alt{color:#16286a;text-shadow:none;border-color:#fff;background:linear-gradient(180deg,#fdfeff,#d9e1f3 50%,#c3cde4);box-shadow:inset 0 1px 0 #fff,0 3px 0 #7d89a8}
+  html.ps2 .linkbtn{color:#1d3fb0}
+  html.ps2 .ok{color:#127a44}
+  html.ps2 .toast{border-radius:4px;background:linear-gradient(180deg,rgba(80,130,240,.9),rgba(8,20,90,.95));color:#fff;border:1px solid #b6d4ff;box-shadow:0 0 16px rgba(90,150,255,.6)}
+  html.ps2 .coinbtn{border-radius:4px;border-color:#b6d4ff;background:linear-gradient(180deg,#e8f1ff,#9fbdf0);color:#0f2150}
+  html.ps2 .xdtable{border-color:#16318f;box-shadow:inset 0 0 0 2px rgba(160,205,255,.6),inset 0 10px 26px rgba(0,0,0,.4),0 0 14px rgba(70,130,255,.45)}
+  html.ps2 .xdtable .xdrow .who{border-color:rgba(160,205,255,.7);background:rgba(4,12,58,.78)}
+  html.ps2 .xdtable .xdrow.own .who{background:linear-gradient(#e8f4ff,#8fb8f4);color:#0f2150;border-color:#fff}
+  html.ps2 .xdtable .xdrow .pt{color:#bfe0ff;text-shadow:0 1px 0 #06124a,0 0 6px rgba(0,0,0,.6)}
+  html.ps2 .xdtable .xdrow .rk{background:linear-gradient(#e8f4ff,#8fb8f4);color:#0f2150;box-shadow:0 2px 0 #3a5aa8}
+  html.ps2 .act .disc{background:radial-gradient(circle at 38% 28%,#7fb0ff,#2a55d0 58%,#0e2278);border:2px solid #cfe4ff;color:#fff;
+    box-shadow:0 0 0 1.5px #0b1c63,inset 0 0 0 2px rgba(10,28,110,.55),inset 0 -6px 10px rgba(0,0,0,.25),0 4px 0 #081a5c,0 0 14px rgba(90,150,255,.55)}
+  html.ps2 .act:active .disc{box-shadow:0 0 0 1.5px #0b1c63,inset 0 0 0 2px rgba(10,28,110,.55),0 1px 0 #081a5c}
+  html.ps2 .act .cost{background:#e8f4ff;border-color:#2a55d0;color:#0f2150;border-radius:4px}
+  html.ps2 .act .cost.free{background:#d6f5c8;border-color:#2f6b2a;color:#2f5a24}
+  html.ps2 .nm{border-radius:3px;background:linear-gradient(rgba(40,80,200,.85),rgba(6,16,70,.9));border:1px solid rgba(190,220,255,.7)}
+  html.ps2 .nm .h{color:#bfe0ff}
+  html.ps2 .pl.me .nm{background:linear-gradient(#f2f8ff,#9fc2f4);color:#0f2150;border-color:#fff}
+  html.ps2 .pl.me .nm .h{color:#2a55d0}
+  html.ps2 .nm .t{color:#9fd0ff}
+  html.ps2 input[type=number],html.ps2 input[type=email],html.ps2 input[type=password],html.ps2 input[type=text],html.ps2 textarea{border:2px solid #86adf0;border-radius:4px;background:#fff}
+  html.ps2 input[type=email]:focus,html.ps2 input[type=password]:focus,html.ps2 input[type=text]:focus,html.ps2 textarea:focus{border-color:#2a55d0;box-shadow:0 0 0 3px rgba(80,140,255,.35)}
+  html.ps2 .kchip[aria-pressed=true]{box-shadow:0 0 0 2px var(--c),0 0 0 5px #9fd0ff,0 5px 0 rgba(0,0,0,.3)}
+  html.ps2 #lightFx{opacity:.8}
+  /* màn đăng nhập: các cột sáng trôi lơ lửng trên nền xanh đen */
+  html.ps2:has(#mAuth.open) #psxBoot{display:block;position:fixed;inset:0;z-index:25;pointer-events:none;overflow:hidden;
+    background:radial-gradient(ellipse 70% 60% at 50% 55%,rgba(30,70,200,.35),rgba(2,6,40,0) 70%)}
+  #psxBoot i{position:absolute;bottom:-4%;left:var(--x);width:3.4%;min-width:14px;height:var(--h);transform-origin:50% 100%;
+    background:linear-gradient(180deg,rgba(210,235,255,.85) 0,rgba(110,170,255,.5) 6%,rgba(70,120,240,.22) 60%,rgba(70,120,240,0));
+    animation:psxRise 5.5s ease-in-out var(--d) infinite alternate}
+  @keyframes psxRise{from{transform:scaleY(.5);opacity:.4}to{transform:scaleY(1);opacity:.9}}
+  @media (prefers-reduced-motion:reduce){#psxBoot i{animation:none}}
 </style>
 </head>
 <body>
@@ -703,6 +769,8 @@
   <linearGradient id="hrB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6b5649"/><stop offset="1" stop-color="#3e2f28"/></linearGradient>
   <radialGradient id="gSh"><stop offset="0" stop-color="#000" stop-opacity=".46"/><stop offset=".55" stop-color="#000" stop-opacity=".24"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
 </defs></svg>
+<div id="psx" aria-hidden="true"></div>
+<div id="psxBoot" aria-hidden="true"><i style="--x:4%;--h:46%;--d:-0s"></i><i style="--x:12%;--h:70%;--d:-2.1s"></i><i style="--x:20%;--h:38%;--d:-3.6s"></i><i style="--x:29%;--h:58%;--d:-1s"></i><i style="--x:37%;--h:80%;--d:-4.4s"></i><i style="--x:46%;--h:44%;--d:-2.7s"></i><i style="--x:54%;--h:66%;--d:-0.6s"></i><i style="--x:63%;--h:40%;--d:-3.3s"></i><i style="--x:71%;--h:76%;--d:-1.8s"></i><i style="--x:80%;--h:52%;--d:-4.9s"></i><i style="--x:88%;--h:64%;--d:-2.4s"></i><i style="--x:95%;--h:42%;--d:-0.9s"></i></div>
 <div id="view">
   <div id="stage">
 <svg id="scene" viewBox="0 0 1280 720" width="1280" height="720" xmlns="http://www.w3.org/2000/svg">
@@ -1294,6 +1362,7 @@
 <!-- Góc trên phải -->
 <div class="hud" id="hudTR">
   <button class="tbtn" id="btnSound" type="button" aria-pressed="true">Âm thanh: Bật</button>
+  <button class="tbtn" id="btnPsx" type="button" aria-pressed="true">Giao diện: PS2</button>
   <button class="tbtn" id="btnPrayers" type="button">Lời nguyện</button>
   <button class="tbtn" id="btnChar" type="button">Nhân vật</button>
   <button class="tbtn" id="btnBag" type="button" hidden>Túi đồ</button>
@@ -1582,6 +1651,64 @@ const $ = id => document.getElementById(id);
 const fmt = n => new Intl.NumberFormat("vi-VN").format(n || 0);
 const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+/* ---------------- Giao diện PS2: biến mọi đường cong thành đa giác thấp poly ----------------
+   Mỗi đoạn cong Q, C, cung A thành 1 đến 2 đoạn thẳng; hình tròn, elip thành đa giác 6 đến 10 cạnh; bỏ bo góc hình chữ nhật. Chỉ chạy khi bật PS2. */
+const PS2 = document.documentElement.classList.contains("ps2");
+function psxPath(d){
+  const t = d.match(/[a-zA-Z]|-?(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?/g); if (!t) return d;
+  const isL = s => /[a-zA-Z]/.test(s), f = v => +v.toFixed(2);
+  let i = 0, cmd = "", x = 0, y = 0, sx = 0, sy = 0, out = "";
+  const n = () => parseFloat(t[i++]);
+  const to = (a, b) => { out += "L" + f(a) + " " + f(b); x = a; y = b; };
+  while (i < t.length) {
+    if (isL(t[i])) cmd = t[i++]; else if (!cmd) { i++; continue; }
+    const rel = cmd === cmd.toLowerCase(), C = cmd.toUpperCase(), ox = rel ? x : 0, oy = rel ? y : 0;
+    if (C === "Z") { out += "Z"; x = sx; y = sy; if (i < t.length && !isL(t[i])) i++; continue; }
+    if (C === "M") { const a = n() + ox, b = n() + oy; out += "M" + f(a) + " " + f(b); x = sx = a; y = sy = b; cmd = rel ? "l" : "L"; }
+    else if (C === "L") to(n() + ox, n() + oy);
+    else if (C === "H") to(n() + ox, y);
+    else if (C === "V") to(x, n() + oy);
+    else if (C === "Q") { const a = n() + ox, b = n() + oy, e = n() + ox, g = n() + oy; if (Math.hypot(e - x, g - y) > 3.5) to(.25 * x + .5 * a + .25 * e, .25 * y + .5 * b + .25 * g); to(e, g); }
+    else if (C === "C") { const a = n() + ox, b = n() + oy, c = n() + ox, e = n() + oy, g = n() + ox, h = n() + oy; if (Math.hypot(g - x, h - y) > 3.5) to(.125 * x + .375 * a + .375 * c + .125 * g, .125 * y + .375 * b + .375 * e + .125 * h); to(g, h); }
+    else if (C === "S") { n(); n(); to(n() + ox, n() + oy); }
+    else if (C === "T") to(n() + ox, n() + oy);
+    else if (C === "A") { n(); n(); n(); n(); n(); to(n() + ox, n() + oy); }
+    else i++;
+  }
+  return out;
+}
+function psxPts(cx, cy, rx, ry){
+  const k = Math.max(rx, ry), N = k < 1.6 ? 5 : k < 4 ? 6 : k < 9 ? 7 : 9; let s = "";
+  for (let j = 0; j < N; j++) { const a = (j + .5) * 2 * Math.PI / N; s += (j ? " " : "") + (cx + Math.cos(a) * rx).toFixed(2) + "," + (cy + Math.sin(a) * ry).toFixed(2); }
+  return s;
+}
+// chuỗi SVG (nhân vật): đổi bằng biểu thức chính quy
+function psxPoly(s){
+  return s.replace(/ d="([^"]*)"/g, (m, d) => ` d="${psxPath(d)}"`)
+    .replace(/<rect\b[^>]*>/g, m => m.replace(/ r[xy]="[^"]*"/g, ""))
+    .replace(/<(ellipse|circle)\b([^>]*?)(\/?)>/g, (m, tag, a, sl) => {
+      const g = k => { const r = new RegExp("\\b" + k + '="([^"]*)"').exec(a); return r ? parseFloat(r[1]) : 0; };
+      const cx = g("cx"), cy = g("cy"), rx = tag === "circle" ? g("r") : g("rx"), ry = tag === "circle" ? g("r") : g("ry");
+      return `<polygon points="${psxPts(cx, cy, rx, ry)}"${a.replace(/\s(cx|cy|rx|ry|r)="[^"]*"/g, "")}${sl}>`;
+    })
+    .replace(/<\/(ellipse|circle)>/g, "</polygon>");
+}
+// phần hình có sẵn trong trang (các map, bảng, biểu tượng)
+function psxScenes(){
+  const NS = "http://www.w3.org/2000/svg";
+  document.querySelectorAll("svg path[d]").forEach(e => e.setAttribute("d", psxPath(e.getAttribute("d"))));
+  document.querySelectorAll("svg rect[rx],svg rect[ry]").forEach(e => { e.removeAttribute("rx"); e.removeAttribute("ry"); });
+  document.querySelectorAll("svg ellipse:not([id]),svg circle:not([id])").forEach(e => {
+    const c = e.tagName === "circle", g = k => parseFloat(e.getAttribute(k)) || 0, rx = c ? g("r") : g("rx"), ry = c ? g("r") : g("ry");
+    const pg = document.createElementNS(NS, "polygon");
+    for (const a of [...e.attributes]) if (!["cx", "cy", "rx", "ry", "r"].includes(a.name)) pg.setAttribute(a.name, a.value);
+    pg.setAttribute("points", psxPts(g("cx"), g("cy"), rx, ry)); e.replaceWith(pg);
+  });
+}
+if (PS2) psxScenes();
+{ const b = document.getElementById("btnPsx"); b.textContent = "Giao diện: " + (PS2 ? "PS2" : "Gốc"); b.setAttribute("aria-pressed", PS2);
+  b.onclick = () => { try { localStorage.setItem("chua_ps2", PS2 ? "0" : "1"); } catch {} location.reload(); }; }
+
 const ls = {
   get(k, d){ try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
@@ -2038,7 +2165,8 @@ function fabric(s, f){
   }
   return s;
 }
-function avatarSVG(d, view, act, opt){
+function avatarSVG(d, view, act, opt){ const s = avatarSVG0(d, view, act, opt); return PS2 ? psxPoly(s) : s; }
+function avatarSVG0(d, view, act, opt){
   if (act) view = "back";
   // vật phẩm VIP đang mặc: ao (cà sa), non (mũ Tỳ Lư), gay (gậy pháp)
   const vip = new Set(String(d.vip || "").split(",").filter(Boolean)), vAo = vip.has("ao");
